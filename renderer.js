@@ -2,7 +2,7 @@ let ipcRenderer = require('electron').ipcRenderer;
 
 //> close button
 let closeBtn = document.querySelector('#setting');
-let joinBtn = document.querySelector('#join');
+let joinBtn = document.querySelector('#announcement');
 
 closeBtn.addEventListener('click', () => {
     console.log('send');
@@ -11,5 +11,5 @@ closeBtn.addEventListener('click', () => {
 
 joinBtn.addEventListener('click', () => {
     console.log('send');
-    ipcRenderer.send('showJoin');
+    ipcRenderer.send('showAnnouncement');
 });
