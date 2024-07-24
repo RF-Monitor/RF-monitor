@@ -81,7 +81,13 @@ if(storage.getItem('enable_wave')   == ""){
 if(storage.getItem('enable_notification')  == ""){
   storage.setItem('enable_notification',true)
 }
-/////////
+/////////音效
+if(storage.getItem('enable_tw_eew_sound')  == ""){
+  storage.setItem('enable_tw_eew_sound',true)
+}
+if(storage.getItem('enable_eew_tw_read')  == ""){
+  storage.setItem('enable_eew_tw_read',true)
+}
 if(storage.getItem('enable_shindo_sounds_1')  == ""){
   storage.setItem('enable_shindo_sounds_1',true)
 }
@@ -123,9 +129,7 @@ if(storage.getItem('enable_eew_jp')  == ""){
 if(storage.getItem('enable_eew_tw')  == ""){
   storage.setItem('enable_eew_tw',true)
 }
-if(storage.getItem('enable_eew_tw_read')  == ""){
-  storage.setItem('enable_eew_tw_read',true)
-}
+
 if(storage.getItem('opacity')  == ""){
   storage.setItem('opacity',0.7)
 }
