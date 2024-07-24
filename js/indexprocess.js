@@ -25,7 +25,6 @@ enable_eew_tw = storage.getItem('enable_eew_tw');
 enable_RFPLUS = storage.getItem("enable_RFPLUS");
 enable_window_popup = storage.getItem("enable_window_popup");
 enable_ty_analysis = storage.getItem("enable_ty_analysis");
-enable_eew_tw_read = storage.getItem("enable_eew_tw_read");
 enable_notification = storage.getItem("enable_notification");
 enable_warningArea = storage.getItem('enable_warningArea');
 enable_wave = storage.getItem('enable_wave');
@@ -48,7 +47,9 @@ webhook_text_TW_EEW = storage.getItem('webhook_text_TW_EEW')
 //自動調整伺服器url
 //
 
-//----------震度音效設定參數----------//
+//----------震度音效設定參數----------//enable_tw_eew_sound
+enable_tw_eew_sound = storage.getItem("enable_tw_eew_sound");
+enable_eew_tw_read = storage.getItem("enable_eew_tw_read");
 let enable_shindo_sounds_1 = storage.getItem('enable_shindo_sounds_1');
 let enable_shindo_sounds_2 = storage.getItem('enable_shindo_sounds_2');
 let enable_shindo_sounds_3 = storage.getItem('enable_shindo_sounds_3');
@@ -1411,9 +1412,13 @@ function InfoUpdate()
 				}
 
 				/*----播放音效----*/
-				if(enable_eew_tw_read != "false"){
-					playAudio_eew(['./audio/tw/eew/new/EEW.mp3',"./audio/tw/eew/new/"+eew_tw_localshindo+".mp3"]);
-					//playAudio_eew(['./audio/tw/eew/alert.mp3',"./audio/tw/eew/local.mp3","./audio/tw/eew/"+eew_tw_localshindo+".mp3","./audio/tw/eew/max.mp3","./audio/tw/eew/"+max_shindo_eew+".mp3"]);
+				if(enable_tw_eew_sound != "false"){
+					if(enable_eew_tw_read != "false"){
+						playAudio_eew(['./audio/tw/eew/new/EEW.mp3',"./audio/tw/eew/new/"+eew_tw_localshindo+".mp3"]);
+						//playAudio_eew(['./audio/tw/eew/alert.mp3',"./audio/tw/eew/local.mp3","./audio/tw/eew/"+eew_tw_localshindo+".mp3","./audio/tw/eew/max.mp3","./audio/tw/eew/"+max_shindo_eew+".mp3"]);
+					}else{
+						playAudio_eew(['./audio/tw/eew/new/EEW.mp3']);
+					}
 				}
 				//eew_tw_shindo_list_layer = L.layerGroup(eew_tw_shindo_list).addTo(map);
 

@@ -200,7 +200,9 @@ let local_only = storage.getItem("local_only");
 
 let enable_wave = storage.getItem("enable_wave");
 let enable_notification = storage.getItem("enable_notification");
-///////////震度音效/////////////
+///////////音效/////////////
+let enable_tw_eew_sound = storage.getItem('enable_tw_eew_sound');
+let enable_eew_tw_read = storage.getItem("enable_eew_tw_read");
 let enable_shindo_sounds_1 = storage.getItem('enable_shindo_sounds_1');
 let enable_shindo_sounds_2 = storage.getItem('enable_shindo_sounds_2');
 let enable_shindo_sounds_3 = storage.getItem('enable_shindo_sounds_3');
@@ -216,7 +218,7 @@ let enable_shindo_TREM = storage.getItem('enable_shindo_TREM');
 let enable_eew_jp = storage.getItem('enable_eew_jp');
 let enable_eew_tw = storage.getItem('enable_eew_tw');
 let enable_RFPLUS = storage.getItem('enable_RFPLUS');
-let enable_eew_tw_read = storage.getItem("enable_eew_tw_read");
+
 let opacity = storage.getItem('opacity');
 let webhook_url_shindo_sokuho = storage.getItem('webhook_url_shindo_sokuho');
 let webhook_header_shindo_sokuho = storage.getItem('webhook_header_shindo_sokuho');
@@ -274,7 +276,10 @@ if(enable_wave != "false"){
 if(enable_notification != "false"){
     document.getElementById("enable_notification").checked = true;
 }
-///////////震度音效/////////////
+///////////音效/////////////
+if(enable_tw_eew_sound != "false"){
+    document.getElementById("enable_tw_eew_sound").checked = true;
+}
 if(enable_shindo_sounds_1 != "false"){
     document.getElementById("enable_int_1").checked = true;
 }
