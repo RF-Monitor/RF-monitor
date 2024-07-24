@@ -1705,10 +1705,12 @@ function InfoUpdate()
 					RFPLUS_eew = RFPLUS_render(RFPLUS_eew);
 					RFPLUS_list.push(RFPLUS_eew);
 					//----播放音效----//
-					if(localshindo != "0"){
-						playAudio_eew(['./audio/tw/eew/new/EEW.mp3' ,'./audio/tw/eew/new/' +localshindo+ '.mp3']);
-					}else{
-						playAudio_eew(['./audio/tw/eew/new/EEW.mp3']);
+					if(enable_tw_eew_sound != "false"){
+						if(enable_eew_tw_read != "false"){
+							playAudio_eew(['./audio/tw/eew/new/EEW.mp3' ,'./audio/tw/eew/new/' +localshindo+ '.mp3']);
+						}else{
+							playAudio_eew(['./audio/tw/eew/new/EEW.mp3']);
+						}
 					}
 					//UI顯示(此處沒有針對同時多警報做優化)
 					document.getElementById("RFPLUS").style.display = "block";
