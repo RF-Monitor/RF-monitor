@@ -1412,7 +1412,7 @@ function InfoUpdate()
 
 				/*----播放音效----*/
 				if(enable_eew_tw_read != "false"){
-					playAudio_eew(['./audio/tw/eew/alert.wav',"./audio/tw/eew/local.wav","./audio/tw/eew/"+eew_tw_localshindo+".wav","./audio/tw/eew/max.wav","./audio/tw/eew/"+max_shindo_eew+".wav"]);
+					playAudio_eew(['./audio/tw/eew/new/EEW.mp3',"./audio/tw/eew/new/"+eew_tw_localshindo+".mp3"]);
 					//playAudio_eew(['./audio/tw/eew/alert.mp3',"./audio/tw/eew/local.mp3","./audio/tw/eew/"+eew_tw_localshindo+".mp3","./audio/tw/eew/max.mp3","./audio/tw/eew/"+max_shindo_eew+".mp3"]);
 				}
 				//eew_tw_shindo_list_layer = L.layerGroup(eew_tw_shindo_list).addTo(map);
