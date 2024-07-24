@@ -70,7 +70,7 @@ if(storage.getItem('PGA_warn_only')   == ""){
 console.log(storage.getItem('PGA_warn_only'));
 
 if(storage.getItem('enable_warningArea')   == ""){
-  storage.setItem('enable_warningArea',"false")
+  storage.setItem('enable_warningArea',true)
 }
 if(storage.getItem('local_only')   == ""){
   storage.setItem('local_only',"false")
@@ -128,6 +128,9 @@ if(storage.getItem('enable_eew_jp')  == ""){
 }
 if(storage.getItem('enable_eew_tw')  == ""){
   storage.setItem('enable_eew_tw',true)
+}
+if(storage.getItem('enable_RFPLUS')  == ""){
+  storage.setItem('enable_RFPLUS',true)
 }
 
 if(storage.getItem('opacity')  == ""){
