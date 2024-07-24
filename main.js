@@ -72,6 +72,9 @@ console.log(storage.getItem('PGA_warn_only'));
 if(storage.getItem('enable_warningArea')   == ""){
   storage.setItem('enable_warningArea',"false")
 }
+if(storage.getItem('local_only')   == ""){
+  storage.setItem('local_only',"false")
+}
 if(storage.getItem('enable_wave')   == ""){
   storage.setItem('enable_wave',"false")
 }
