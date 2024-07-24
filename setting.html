@@ -173,15 +173,17 @@
 					<br>
 					<input class="maincheckbox" type="checkbox" value="" id="enable_warningArea" name="enable_warningArea">
 					<label for="enable_warningArea">
-						<p style='font-size: 22px;'> 當收到RF測站警報時，顯示警報範圍</p>
+						<p style='font-size: 22px;margin-bottom: 1px;'> 當RF測站偵測到地震時，顯示區域警報範圍</p>
 					</label>
 					<br>
+					<h6 style="margin-bottom: 30px;">區域警報範圍為測站方圓20公里</h6>
 					<input style="margin-bottom: 1px;" class="maincheckbox" type="checkbox" value="" id="local_only" name="local_only">
 					<label for="local_only">
 						<p style='font-size: 22px;margin-bottom: 1px;'> RF區域警報本地模式</p>
 					</label>
 					<br>
-					<h6>開啟此選項後，最大震度以及音效將只取決於鄰近您20公里內的測站</h6>
+					<h6>開啟此選項後，RF震度偵測的音效將只取決於鄰近您20公里內的測站</h6>
+					<h6>若關閉此選項，震度偵測的音效將取決於全台灣偵測到的最大震度</h6>
 					<input style="display: none;" class="maincheckbox" type="checkbox" value="" id="enable_PGA_TREM" name="enable_PGA_TREM" disabled>
 					<label  style='margin-bottom: 0px;' for="enable_PGA_TREM">
 						<p style='display: none;font-size: 22px;margin-bottom: 1px;'>顯示TREM即時測站</p>
