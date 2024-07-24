@@ -2612,7 +2612,7 @@ function InfoUpdate()
 		}
 		
 		function downnewver(){
-			shell.openExternal(server_url+":8080/downloads/RF-monitor.exe");
+			shell.openExternal("https://rfeqserver.myqnapcloud.com/RFEQservice/downloads/RF-monitor.exe");
 		}
 		function register_google(){
 			shell.openExternal("https://rfeqserver.myqnapcloud.com/RFEQservice/register.html");
