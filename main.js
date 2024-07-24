@@ -154,6 +154,9 @@ if(storage.getItem('enable_autolaunch') != "false" || !isDevelopment){
 if(storage.getItem('webhook_url_shindo_sokuho')  == ""){
   storage.setItem('webhook_url_shindo_sokuho','')
 }
+if(storage.getItem('webhook_header_shindo_sokuho')  == ""){
+  storage.setItem('webhook_header_shindo_sokuho','RF震度速報')
+}
 if(storage.getItem('webhook_url_TW_EEW')  == ""){
   storage.setItem('webhook_url_TW_EEW','')
 }
@@ -222,7 +225,7 @@ const createWindow = () => {
     })
     setting_win.loadFile('setting.html');
 
-    join_win = new BrowserWindow({
+    announcement_win = new BrowserWindow({
       height:600,
       width:800,
       minHeight: 600,
@@ -236,7 +239,7 @@ const createWindow = () => {
         nativeWindowOpen: true,
       }
     })
-    join_win.loadFile('join.html');
+    announcement_win.loadFile('announcement.html');
 
     setting_win.hide();
     setting_win.on('close', (event) => {
@@ -248,13 +251,13 @@ const createWindow = () => {
       }
     })
 
-    join_win.hide();
-    join_win.on('close', (event) => {
+    announcement_win.hide();
+    announcement_win.on('close', (event) => {
       if (app.quitting) {
-        join_win = null;
+        announcement_win = null;
       } else {
         event.preventDefault()
-        join_win.hide();
+        announcement_win.hide();
       }
     })
     win.on('close', ((event) => {
@@ -337,8 +340,9 @@ ipcMain.on('showSetting',() => {//顯示設定視窗
     setting_win.show();
 })
 
-ipcMain.on('showJoin',() => {//顯示加入測站視窗
-    join_win.show();
+ipcMain.on('showAnnouncement',() => {//顯示加入測站視窗
+    announcement_win.show();
+    announcement_win.webContents.send('refresh', 'refresh');
 })
 
 ipcMain.on('hideSetting',() => {//隱藏設定視窗
