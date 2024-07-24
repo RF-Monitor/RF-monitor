@@ -2539,12 +2539,22 @@ function InfoUpdate()
 								let radius_70p = route[j]["radiusof70percentprobability"];
 								let windspeed = route[j]["windspeed"];
 								let gustspeed = route[j]["gustspeed"];
+								let typhoonName = "";
+								if (parseInt(windspeed) <= 17.2){
+									typhoonName = "熱低壓";
+								}else if(parseInt(windspeed) <= 32.6){
+									typhoonName = "輕度颱風" + cwbname;
+								}else if(parseInt(windspeed) <= 50.9){
+									typhoonName = "中度颱風" + cwbname;
+								}else{
+									typhoonName = "強烈颱風" + cwbname;
+								}
 								let popupContent = "";
 								radius = radius_15;
 								if(cwbname == "0"){
 									popupContent = "<p>熱低壓</p>";
 								}else{
-									popupContent = "<p>颱風 "+cwbname+"</p>";
+									popupContent = "<b><p>"+typhoonName+"</p></b>";
 								}
 								
 								let movpred = route[j]["movingprediction"];
