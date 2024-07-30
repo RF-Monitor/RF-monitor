@@ -82,6 +82,9 @@ if(storage.getItem('enable_notification')  == ""){
   storage.setItem('enable_notification',true)
 }
 /////////音效
+if(storage.getItem('enable_jp_eew_sound')  == ""){
+  storage.setItem('enable_jp_eew_sound',"false")
+}
 if(storage.getItem('enable_tw_eew_sound')  == ""){
   storage.setItem('enable_tw_eew_sound',true)
 }
