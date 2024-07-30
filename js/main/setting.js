@@ -94,6 +94,12 @@ function submit(){
         storage.setItem('enable_notification',"false");
     }
     //////////////////////
+    if(document.querySelector("#enable_tw_eew_sound").checked){
+        storage.setItem('enable_tw_eew_sound',true);
+    }
+    if(document.querySelector("#enable_jp_eew_sound").checked){
+        storage.setItem('enable_jp_eew_sound',true);
+    }
     if(document.querySelector("#enable_int_1").checked){
         storage.setItem('enable_shindo_sounds_1',true);
     }else{
@@ -202,6 +208,7 @@ let enable_wave = storage.getItem("enable_wave");
 let enable_notification = storage.getItem("enable_notification");
 ///////////音效/////////////
 let enable_tw_eew_sound = storage.getItem('enable_tw_eew_sound');
+let enable_jp_eew_sound = storage.getItem('enable_jp_eew_sound');
 let enable_eew_tw_read = storage.getItem("enable_eew_tw_read");
 let enable_shindo_sounds_1 = storage.getItem('enable_shindo_sounds_1');
 let enable_shindo_sounds_2 = storage.getItem('enable_shindo_sounds_2');
@@ -279,6 +286,9 @@ if(enable_notification != "false"){
 ///////////音效/////////////
 if(enable_tw_eew_sound != "false"){
     document.getElementById("enable_tw_eew_sound").checked = true;
+}
+if(enable_jp_eew_sound != "false"){
+    document.getElementById("enable_jp_eew_sound").checked = true;
 }
 if(enable_shindo_sounds_1 != "false"){
     document.getElementById("enable_int_1").checked = true;
