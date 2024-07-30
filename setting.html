@@ -56,7 +56,35 @@
 			bottom:3px;
 			color:white;
 		}
+		.speaker{
+			width: 33px; 
+			height: 33px; 
+			vertical-align: middle;
+			cursor: pointer;
+		}
 	</style>
+	<script>
+		function playAudio_eew2(audio){
+			return new Promise(resolve=> {
+				audio.play()
+				audio.onended=function(){
+					resolve("1")
+				};
+			})
+		}
+
+		async function playAudio_eew(path){
+			console.log(path.length)
+			for(l = 0;l<path.length;l++){
+				console.log("start")
+				nowplayAud_eew = new Audio(path[l]);
+				console.log(path[l]);
+				let a = await playAudio_eew2(nowplayAud_eew);
+				console.log(l)
+			}
+			console.log("end")
+		}
+	</script>
 </head>
 <body style="background-color:#2B2B2B;color: white;height: 100%;">
 	<h6 style="color: #2B2B2B;text-decoration:line-through">偽娘萬歲</h6>
@@ -249,12 +277,12 @@
 				<h4>緊急地震速報音效</h4>
 				<input class="maincheckbox" type="checkbox" value="" id="enable_jp_eew_sound" name="enable_jp_eew_sound">
 				<label for="enable_jp_eew_sound">
-					<p style='font-size: 22px;'>日本地震速報音效</p>
+					<p style='font-size: 22px;'>日本地震速報音效(NIED)<img src="images/speaker.png" class="speaker" onclick="event.preventDefault();playAudio_eew(['audio/tw/eew/new/EEW.mp3'])"></p>
 				</label>
 				<br>
 				<input class="maincheckbox" type="checkbox" value="" id="enable_tw_eew_sound" name="enable_tw_eew_sound">
 				<label for="enable_tw_eew_sound">
-					<p style='font-size: 22px;'>台灣地震速報音效(CWA/RFPLUS)</p>
+					<p style='font-size: 22px;'>台灣地震速報音效(CWA/RFPLUS)<img src="images/speaker.png" class="speaker" onclick="event.preventDefault();playAudio_eew(['audio/tw/eew/new/EEW.mp3'])"></p>
 				</label>
 				<br>
 				<input class="maincheckbox" type="checkbox" value="" id="enable_eew_tw_read" name="enable_eew_tw_read" style='margin-bottom: 0px;'>
