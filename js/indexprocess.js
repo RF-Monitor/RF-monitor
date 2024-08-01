@@ -2625,15 +2625,18 @@ function InfoUpdate()
 		function ntp(){
 			if(!EEW_TW_ing){
 				try{
-					XHR_ntp.open('GET','http://worldtimeapi.org/api/timezone/Asia/Taipei',false);
+					XHR_ntp.open('GET','http://worldtimeapi.org/api/timezone/Asia/Taipei',true);
 					XHR_ntp.send(null);
-					if(XHR_ntp.status ==200){
-						let ntpnum = XHR_ntp.responseText;
-						ntpnum = JSON.parse(ntpnum);
-						ntpnum = ntpnum["unixtime"] * 1000;
-						ntpoffset_ = ntpnum - Date.now();
-						console.log("NTP offset:"+ntpoffset_.toString());
+					XHR_ntp.onreadystatechange = function(){
+						if(XHR_ntp.status ==200){
+							let ntpnum = XHR_ntp.responseText;
+							ntpnum = JSON.parse(ntpnum);
+							ntpnum = ntpnum["unixtime"] * 1000;
+							ntpoffset_ = ntpnum - Date.now();
+							console.log("NTP offset:"+ntpoffset_.toString());
+						}
 					}
+					
 				}catch(e){
 					setTimeout(() => {ntp()},1000)
 				}
