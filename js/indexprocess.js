@@ -2598,7 +2598,7 @@ function InfoUpdate()
 				if(XHR_ver.status ==200)
 				{
 					let newver = XHR_ver.responseText;
-					let ver = "2.6.0";
+					let ver = "2.6.1";
 					//newver = newver.substring(0, newver.length - 2);
 					console.log('最新版本:',newver)
 					console.log('目前版本:',ver)
@@ -2647,17 +2647,6 @@ function InfoUpdate()
 				if(count % 100 == 0){
 					ntp();
 				}
-				
-				if(count % 10 == 0){
-					//地震速報jp
-					eewupdate_jp_ws()
-					
-					//地震速報tw
-					eewupdate_tw_p2p();
-
-					//RFPLUS警報過期檢查
-					RFPLUS_overtime();
-				}
 
 				if (count % 100 == 0){
 					//檢查更新
@@ -2677,8 +2666,8 @@ function InfoUpdate()
 				}
 
 				//地震速報渲染
-				jp_eew_circle()
-				tw_eew_circle()
+				//jp_eew_circle()
+				//tw_eew_circle()
 
 				count++;
 				if(count == 600){
@@ -2815,15 +2804,30 @@ function InfoUpdate()
 
 
 /*----------main----------*/
-		document.getElementById("loading_text").innerHTML = "正在取得測站列表...";
-		updateStaList();
-		document.getElementById("loading_text").innerHTML = "正在校正時間...";
-		ntp();
-		timeUpdate();
-		if(enable_wave != "false"){
-			wave_update();
-		}else{
-			document.getElementById("wave").style.display = "none";
+		function main(){
+			document.getElementById("loading_text").innerHTML = "正在取得測站列表...";
+			updateStaList();
+			document.getElementById("loading_text").innerHTML = "正在校正時間...";
+			ntp();
+			timeUpdate();
+			if(enable_wave != "false"){
+				wave_update();
+			}else{
+				document.getElementById("wave").style.display = "none";
+			}
+			document.getElementById("loading_text").innerHTML = "正在連線到websocket伺服器...";
+
+			//台灣地震速報渲染
+			setInterval(eewupdate_tw_p2p,1000);
+			setInterval(tw_eew_circle,100);
+			//日本地震速報渲染
+			setInterval(eewupdate_jp_ws,1000);
+			setInterval(jp_eew_circle,100);
+			//RFPLUS警報過期檢查
+			setInterval(RFPLUS_overtime,1000);
+			//連線到websocket伺服器
+			ws_connect();
 		}
-		document.getElementById("loading_text").innerHTML = "正在連線到websocket伺服器...";
-		ws_connect();
+		
+
+		
