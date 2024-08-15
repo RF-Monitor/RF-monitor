@@ -133,7 +133,7 @@ if(storage.getItem('enable_eew_tw')  == ""){
   storage.setItem('enable_eew_tw',true)
 }
 if(storage.getItem('enable_RFPLUS')  == ""){
-  storage.setItem('enable_RFPLUS',true)
+  storage.setItem('enable_RFPLUS',"false")
 }
 
 if(storage.getItem('opacity')  == ""){
