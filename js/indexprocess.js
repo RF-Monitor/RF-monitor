@@ -66,6 +66,9 @@ eew_tw_ws = "";
 eew_jp_ws = "";
 var report = "";
 
+eew_tw_list = {};
+eew_tw_interval_list = {};
+
 //eew狀態全域
 EEW_TW_ing = false;
 
@@ -281,6 +284,40 @@ function PGA2shindo(PGA){
 		localshindo = "0";
 	}
 	return localshindo;
+}
+function PGA2color(PGA){
+	if (PGA >= 800) {
+		localshindo = "7";
+		localcolor = 'purple';
+	} else if (800 >= PGA && 440 < PGA) {
+		localshindo = "6+";
+		localcolor = 'brown';
+	} else if (440 >= PGA && 250 < PGA) {
+		localshindo = "6-";
+		localcolor = 'brown';
+	} else if (250 >= PGA && 140 < PGA) {
+		localshindo = "5+";
+		localcolor = 'red';
+	} else if (140 >= PGA && 80 < PGA) {
+		localshindo = "5-";
+		localcolor = 'red';
+	} else if (80 >= PGA && 25 < PGA) {
+		localshindo = "4";
+		localcolor = '#BAC000';
+	} else if (25 >= PGA && 8 < PGA) {
+		localshindo = "3";
+		localcolor = 'green';
+	} else if (8 >= PGA && 2.5 < PGA) {
+		localshindo = "2";
+		localcolor = '#0066CC';
+	} else if (2.5 >= PGA && 0.8 < PGA) {
+		localshindo = "1";
+		localcolor = 'gray';
+	} else {
+		localshindo = "0";
+		localcolor = 'blue';
+	}
+	return localcolor;
 }
 Date.prototype.format = function (fmt) {
 	var o = {
@@ -1035,6 +1072,197 @@ function InfoUpdate()
 				eew_jp_lon_displayed = eew_jp_lon;
 				eew_jp_timestamp_displayed = eew_jp_timestamp;
 				eew_jp_version_displayed = eew_jp_version;
+			}
+		}
+		function eew_localPGA(townlat,townlon,warningData){
+			let surface = Math.sqrt(Math.pow(Math.abs(townlat + (warningData["lat"] * -1)) * 111, 2) + Math.pow(Math.abs(townlon + (warningData["lon"] * -1)) * 101, 2));//震央距
+			let distance = Math.sqrt(Math.pow(warningData["depth"], 2) + Math.pow(surface, 2));//震源距
+			//let value = Math.round((distance - ((new Date().getTime() - json.Time) / 1000) * 3.5) / 3.5)
+			let PGA = (1.657 * Math.pow(Math.E, (1.533 * warningData["scale"])) * Math.pow(distance, -1.607)).toFixed(3);
+			return PGA;
+		}
+		
+		function eew_tw_control(warning){
+			let id = warning["id"];
+			let inList = false;
+			//檢查eew id是否已存在
+			for(let i = 0; i < eew_tw_list.length; i++){
+				if(eew_tw_list[i]["id"] == id){
+					inList = true;
+					eew_tw_list[i] = warning;
+				}
+			}
+			//新地震
+			if(!inList){
+				let eew_data = {"warningData":warning}
+				let eew_displayed = {"id":"","number":0,"location":"","scale":0,"depth":0,"max":0,"lat":0,"lon":0,"time":0}
+				let eew_shindo_list_layer = L.layerGroup().addTo(map);
+				eew_data["eew_displayed"] = eew_displayed;
+				eew_data["eew_shindo_list_layer"] = eew_shindo_list_layer;
+				eew_tw_list[id] = eew_data;
+				eew_tw_interval[id] = setInterval(function(){
+					eew_tw_interval(id);
+				},100)
+			}
+		}
+
+		function eew_tw_interval(id){
+			//----------新地震---------//
+			if(eew_tw_list[id]["eew_displayed"]["id"] == ""){
+				//計算本地預計震度
+				let localshindo = PGA2shindo(eew_localPGA(userlat,userlon,eew_tw_list[id]["warningData"]));
+				//計算全域預計震度
+				for(i = 0; i < country_list.length;i++){
+					for(var key of Object.keys(locations["towns"][country_list[i]])){
+						let town_ID = null;
+						let townlat = locations["towns"][country_list[i]][key][1];
+						let townlon = locations["towns"][country_list[i]][key][2];
+						let countryname = country_list[i];
+						let townname = key;
+						for(j = 0;j < town_ID_list.length;j++){
+							if(countryname == town_ID_list[j]["COUNTYNAME"] && townname == town_ID_list[j]["TOWNNAME"]){
+								town_ID = town_ID_list[j]["TOWNCODE"].toString();
+							}
+						}
+						let PGA = eew_localPGA(townlat,townlon,eew_tw_list[id]["warningData"]);
+						let localshindo = PGA2shindo(PGA);
+						let localcolor = PGA2color(PGA);
+						
+						/*----加入震度色塊----*/
+						if(localshindo != "0"){
+							let line = town_line[town_ID];
+							//console.log(town_line[[town_ID]])
+							eew_tw_list[id]["eew_shindo_list_layer"].addLayer(L.geoJSON(line, { color:"#5B5B5B",fillColor: localcolor,weight:1,fillOpacity:1,pane:"eew_tw_shindo_list_layer" }))
+						}
+						/*----最大震度----*/
+						/*
+						if(shindo2float(max_shindo_eew)<shindo2float(localshindo)){
+							max_shindo_eew = localshindo;
+						}*/
+					}
+				}
+				//ui新增
+
+				//顯示震波圓
+				let timestamp_now = Date.now()+ntpoffset_;//現在的timestamp
+				let elapsed = (timestamp_now - eew_tw_list[id]["warningData"]["time"]) / 1000;//timestamp差異
+				let p_radius = Math.sqrt(Math.pow(6.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//P半徑
+				let s_radius = Math.sqrt(Math.pow(3.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//s半徑
+				if (s_radius <= 0 || isNaN(s_radius)){
+					s_radius = 0;
+				}
+				if (p_radius <= 0 || isNaN(p_radius)){
+					p_radius = 0;
+				}
+
+				let eew_tw_Pcircle = L.circle([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]],{color : 'blue' , radius:p_radius*1000 , fill : false,pane:"wave_layer"}).addTo(map);
+				let eew_tw_Scircle = L.circle([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]],{color : 'red' , radius:s_radius*1000,pane:"wave_layer"}).addTo(map);
+				let epiicon = L.icon({iconUrl : 'shindo_icon/epicenter_tw.png',iconSize : [30,30],});
+				let eew_tw_epicenter_icon = L.marker([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]],{icon : epiicon,opacity : 1.0}).addTo(map);
+
+				eew_tw_list[id]["eew_Pcircle"] = eew_tw_Pcircle;
+				eew_tw_list[id]["eew_Scircle"] = eew_tw_Scircle;
+				eew_tw_list[id]["eew_icon"] = eew_tw_epicenter_icon;
+				//webhook
+
+				//更新displayed
+				eew_tw_list[id]["eew_displayed"] = eew_tw_list[id]["warningData"];
+
+			//----------更正報----------//
+			}else if(eew_tw_list[id]["eew_displayed"]["number"] != eew_tw_list[id]["warningData"]["number"]){
+				//計算本地預計震度
+				let localshindo = PGA2shindo(eew_localPGA(userlat,userlon,eew_tw_list[id]["warningData"]));
+				//計算全域預計震度
+				eew_tw_list[id]["eew_shindo_list_layer"].clearLayers();
+
+				for(i = 0; i < country_list.length;i++){
+					for(var key of Object.keys(locations["towns"][country_list[i]])){
+						let town_ID = null;
+						let townlat = locations["towns"][country_list[i]][key][1];
+						let townlon = locations["towns"][country_list[i]][key][2];
+						let countryname = country_list[i];
+						let townname = key;
+						for(j = 0;j < town_ID_list.length;j++){
+							if(countryname == town_ID_list[j]["COUNTYNAME"] && townname == town_ID_list[j]["TOWNNAME"]){
+								town_ID = town_ID_list[j]["TOWNCODE"].toString();
+							}
+						}
+						let PGA = eew_localPGA(townlat,townlon,eew_tw_list[id]["warningData"]);
+						let localshindo = PGA2shindo(PGA);
+						let localcolor = PGA2color(PGA);
+						
+						/*----加入震度色塊----*/
+						if(localshindo != "0"){
+							let line = town_line[town_ID];
+							//console.log(town_line[[town_ID]])
+							eew_tw_list[id]["eew_shindo_list_layer"].addLayer(L.geoJSON(line, { color:"#5B5B5B",fillColor: localcolor,weight:1,fillOpacity:1,pane:"eew_tw_shindo_list_layer" }))
+						}
+						/*----最大震度----*/
+						/*
+						if(shindo2float(max_shindo_eew)<shindo2float(localshindo)){
+							max_shindo_eew = localshindo;
+						}*/
+					}
+				}
+				//ui更新
+				
+				//計算震波圓
+				let timestamp_now = Date.now()+ntpoffset_;//現在的timestamp
+				let elapsed = (timestamp_now - eew_tw_list[id]["warningData"]["time"]) / 1000;//timestamp差異
+				let p_radius = Math.sqrt(Math.pow(6.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//P半徑
+				let s_radius = Math.sqrt(Math.pow(3.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//s半徑
+				if (s_radius <= 0 || isNaN(s_radius)){
+					s_radius = 0;
+				}
+				if (p_radius <= 0 || isNaN(p_radius)){
+					p_radius = 0;
+				}
+				//更新震波圓半徑
+				eew_tw_list[id]["eew_Pcircle"].setRadius(p_radius * 1000);
+				eew_tw_list[id]["eew_Scircle"].setRadius(s_radius * 1000);
+				//更新座標
+				eew_tw_list[id]["eew_Pcircle"].setLatLng([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]]);
+				eew_tw_list[id]["eew_Scircle"].setLatLng([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]]);
+				eew_tw_list[id]["eew_icon"].setLatLng([eew_tw_list["warningData"]["lat"],eew_tw_list["warningData"]["lon"]]);
+				
+				//更新displayed
+				eew_tw_list[id]["eew_displayed"] = eew_tw_list[id]["warningData"];
+			//----------繼續----------//
+			}else{
+				//計算震波圓
+				let timestamp_now = Date.now()+ntpoffset_;//現在的timestamp
+				let elapsed = (timestamp_now - eew_tw_list[id]["warningData"]["time"]) / 1000;//timestamp差異
+				let p_radius = Math.sqrt(Math.pow(6.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//P半徑
+				let s_radius = Math.sqrt(Math.pow(3.5 * elapsed,2) - Math.pow(eew_tw_depth,2));//s半徑
+				if (s_radius <= 0 || isNaN(s_radius)){
+					s_radius = 0;
+				}
+				if (p_radius <= 0 || isNaN(p_radius)){
+					p_radius = 0;
+				}
+				//更新震波圓半徑
+				eew_tw_list[id]["eew_Pcircle"].setRadius(p_radius * 1000);
+				eew_tw_list[id]["eew_Scircle"].setRadius(s_radius * 1000);
+			}
+
+			//----------判斷速報過期----------//
+			if((timestamp_now - eew_tw_list[id]["warningData"]["time"]) / 1000 >= 180){
+				//震度色塊
+				eew_tw_list[id]["eew_shindo_list_layer"].clearLayers();
+				//震波圓
+				//震波消失
+				if(eew_tw_list[id]["eew_Pcircle"] != null || eew_tw_list[id]["eew_Scircle"] != null){
+					//max_shindo_eew = "0"
+					//左側css
+					//let main_box = document.querySelector('.eew_tw_main_box');
+					//main_box.style.backgroundColor = "blue";
+					//document.getElementById("eew_tw_maxshindo").src="shindo_icon/selected/0.png";
+					map.removeLayer(eew_tw_list[id]["eew_Pcircle"]);
+					map.removeLayer(eew_tw_list[id]["eew_Scircle"]);
+					map.removeLayer(eew_tw_list[id]["eew_icon"]);
+					delete eew_tw_list[id];
+					clearInterval(eew_tw_interval_list[id]);
+				}
 			}
 		}
 
@@ -2598,7 +2826,7 @@ function InfoUpdate()
 				if(XHR_ver.status ==200)
 				{
 					let newver = XHR_ver.responseText;
-					let ver = "2.6.1";
+					let ver = "2.6.2";
 					//newver = newver.substring(0, newver.length - 2);
 					console.log('最新版本:',newver)
 					console.log('目前版本:',ver)
@@ -2709,6 +2937,7 @@ function InfoUpdate()
 					console.log(data["content"])
 					eew_tw_ws = data["content"];
 					eew_tw_p2p = data["content"];
+					//eew_tw_control(data["content"]);
 				}
 				//日本速報
 				if(data["type"] == "eew_jp"){
