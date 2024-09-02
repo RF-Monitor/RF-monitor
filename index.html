@@ -634,6 +634,12 @@ ws_server_url = storage.getItem('ws_server_url');
 	}
 	document.getElementById("loading_text").innerHTML = "正在建構地圖...";
 	/*----------建構地圖----------*/
+	var BlackLayer = L.TileLayer.extend({
+		getTileUrl: function(coords) {
+			return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXY3B0dPwPAANNAcN9MwGSAAAAAElFTkSuQmCC'; // 一個 1x1 全黑的 PNG
+		},
+		tileSize: 256
+	});
 	var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
 	var osmUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
 	var map_shakingArea = L.map('map_shakingArea', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false,attributionControl:false,zoomDelta: 0.1 }).setView([23.7, 120.924610], 8);
@@ -643,8 +649,8 @@ ws_server_url = storage.getItem('ws_server_url');
 	var map = L.map('mapid', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
 	osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
 	osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
+	//osm = new BlackLayer();
 	map.addLayer(osm);
-
 	var map2 = L.map('map2', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
 	osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
 	osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
@@ -852,7 +858,7 @@ ws_server_url = storage.getItem('ws_server_url');
 	setInterval("update()", 100);
 	main();
 	document.getElementById("loading_intro").style.display = "none";
-	//setTimeout(() =>{RFPLUS({"time":1710337970339,"center":{"lat":24.574,"lon":121.868,"pga":10.27,"cname":"宜蘭縣蘇澳鎮"},"rate":0.10505097728445321,"report_num":2,"id":"1710337970339"})},5000)
+	//setTimeout(() =>{RFPLUS({"time":Date.now()*1000,"center":{"lat":23.996,"lon":121.605,"pga":48.95,"cname":"花蓮縣花蓮市"},"rate":11140.39361376332,"final":false,"report_num":24,"id":"1725265593920"})},5000)
 	
 </script>
 </body>
