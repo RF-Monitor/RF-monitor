@@ -2826,7 +2826,7 @@ function InfoUpdate()
 				if(XHR_ver.status ==200)
 				{
 					let newver = XHR_ver.responseText;
-					let ver = "2.6.2";
+					let ver = "2.6.3";
 					//newver = newver.substring(0, newver.length - 2);
 					console.log('最新版本:',newver)
 					console.log('目前版本:',ver)
