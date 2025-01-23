@@ -2826,7 +2826,7 @@ function InfoUpdate()
 				if(XHR_ver.status ==200)
 				{
 					let newver = XHR_ver.responseText;
-					let ver = "2.6.3";
+					let ver = "2.6.4";
 					//newver = newver.substring(0, newver.length - 2);
 					console.log('最新版本:',newver)
 					console.log('目前版本:',ver)
@@ -2853,7 +2853,7 @@ function InfoUpdate()
 		function ntp(){
 			if(!EEW_TW_ing){
 				try{
-					XHR_ntp.open('GET','http://worldtimeapi.org/api/timezone/Asia/Taipei',true);
+					XHR_ntp.open('GET','https://rfeqserver.myqnapcloud.com/ntp',true);
 					XHR_ntp.send(null);
 					XHR_ntp.onreadystatechange = function(){
 						if(XHR_ntp.status ==200){
