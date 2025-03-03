@@ -155,7 +155,7 @@
 					<h5 class='lang_CNS'>预计本地震度:<span id="localshindo"></span></h5>
 				</div>
 			</div>
-			<!--RF測站-->
+			<!--RFEQ地震預警-->
 			<div class="RF" style="display: block;">
 				<div class="RF_title">
 					<!--<h4><span id="RF_title"></span></h4>-->
@@ -164,6 +164,35 @@
 					<h5 class="lang_CNS" style="color:white ;"><strong>台湾地震预警(RFEQ)</strong></h5>
 					<h5 class="lang_JP" style="color:white ;"><strong>緊急地震速報(台湾RFEQ)</strong></h5>
 				</div>
+
+				<!--RFPLUS3-->
+				<div id="RFPLUS3" class="RFPLUS" style="display: none;">
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第<span id="RFPLUS3_report_num"></span>報)</h4>
+					</div>
+					<div class="RFPLUS_main_box">
+						<div style="width:70px">
+							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
+							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<img id="RFPLUS3_maxshindo" style="width:70px">
+						</div>
+						<div style="width:160px;margin-left: 10px">
+							<div>
+								<h4 style='color:white'>
+									<span id="RFPLUS3_epicenter"></span>
+								</h4>
+							</div>
+							<div class="RFPLUS3_maindown">
+								<div class="RFPLUS3_scale"><h4>M<span id="RFPLUS3_scale"></span></h4></div>
+								<div class="RFPLUS3_depth"><h4><span id="RFPLUS3_depth"></span></h4></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--RFPLUS2-->
 				<div id="RFPLUS" class="RFPLUS" style="display: none;">
 					<div id="RFPLUS_status_box" class="RFPLUS_status_box">
 						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第<span id="RFPLUS_report_num"></span>報)</h4>
@@ -188,6 +217,8 @@
 						</div>
 					</div>
 				</div>
+
+				<!--RF-sensor alert list-->
 				<div class="RF_list">
 					<h4 id="RF_status" style="color:white ;display: block;">目前沒有地震速報</h4>
 					<div class="RF_lists">
@@ -606,6 +637,7 @@ ws_server_url = storage.getItem('ws_server_url');
 <script src="trem-core/index.js"></script>
 <script src="js/main/replay.js"></script>
 <script src="js/main/webhook.js"></script>
+<script src="js/main/RFPLUS.js"></script>
 <script src="js/indexprocess.js"></script>
 <script type="text/javascript">
 

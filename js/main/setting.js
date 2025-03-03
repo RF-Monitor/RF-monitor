@@ -168,6 +168,10 @@ function submit(){
     }else{
         storage.setItem("enable_RFPLUS","false");
     }
+    let RFPLUS_type_selected = document.querySelector('input[name="RFPLUS_type"]:checked')
+    if(RFPLUS_type_selected){
+        storage.setItem("RFPLUS_type",RFPLUS_type_selected.value);
+    }
     if(document.querySelector("#enable_eew_tw_read").checked){
         storage.setItem('enable_eew_tw_read',true);
     }else{
@@ -225,6 +229,7 @@ let enable_shindo_TREM = storage.getItem('enable_shindo_TREM');
 let enable_eew_jp = storage.getItem('enable_eew_jp');
 let enable_eew_tw = storage.getItem('enable_eew_tw');
 let enable_RFPLUS = storage.getItem('enable_RFPLUS');
+let RFPLUS_type = storage.getItem('RFPLUS_type');
 
 let opacity = storage.getItem('opacity');
 let webhook_url_shindo_sokuho = storage.getItem('webhook_url_shindo_sokuho');
@@ -240,6 +245,8 @@ if(server_select == "http://RFEQSERVER.myqnapcloud.com"){
 }
 document.getElementById("lat").value = userlat;
 document.getElementById("lon").value = userlon;
+
+
 if(enable_gpu != "false"){
     document.getElementById("enable_gpu").checked = true;
 }
@@ -334,6 +341,11 @@ if(enable_eew_tw != "false"){
 }
 if(enable_RFPLUS != "false"){
     document.getElementById("enable_RFPLUS").checked = true;
+}
+if(RFPLUS_type == "RFPLUS2"){
+    document.getElementById("RFPLUS_type_2").checked = true;
+}else{
+    document.getElementById("RFPLUS_type_3").checked = true;
 }
 if(enable_eew_tw_read != "false"){
     document.getElementById("enable_eew_tw_read").checked = true;

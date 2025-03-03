@@ -176,24 +176,35 @@
 						<p style='font-size: 22px;margin-bottom: 1px;'>顯示台灣快速震度推算法地震速報(RFPLUS)(發布單位:RFEQ)</p>
 					</label>
 					<br>
+					<p style='font-size: 18px;margin-bottom: 1px;'>RFPLUS版本選擇</p>
+					<input class="mainradio" type="radio" id="RFPLUS_type_2" name="RFPLUS_type" value="RFPLUS2">
+					<label for="RFPLUS_type_2">
+						<p style='font-size: 18px; margin-bottom: 1px;'>RFPLUS2</p>
+					</label>
+					<br>
+					<input class="mainradio" type="radio" id="RFPLUS_type_3" name="RFPLUS_type" value="RFPLUS3">
+					<label for="RFPLUS_type_3">
+						<p style='font-size: 18px; margin-bottom: 1px;'>RFPLUS3 + RFPLUS2(實驗性功能)</p>
+					</label>
 					<h6 style="margin-bottom: 30px;">您必須是進階帳號才會顯示RFPLUS地震速報</h6>
+					<br>
+					<input class="maincheckbox" type="checkbox" value="" id="enable_tsunami" name="enable_tsunami" disabled>
+					<label for="enable_tsunami">
+						<p style='font-size: 22px;'>顯示海嘯警訊、警報(功能暫時停用)</p>
+					</label>
+					<br>
+					<input class="maincheckbox" type="checkbox" value="" id="enable_wave" name="enable_wave" disabled>
+					<label for="enable_wave">
+						<p style='font-size: 22px;'>顯示測站波型(功能暫時停用)</p>
+					</label>
+					<hr/>
+					<!------------>
+					<h4>RF強震監視器</h4>
 					<input class="maincheckbox" type="checkbox" value="" id="enable_PGA" name="enable_PGA">
 					<label for="enable_PGA">
 						<p style='font-size: 22px;'>顯示RF-sensor即時測站</p>
 					</label>
 					<br>
-					<input class="maincheckbox" type="checkbox" value="" id="enable_tsunami" name="enable_tsunami" disabled>
-					<label for="enable_tsunami">
-						<p style='font-size: 22px;'>顯示海嘯警訊、警報</p>
-					</label>
-					<br>
-					<input class="maincheckbox" type="checkbox" value="" id="enable_wave" name="enable_wave">
-					<label for="enable_wave">
-						<p style='font-size: 22px;'>顯示測站波型(可能較耗效能及網路資源)</p>
-					</label>
-					<hr/>
-					<!------------>
-					<h4>RF強震監視器</h4>
 					<input class="maincheckbox" type="checkbox" value="" id="PGA_warn_only" name="PGA_warn_only">
 					<label for="PGA_warn_only">
 						<p style='font-size: 22px;'>僅在震動檢測時顯示震度</p>
@@ -408,7 +419,7 @@
 				<h5>加入RPTeS discord社群:</h5>
 				<h5>https://discord.gg/Gqt3WhrQpd</h5>
 				<hr/>
-				<p>ver.2.6.4   資料僅供參考，可能會有所誤差，實際應以中央氣象署所最終公布資料為準</p>
+				<p>ver.2.7.0-pre1   資料僅供參考，可能會有所誤差，實際應以中央氣象署所最終公布資料為準</p>
 				<p>意見反應、Bug回報 請聯繫rexis0227@gmail.com</p>
 				<p>地震報告、天氣警特報、颱風資訊資料來源:中央氣象署</p>
 			</div>
