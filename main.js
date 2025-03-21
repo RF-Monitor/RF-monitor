@@ -45,6 +45,7 @@ if (storage.getItem('server_url') === null) {
   console.log("Backup config file successfully used.")
 }
 
+/*----------設定預設值----------*/
 if(storage.getItem('server_url')  == ""){
   storage.setItem('server_url','http://RFEQSERVER.myqnapcloud.com')
 }
@@ -152,6 +153,9 @@ if(storage.getItem('enable_eew_tw')  == ""){
 }
 if(storage.getItem('enable_RFPLUS')  == ""){
   storage.setItem('enable_RFPLUS',"false")
+}
+if(storage.getItem('RFPLUS_type')  == ""){
+  storage.setItem('RFPLUS_type',"RFPLUS2")
 }
 
 if(storage.getItem('opacity')  == ""){

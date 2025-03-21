@@ -305,6 +305,15 @@
     padding-bottom: 0px;
     /*height: 30px;*/
 }
+.RFPLUS3_maindown{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.RFPLUS3_scale{
+    padding: 3px;
+}
 .RF_lists{
     background-color: #3c3c3c;
     display: flex;
