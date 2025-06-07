@@ -634,7 +634,7 @@ server_url = storage.getItem('server_url');
 ws_server_url = storage.getItem('ws_server_url');
 </script>
 <script src="js/main/auth.js"></script>
-<script src="trem-core/index.js"></script>
+<!--<script src="trem-core/index.js"></script>-->
 <script src="js/main/replay.js"></script>
 <script src="js/main/webhook.js"></script>
 <script src="js/main/RFPLUS.js"></script>
@@ -890,7 +890,21 @@ ws_server_url = storage.getItem('ws_server_url');
 	setInterval("update()", 100);
 	main();
 	document.getElementById("loading_intro").style.display = "none";
-	//setTimeout(() =>{RFPLUS({"time":Date.now()*1000,"center":{"lat":23.996,"lon":121.605,"pga":48.95,"cname":"花蓮縣花蓮市"},"rate":11140.39361376332,"final":false,"report_num":24,"id":"1725265593920"})},5000)
+	setTimeout(() =>{RFPLUS({
+                        "id":"1749301625",
+                        "type":"RFPLUS3",
+                        "time": 1749301857000,
+                        "center":{
+                            "lat":24.818,//float
+                            "lon":121.02,///float
+                            "cname":"",//float
+                            "depth":10
+                        },
+                        "scale":5.0,
+                        "rate":0,
+                        "report_num":1,
+                        "final":false
+                    })},5000)
 	
 </script>
 </body>
