@@ -186,8 +186,11 @@ var XHR_ntp = createXHR();
 //時間差值(毫秒)
 ntpoffset_ = 0;
 
+/*----------取得校正後時間----------*/
+function timestampNow(){
+	return (Date.now()) + ntpoffset_;
+}
 
-//send_webhook(webhook_url_shindo_sokuho,"RF震度速報(測試)\n測試點1 4\n測試點2 3\n");
 
 /*----------播放音效----------*/
 nowplayAud_eew = null;
@@ -2906,6 +2909,8 @@ function InfoUpdate()
 			//日本地震速報渲染
 			setInterval(eewupdate_jp_ws,1000);
 			setInterval(jp_eew_circle,100);
+			//RFPLUS渲染
+			setInterval(RFPLUS_circleRender,100);
 			//RFPLUS警報過期檢查
 			setInterval(RFPLUS_overtime,1000);
 			//連線到websocket伺服器

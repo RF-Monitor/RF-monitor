@@ -12,8 +12,9 @@ function RFPLUS(alert){
 
         //----------RFPLUS3---------//
         if(alert["type"] == "RFPLUS3"){
-            console.log("RFPLUS3 executing")
+            console.log("RFPLUS3 executing");
             if(newAlert && alert["id"] != "0" && Date.now() + ntpoffset_ - alert["time"] < 180000){
+                console.log("RFPLUS3 new alert");
                 let RFPLUS_eew = alert;
                 let time = alert["time"];
                 let id = alert["id"];
@@ -25,6 +26,12 @@ function RFPLUS(alert){
                 let icon = L.icon({iconUrl : 'shindo_icon/epicenter_tw.png',iconSize : [30,30],});
                 let center_icon = L.marker([center["lat"],center["lon"]],{icon : icon,opacity : 1.0}).addTo(map);
                 RFPLUS_eew["center"]["icon"] = center_icon;
+                //初始化震波圓
+                let Pwave =  L.circle([center["lat"],center["lon"]],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(map);
+                let Swave = L.circle([center["lat"],center["lon"]],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(map);
+                RFPLUS_eew["center"]["Pwave"] = Pwave;
+                RFPLUS_eew["center"]["Swave"] = Swave;
+                
                 //計算本地震度
                 let localPGA = RFPLUS3_localPGA(parseFloat(userlat),parseFloat(userlon),center["lat"],center["lon"],scale)
                 let localshindo = PGA2shindo(localPGA);
@@ -51,6 +58,7 @@ function RFPLUS(alert){
                 document.getElementById("RFPLUS3_scale").innerHTML = RFPLUS_eew["scale"]
                 
             }else if(alert["id"] != "0" && Date.now() + ntpoffset_ - alert["time"] < 180000){
+                console.log("RFPLUS3 update");
                 let RFPLUS_eew = alert;
                 let time = alert["time"];
                 let id = alert["id"];
@@ -69,6 +77,10 @@ function RFPLUS(alert){
                 RFPLUS_eew["shindoLayer"] = RFPLUS_list[key]["shindoLayer"]
                 //更新假想震央icon
                 RFPLUS_eew["center"]["icon"] = RFPLUS_list[key]["center"]["icon"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+                //更新震波圓位置
+                RFPLUS_eew["center"]["Pwave"] = RFPLUS_list[key]["center"]["Pwave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+                RFPLUS_eew["center"]["Swave"] = RFPLUS_list[key]["center"]["Swave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+
                 //計算本地震度
                 let localPGA = RFPLUS3_localPGA(parseFloat(userlat),parseFloat(userlon),center["lat"],center["lon"],scale);
                 let localshindo = PGA2shindo(localPGA);
@@ -244,7 +256,7 @@ function RFPLUS3_render(RFPLUS_eew){
     let scale = RFPLUS_eew["scale"];
     //----------檢查layer是否已創建(是)----------//
     if(RFPLUS_eew.hasOwnProperty("shindoLayer")){
-        RFPLUS_eew["shindoLayer"].clearLayers()
+        RFPLUS_eew["shindoLayer"].clearLayers();
     //----------若無 創建layer----------//
     }else{
         RFPLUS_eew["shindoLayer"] = L.layerGroup().addTo(map);
@@ -282,10 +294,26 @@ function RFPLUS3_render(RFPLUS_eew){
     RFPLUS_eew["max_shindo"] = max_shindo_RFPLUS;
     return RFPLUS_eew;
 }
+function RFPLUS_circleRender(){
+    for (let i = 0; i < RFPLUS_list.length; i++) {
+        const alert = RFPLUS_list[i];
+        if(alert["type"] == "RFPLUS3"){
+            const elapsed = timestampNow() - alert["time"];
+            const P_radius = elapsed * 6;
+            const S_radius = elapsed * 3.5;
+
+            alert["center"]["Pwave"].setRadius(P_radius);
+            alert["center"]["Swave"].setRadius(S_radius);
+        }
+        
+        
+}
+}
 /*----------RFPLUS清除警報----------*/
 function RFPLUS_overtime(){
     for(let i = 0; i < RFPLUS_list.length; i++){
         if(Date.now() + ntpoffset_ - RFPLUS_list[i]["time"] >= 180000){//超過發震後3分鐘
+            console.log("RFPLUS end");
             RFPLUS_list[i]["shindoLayer"].clearLayers()//清除地圖圖層
             map.removeLayer(RFPLUS_list[i]["center"]["icon"])//清除地圖icon
             RFPLUS_list.splice(i,1);//移除警報
