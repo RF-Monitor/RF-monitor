@@ -1272,7 +1272,7 @@ function InfoUpdate()
 			if (true){
 				if(true){
 					if(enable_eew_tw != "false"){//only for app//////////////////////////////////////////////////////
-						let eew = eew_tw_p2p;
+						let eew = {};
 						//eew = eew_hand;
 						
 						let id = '';
@@ -1295,24 +1295,23 @@ function InfoUpdate()
 
 						if(true)
 						{
-							if(eew == {})
+							if(true)
 							{
-								status_color = '#0000E3';
+								status_color = '#3c3c3c';
 								main_color = 'blue';
 								epicenter = '-';
 								magnitude = '-';
 								depth = '-';
-								status = '目前沒有地震速報';
+								status = '服務暫不支援';
+								localshindo = "";
+								localcolor = "blue";
 
 								document.querySelector('.eew_tw_main_box').style.display = "none";
 								document.querySelector('.eew_tw_local').style.display = "none";
 								document.querySelector('.eew_tw_status_box').style.border_bottom_left_radius = "7px";
 								document.querySelector('.eew_tw_status_box').style.border_bottom_right_radius = "7px";
 								
-							}
-							else
-							{
-								
+							}else{
 								//eew = eew.split(',');
 								timestamp = eew["time"];
 								let timestamp_now = Date.now()+ntpoffset_;
