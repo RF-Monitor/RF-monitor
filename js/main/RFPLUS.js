@@ -75,11 +75,21 @@ function RFPLUS(alert){
                 }
                 //繼承部分舊報內容
                 RFPLUS_eew["shindoLayer"] = RFPLUS_list[key]["shindoLayer"]
+                
                 //更新假想震央icon
                 RFPLUS_eew["center"]["icon"] = RFPLUS_list[key]["center"]["icon"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+
                 //更新震波圓位置
-                RFPLUS_eew["center"]["Pwave"] = RFPLUS_list[key]["center"]["Pwave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
-                RFPLUS_eew["center"]["Swave"] = RFPLUS_list[key]["center"]["Swave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+                if(!RFPLUS_eew["center"]["Pwave"]){
+                    RFPLUS_eew["center"]["Pwave"] = L.circle([alert["center"]["lat"],alert["center"]["lon"]],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(map);
+                }else{
+                    RFPLUS_eew["center"]["Pwave"] = RFPLUS_list[key]["center"]["Pwave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+                }
+                if(!RFPLUS_eew["center"]["Swave"]){
+                    RFPLUS_eew["center"]["Swave"] = L.circle([alert["center"]["lat"],alert["center"]["lon"]],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(map);
+                }else{
+                    RFPLUS_eew["center"]["Swave"] = RFPLUS_list[key]["center"]["Swave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
+                }
 
                 //計算本地震度
                 let localPGA = RFPLUS3_localPGA(parseFloat(userlat),parseFloat(userlon),center["lat"],center["lon"],scale);
