@@ -324,6 +324,12 @@ function RFPLUS_overtime(){
     for(let i = 0; i < RFPLUS_list.length; i++){
         if(Date.now() + ntpoffset_ - RFPLUS_list[i]["time"] >= 180000){//超過發震後3分鐘
             console.log("RFPLUS end");
+            if(RFPLUS_list[i]["center"]["Pwave"]){
+                RFPLUS_list[i]["center"]["Pwave"].remove();
+            }
+            if(RFPLUS_list[i]["center"]["Swave"]){
+                RFPLUS_list[i]["center"]["Swave"].remove();
+            }
             RFPLUS_list[i]["shindoLayer"].clearLayers()//清除地圖圖層
             map.removeLayer(RFPLUS_list[i]["center"]["icon"])//清除地圖icon
             RFPLUS_list.splice(i,1);//移除警報
