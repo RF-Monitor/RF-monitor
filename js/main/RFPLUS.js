@@ -80,12 +80,12 @@ function RFPLUS(alert){
                 RFPLUS_eew["center"]["icon"] = RFPLUS_list[key]["center"]["icon"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
 
                 //更新震波圓位置
-                if(!RFPLUS_eew["center"]["Pwave"]){
+                if(!RFPLUS_list[key]["center"]["Pwave"]){
                     RFPLUS_eew["center"]["Pwave"] = L.circle([alert["center"]["lat"],alert["center"]["lon"]],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(map);
                 }else{
                     RFPLUS_eew["center"]["Pwave"] = RFPLUS_list[key]["center"]["Pwave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
                 }
-                if(!RFPLUS_eew["center"]["Swave"]){
+                if(!RFPLUS_list[key]["center"]["Swave"]){
                     RFPLUS_eew["center"]["Swave"] = L.circle([alert["center"]["lat"],alert["center"]["lon"]],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(map);
                 }else{
                     RFPLUS_eew["center"]["Swave"] = RFPLUS_list[key]["center"]["Swave"].setLatLng([alert["center"]["lat"],alert["center"]["lon"]]);
