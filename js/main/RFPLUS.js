@@ -54,6 +54,7 @@ function RFPLUS(alert){
                 document.getElementById("RFPLUS3_status_box").style.backgroundColor = "orange";
                 document.getElementById("RFPLUS3_maxshindo").src = "shindo_icon/selected/" + RFPLUS_eew["max_shindo"] + ".png";
                 document.getElementById("RFPLUS3_epicenter").innerHTML = RFPLUS_eew["center"]["cname"];
+                document.getElementById("RFPLUS3_time").innerHTML = formatTimestamp(RFPLUS_eew["time"]);
                 document.getElementById("RFPLUS3_report_num").innerHTML = report_num;
                 document.getElementById("RFPLUS3_scale").innerHTML = Math.floor(RFPLUS_eew["scale"] * 10) / 10;
                 
@@ -105,6 +106,7 @@ function RFPLUS(alert){
                 document.getElementById("RFPLUS3_status_box").style.backgroundColor = "orange";
                 document.getElementById("RFPLUS3_maxshindo").src = "shindo_icon/selected/" + RFPLUS_eew["max_shindo"] + ".png";
                 document.getElementById("RFPLUS3_epicenter").innerHTML = RFPLUS_eew["center"]["cname"];
+                document.getElementById("RFPLUS3_time").innerHTML = formatTimestamp(RFPLUS_eew["time"]);
                 document.getElementById("RFPLUS3_report_num").innerHTML = report_num;
                 document.getElementById("RFPLUS3_scale").innerHTML = Math.floor(RFPLUS_eew["scale"] * 10) / 10;
                 
@@ -337,4 +339,17 @@ function RFPLUS_overtime(){
             document.getElementById("RFPLUS3").style.display = "none";//未針對多警報優化
         }
     }
+}
+
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+
+  const YYYY = date.getFullYear();
+  const MM = String(date.getMonth() + 1).padStart(2, '0'); // 月份從0開始
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  const ss = String(date.getSeconds()).padStart(2, '0');
+
+  return `${YYYY}-${MM}-${dd} ${hh}:${mm}:${ss}`;
 }
