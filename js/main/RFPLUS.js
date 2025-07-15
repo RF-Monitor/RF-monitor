@@ -53,9 +53,9 @@ function RFPLUS(alert){
                 document.getElementById("RFPLUS3").style.display = "block";
                 document.getElementById("RFPLUS3_status_box").style.backgroundColor = "orange";
                 document.getElementById("RFPLUS3_maxshindo").src = "shindo_icon/selected/" + RFPLUS_eew["max_shindo"] + ".png";
-                document.getElementById("RFPLUS3_epicenter").innerHTML = "臺灣附近";
+                document.getElementById("RFPLUS3_epicenter").innerHTML = RFPLUS_eew["center"]["cname"];
                 document.getElementById("RFPLUS3_report_num").innerHTML = report_num;
-                document.getElementById("RFPLUS3_scale").innerHTML = RFPLUS_eew["scale"]
+                document.getElementById("RFPLUS3_scale").innerHTML = Math.floor(RFPLUS_eew["scale"] * 10) / 10;
                 
             }else if(alert["id"] != "0" && Date.now() + ntpoffset_ - alert["time"] < 180000){
                 console.log("RFPLUS3 update");
@@ -104,9 +104,9 @@ function RFPLUS(alert){
                 document.getElementById("RFPLUS3").style.display = "block";
                 document.getElementById("RFPLUS3_status_box").style.backgroundColor = "orange";
                 document.getElementById("RFPLUS3_maxshindo").src = "shindo_icon/selected/" + RFPLUS_eew["max_shindo"] + ".png";
-                document.getElementById("RFPLUS3_epicenter").innerHTML = "臺灣附近";
+                document.getElementById("RFPLUS3_epicenter").innerHTML = RFPLUS_eew["center"]["cname"];
                 document.getElementById("RFPLUS3_report_num").innerHTML = report_num;
-                document.getElementById("RFPLUS3_scale").innerHTML = RFPLUS_eew["scale"]
+                document.getElementById("RFPLUS3_scale").innerHTML = Math.floor(RFPLUS_eew["scale"] * 10) / 10;
                 
             }
         //----------RFPLUS2---------//
