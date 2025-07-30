@@ -2545,48 +2545,6 @@ function InfoUpdate()
 				}
 			}
 		}
-		function TsunamiUpdate(){
-			if(XHR_tsunami.readyState == 4)
-			{
-				if(XHR_tsunami.status ==200)
-				{	
-					if(enable_tsunami != "false"){//only for app/////////////////////////////////////////////////
-						let type = "";
-						let color = "";
-						let content = "";
-						let tsunamiInfo = XHR_tsunami.responseText;
-						//let tsunamiInfo = a;
-						tsunamiInfo = JSON.parse(tsunamiInfo);
-						let tsunamireport = tsunamiInfo["report"];
-						let wave = tsunamiInfo["wave"];
-						let timestamp = parseFloat(tsunamireport[0]["timestamp"]);
-						if (((Date.now()+ntpoffset_)/1000)-timestamp <= 172800) {
-							
-							type = tsunamireport[0]["type"];
-							content = tsunamireport[0]["content"];
-							document.querySelector(".tsunami_coastline").style.display = "block";
-							document.querySelector(".tsunami_content").style.display = "block";
-							document.querySelector(".left").style.height = "100%";
-							for(let i = 0;i<wave.length;i++){
-								document.getElementById(tsunami_coastline_height[wave[i]["name"]]).innerHTML = wave[i]["height"];
-								document.getElementById(tsunami_coastline_time[wave[i]["name"]]).innerHTML = wave[i]["time"];
-							}
-
-							
-						}else{
-							type = "目前沒有海嘯相關資訊";
-							content = "無";
-							document.querySelector(".tsunami_coastline").style.display = "none";
-							document.querySelector(".tsunami_content").style.display = "none";
-							document.querySelector(".left").style.height = "fit-content";
-
-						}
-						document.getElementById("tsunami_status").innerHTML = type;
-						document.getElementById("tsunami_content").innerHTML = content;
-					}
-				}
-			}
-		}
 
 		function typhoon_update(){
 			if(XHR_typhoon.readyState == 4)
@@ -2730,10 +2688,6 @@ function InfoUpdate()
 					XHR_ver.send(null);
 				}
 				if (count % 300 == 0){
-					//海嘯
-					XHR_tsunami.open('GET',server_url+':8080/cgi-bin/get_tsunami.py',true);
-					XHR_tsunami.onreadystatechange = TsunamiUpdate;
-					XHR_tsunami.send(null);
 					//颱風
 					XHR_typhoon.open('GET',server_url+':8080/cgi-bin/get_typhoon.py',true);
 					XHR_typhoon.onreadystatechange = typhoon_update;
@@ -2825,6 +2779,12 @@ function InfoUpdate()
 					console.log(data["content"])
 					let content = JSON.stringify(data["content"])
 					pgaupdate_async_ws(content)
+				}
+				//海嘯
+				if(data["type"] == "tsunami"){
+					console.log(data["content"])
+					let content = data["content"]
+					tsunami(content)
 				}
 				//要求公鑰 並嘗試登入
 				if(data["type"] == "key"){

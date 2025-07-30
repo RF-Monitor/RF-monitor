@@ -343,39 +343,27 @@
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }
+
 .tsunami {
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
-    display: none;
 }
-
-.tsunami_title_box {
+.tsunami_title{
     background-color: #0066CC;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     height: 30px;
 }
-
-.tsunami_main_box {
-    background-color: #414141;
+.tsunami_content{
+    background-color: #3c3c3c;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
-    margin-bottom: 5px;
-}
-
-.tsunami_coastline{
     color: white;
-    display: none;
+    padding: 5px
 }
 
-.tsunami_content{
-    background-color:#414141; 
-    margin-left: 5px; 
-    margin-right: 5px;
-    margin-bottom: 30px;
-    display: none;
-}
+
 
 .others {
     margin-left: 5px;
