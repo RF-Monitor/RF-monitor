@@ -250,58 +250,35 @@
 				</div>
 			</div>
 			<!--海嘯-->
-			<div class="tsunami">
-				<div class="tsunami_title_box" style="background-color: #0066CC;">
-					<h4 class='lang_CNT' style="color:white ;">海嘯警報、警訊</h4>
-					<h4 class='lang_ENG' style="color:white ;">Tsunami warning</h4>
-					<h4 class='lang_JP' style="color:white ;">津波警報、津波注意報</h4>
-					<h4 class='lang_CNS' style="color:white ;">海啸警报、警讯</h4>
+			<div id="tsunami" class="tsunami" style="display: none;">
+				<div id="tsunami_color" class="tsunami_title" style="background-color: yellow;">
+					<h4 id="tsunami_type_color" style="color: black;"><strong><span id="tsunami_type"></span>(<span id="tsunami_reportNum"></span>)</strong></h4>
 				</div>
-				<div class="tsunami_main_box">
-					<div style="background-color: #2c2c2c;">
-						<h5 style='color:white'>狀態:<span id="tsunami_status"></span></h5>
+				<div class="tsunami_content">
+					<h4>震央:<span id="tsunami_epicenter"></span></h4>
+					<h4>M<span id="tsunami_magnitude"></span></h4>
+					<div id="tsunami_forecast">
+						<div id="tsunami_N_color" style="border-left: solid 4px;">
+							<h6>北部沿海:<span id="tsunami_N">0公尺</span></h6>
+						</div>
+						<div id="tsunami_EN_color" style="border-left: solid 4px;">
+							<h6>東北部沿海:<span id="tsunami_EN">0公尺</span></h6>
+						</div>
+						<div id="tsunami_W_color" style="border-left: solid 4px;">
+							<h6>海峽沿海:<span id="tsunami_W">0公尺</span></h6>
+						</div>
+						
+						<div id="tsunami_E_color" style="border-left: solid 4px;">
+							<h6>東部沿海:<span id="tsunami_E">0公尺</span></h6>
+						</div>
+						<div id="tsunami_ES_color" style="border-left: solid 4px;">
+							<h6>東南部沿海:<span id="tsunami_ES">0公尺</span></h6>
+						</div>
+						<div id="tsunami_WS_color" style="border-left: solid 4px;">
+							<h6>西南部沿海:<span id="tsunami_WS">0公尺</span></h6>
+						</div>
 					</div>
-					<table class="table table-striped tsunami_coastline" style="padding:0;">
-						<tr>
-							<th style="padding:0;width:30%"><h6>海岸線</h6></th>
-							<th style="padding:0;width:30%"><h6>波高</h6></th>
-							<th style="padding:0;width:40%"><h6>到達時間</h6></th>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>北部沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_north_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_north_time"></span></h6></td>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>海峽沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_mid_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_mid_time"></span></h6></td>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>西南沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_southwest_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_southwest_time"></span></h6></td>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>東北沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_northeast_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_northeast_time"></span></h6></td>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>東部沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_east_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_east_time"></span></h6></td>
-						</tr>
-						<tr>
-							<td style="padding:0"><h6>東南沿海</h6></td>
-							<td style="padding:0"><h6><span id="tsunami_southeast_height"></span></h6></td>
-							<td style="padding:0"><h6><span id="tsunami_southeast_time"></span></h6></td>
-						</tr>
-					</table>
-					<div class="tsunami_content">
-						<h5 style='color:white;'>氣象局海嘯報文:</h5>
-						<h6 style='color:white'><span id="tsunami_content"></h6>
-					</div>
+					<p id="tsunami_moreInfo" style="cursor: pointer;">點此瞭解更多海嘯資訊</p>
 				</div>
 			</div>
 			<!--其他-->
@@ -641,6 +618,7 @@ ws_server_url = storage.getItem('ws_server_url');
 <script src="js/main/replay.js"></script>
 <script src="js/main/webhook.js"></script>
 <script src="js/main/RFPLUS.js"></script>
+<script src="js/main/tsunami.js"></script>
 <script src="js/indexprocess.js"></script>
 <script type="text/javascript">
 
