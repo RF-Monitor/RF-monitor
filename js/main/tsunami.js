@@ -119,6 +119,6 @@
 		}
 
 		function tsunamiTimeout(){
-			document.getElementById("tsunami").style.display = none;
-            tsunamiTimeout = null;
+			document.getElementById("tsunami").style.display = "none";
+            tsunami_timer = null;
 		}
