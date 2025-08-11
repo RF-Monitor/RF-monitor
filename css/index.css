@@ -217,6 +217,7 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     height: 30px;
+    padding-left: 5px;
 }
 
 .eew_jp_status_box {
@@ -249,6 +250,7 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     height: 30px;
+    padding-left: 5px;
 }
 
 .eew_tw_status_box {
@@ -286,6 +288,7 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     height: 30px;
+    padding-left: 5px;
 }
 .RF_list{
     /*background-color: #3c3c3c;*/
@@ -332,6 +335,7 @@
     background-color: #3c3c3c;
     color: white;
     height: 30px;
+    padding-left: 5px;
 }
 .RFPLUS_main_box{
     flex-direction: row;
@@ -354,6 +358,7 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     height: 30px;
+    padding-left: 5px;
 }
 .tsunami_content{
     background-color: #3c3c3c;
