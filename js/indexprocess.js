@@ -99,11 +99,7 @@ tsunami_coastline_time = {
 //----------震度變數----------//
 eew_tw_shindo_list = [];
 max_shindo_eew = "0";//速報最大震度
-max_shindo = "0";//最大震度
-max_shindo_local = "0";//本地模式最大震度
-max_Shindo_before = "0";//上一次最大震度
-max_shindo_local_before = "";//本地模式 上一次最大震度
-RF_stations = {}//測站列表
+
 /*
 {
 	"6050_0007":{
@@ -112,9 +108,7 @@ RF_stations = {}//測站列表
 	}
 }
 */ 
-RF_alert_area_flash_controller = true;//警報範圍閃爍
-RF_alert_list = [];//觸發測站列表
-RF_shindo_sokuho_list = [];//震度速報列表
+
 /*
 "id","name","cname","shindo"
 */
@@ -1906,7 +1900,7 @@ function InfoUpdate()
 		}
 		
 		/*----------RF station check----------*/
-		async function pgaupdate_async_ws(data){
+		async function pgaupdate_async_ws2(data){
 				if(1){
 					document.querySelector('.disconnected').style.display = "none";
 					if(enable_shindo != "false"){//only for app///////////////////////////////////////////
