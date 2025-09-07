@@ -36,6 +36,7 @@ function RFPLUS(alert){
                 let localPGA = RFPLUS3_localPGA(parseFloat(userlat),parseFloat(userlon),center["lat"],center["lon"],scale)
                 let localshindo = PGA2shindo(localPGA);
                 let localcolor = shindo_color[localshindo];
+                RFPLUS_eew["localshindo"] = localshindo;
                 //計算各地震度
                 RFPLUS_eew = RFPLUS3_render(RFPLUS_eew);
                 RFPLUS_list.push(RFPLUS_eew);
@@ -96,6 +97,14 @@ function RFPLUS(alert){
                 let localPGA = RFPLUS3_localPGA(parseFloat(userlat),parseFloat(userlon),center["lat"],center["lon"],scale);
                 let localshindo = PGA2shindo(localPGA);
                 let localcolor = shindo_color[localshindo];
+                if(RFPLUS_list[key]["localshindo"] != localshindo){
+                    //----播放音效----//
+                    if(enable_tw_eew_sound != "false"){
+                        if(enable_eew_tw_read != "false"){
+                            playAudio_eew(['./audio/tw/eew/new/' +localshindo+ '.mp3']);
+                        }
+                    }
+                }
                 //計算各地震度
                 RFPLUS_eew = RFPLUS3_render(RFPLUS_eew);
                 RFPLUS_list[key] = RFPLUS_eew;
