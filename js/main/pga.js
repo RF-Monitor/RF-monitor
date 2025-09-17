@@ -63,7 +63,9 @@
                 const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline } = stationData;
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
-
+				let opacity = 1;
+				if(!isOnline){opacity = 0.5}
+				
                 // 建立 marker
                 let marker = L.marker([lat, lon], {
                     title: name,
@@ -74,7 +76,7 @@
                     <div>PGA(原始): ${pga_origin}</div>
                     <div>PGA(濾波): ${pga}</div>
                     <div>震度: ${shindo}</div>`
-                ).addTo(map);
+                ).addTo(map).setOpacity(opacity);
 
                 // 建立 circle
                 let circle = L.circle([lat, lon], {
@@ -93,7 +95,8 @@
                 let station = stationMap.get(id);
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
-
+				let opacity = 1;
+				if(!isOnline){opacity = 0.5}
                 if (station) {
                     // 已存在 → 更新 marker/circle
                     station.marker.setIcon(cusicon);
@@ -110,11 +113,12 @@
 					}else{
                         circleRadius = 0;
                     }
+					station.marker.setOpacity(opacity);
 
                     station.circle.setLatLng([lat, lon]);
                     station.circle.setRadius(circleRadius);
                     station.circle.setStyle({ color: shindo_color[shindo] });
-
+                    
                     // 更新儲存的資料
                     station.data = stationData;
                 } else {
