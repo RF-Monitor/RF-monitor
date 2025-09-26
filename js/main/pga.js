@@ -64,7 +64,7 @@
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
 				let opacity = 1;
-				if(!isOnline){opacity = 0.5}
+				if(!isOnline){opacity = 0.3}
 				
                 // 建立 marker
                 let marker = L.marker([lat, lon], {
@@ -82,7 +82,8 @@
                 let circle = L.circle([lat, lon], {
                     radius: 0,
                     color: shindo_color[shindo],
-                    fillOpacity: 1
+                    fillOpacity: opacity,
+					opacity: opacity
                 }).addTo(map);
 
                 // 存入 Map
@@ -96,7 +97,7 @@
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
 				let opacity = 1;
-				if(!isOnline){opacity = 0.5}
+				if(!isOnline){opacity = 0.3}
                 if (station) {
                     // 已存在 → 更新 marker/circle
                     station.marker.setIcon(cusicon);
@@ -118,7 +119,8 @@
                     station.circle.setLatLng([lat, lon]);
                     station.circle.setRadius(circleRadius);
                     station.circle.setStyle({ color: shindo_color[shindo] });
-                    
+                    station.circle.setStyle({opacity: opacity, fillOpacity: opacity});
+
                     // 更新儲存的資料
                     station.data = stationData;
                 } else {
