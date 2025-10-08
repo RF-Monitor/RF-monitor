@@ -9,24 +9,12 @@
 
             const Flasher = {
                 state: false,
-                interval: 500, // 閃爍頻率 (ms)
-
-                start() {
-                    this.timer = setInterval(() => {
-                    this.state = !this.state;
-                    }, this.interval);
-                },
-
-                stop() {
-                    clearInterval(this.timer);
-                    this.state = false;
-                },
-
-                isOn() {
-                    return this.state;
-                }
+                update(){
+					this.state = !this.state
+					return this.state;
+				}
             };
-            Flasher.start();
+            //Flasher.start();
 
             // 用 Map 來儲存所有測站資料
             let stationMap = new Map();
@@ -91,7 +79,7 @@
             }
 
             // 更新測站
-            function updateStation(stationData, shakealert) {
+            function updateStation(stationData, flash, shakealert) {
                 const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline  } = stationData;
                 let station = stationMap.get(id);
 
@@ -109,7 +97,9 @@
                         <div>PGA(濾波): ${pga}</div>
                         <div>震度: ${shindo}</div>`
                     );
-                    if(shakealert && shindo_15 != '0' && enable_warningArea !='false' && Flasher.isOn()){
+					
+					//console.log(flash)
+                    if(shakealert && shindo != '0' && enable_warningArea !='false' && flash){
 						circleRadius = 20000;
 					}else{
                         circleRadius = 0;
@@ -142,15 +132,21 @@
             async function pgaupdate_async_ws(data){
 				if(1){
 					document.querySelector('.disconnected').style.display = "none";
+					let timer = Date.now();//計算500ms用 計時器
 					if(enable_shindo != "false"){//only for app///////////////////////////////////////////
-
+						
 						var station_count = 0;//上線測站計數
 						let stations_displayed = []//清空更新完成測站列表
 						let RF_alert_list = [];//清空觸發測站列表
 						let pga_list = data;//全部測站
-						//console.log(pga_list)
-						let shakealert = false;
 						pga_list = JSON.parse(pga_list)
+						//console.log(pga_list)
+					
+						let shakealert = false;
+						/*
+						pga_list.data.push({"id":"6050_0087","name":"Linkou_Smileguy0819","lat":"25.07759","lon":"121.37180","cname":"新北市 林口區","pga_origin":"1.98","pga":"0.70","shindo":"0","shindo_15":"3","timestamp":Date.now()})
+						pga_list.data.push({"id":"6050_0088","name":"Linkou_Smileguy0819","lat":"25.07759","lon":"121.37180","cname":"新北市 林口區","pga_origin":"1.98","pga":"0.70","shindo":"0","shindo_15":"3","timestamp":Date.now()})
+						*/
 						/*----------警報判定----------*/
 						if(pga_list["shake_alert"]){
 							shakealert = true;
@@ -165,6 +161,7 @@
 						}
 
                         let seenIds = new Set();
+						const flash = Flasher.update()
 
 						/*----------檢查每個測站----------*/
                         for (let s of pga_list) {
@@ -191,7 +188,7 @@
                                 station_count++;
                             }
 
-                            updateStation(stationData, shakealert);
+                            updateStation(stationData, flash, shakealert);
                             seenIds.add(stationData.id);
 
                             // 檢查是否被選取
@@ -223,7 +220,7 @@
 							let sokuho_key = -1
 							//尋找是否在列表內
 							for(let j = 0;j < RF_shindo_sokuho_list.length ; j++){
-								if(RF_shindo_sokuho_list[j]["id"] == id){
+								if(RF_shindo_sokuho_list[j]["id"] == stationData.id){
 									in_sokuho_list = 1;
 									sokuho_key = j
 								}
