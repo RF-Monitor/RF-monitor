@@ -66,6 +66,9 @@
                     <div>震度: ${shindo}</div>`
                 ).addTo(map).setOpacity(opacity);
 
+				// 綁定點擊事件
+				marker.on('click', selectStation);
+
                 // 建立 circle
                 let circle = L.circle([lat, lon], {
                     radius: 0,
@@ -128,6 +131,12 @@
                     stationMap.delete(id);
                 }
             }
+			function selectStation(e) {
+				let name = e.sourceTarget.options.title;
+				selected_station = name;
+				storage.setItem('selected_station', name);
+				document.getElementById("selected_name").innerHTML = name;
+			}
 
             async function pgaupdate_async_ws(data){
 				if(1){
@@ -197,8 +206,8 @@
 								document.getElementById("selected_pga").innerHTML = stationData.pga;
 								document.getElementById("selected_shindo").innerHTML = "<img src='shindo_icon/selected/"+stationData.shindo.toString()+".png' style='width:50px'>"
 							}
+							
                             // 檢查是否為鄰近本地測站
-                            
 							if(Math.sqrt(Math.pow(Math.abs(parseFloat(userlat) + (lat * -1)) * 111, 2) + Math.pow(Math.abs(parseFloat(userlon) + (lon * -1)) * 101, 2)) <= 20){
 								local = true;
 							}
