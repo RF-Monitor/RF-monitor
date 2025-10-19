@@ -16,7 +16,7 @@ RF-sensor震度計 即時搖晃資訊，縮小預警盲區<br>
 天氣警特報 颱風、天氣警訊即時資訊<br>
 ### 下載鏈接<br>
 
-官網: ( https://RF-Monitor.github.io )<br>
+官網: ( https://rfeqserver.myqnapcloud.com )<br>
 Google雲端載點：(https://drive.google.com/drive/folders/1gb2OpmcMnaiuo67LXT5GhVwsVLFxjVJD)<br>
 Github載點：（https://github.com/RF-Monitor/RF-Monitor/releases/tag/main ）
 
