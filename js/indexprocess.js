@@ -75,7 +75,7 @@ EEW_TW_ing = false;
 
 //EEWsim
 ipcRenderer.on('EEWsim', (event, data) => {
-	eew_tw_p2p = data;
+	EEW_TW(data);
 });
 
 //----------海岸線名稱對照----------//
@@ -112,6 +112,7 @@ max_shindo_eew = "0";//速報最大震度
 /*
 "id","name","cname","shindo"
 */
+EEW_TW_list = [];
 RFPLUS_list = [];
 
 //----------波型canvas----------//
@@ -2863,6 +2864,10 @@ function InfoUpdate()
 			//日本地震速報渲染
 			setInterval(eewupdate_jp_ws,1000);
 			setInterval(jp_eew_circle,100);
+			//EEW_TW渲染
+			setInterval(EEW_TW_circleRender,100);
+			//RFPLUS警報過期檢查
+			setInterval(EEW_TW_overtime,1000);
 			//RFPLUS渲染
 			setInterval(RFPLUS_circleRender,100);
 			//RFPLUS警報過期檢查

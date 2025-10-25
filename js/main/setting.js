@@ -392,15 +392,17 @@ function EEWsim(){
         let epicenter = "自定義震央";
         
         let eew = {
-            "type": "eew-cwb",
+            "type": "eew-cwa",
             "time": time,
-            "lon": EEWsim_lon,
-            "lat": EEWsim_lat,
-            "depth": EEWsim_depth,
+            "center": {
+                "lon": EEWsim_lon,
+                "lat": EEWsim_lat,
+                "depth": EEWsim_depth,
+                "cname": epicenter,
+            },
             "scale": EEWsim_magnitude,
-            "number": parseInt(report_num),
+            "report_num": parseInt(report_num),
             "id": "1120405",
-            "location": epicenter,
             "cancel": false,
             "max": 5,
             "alert":true
