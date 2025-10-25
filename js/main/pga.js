@@ -52,19 +52,24 @@
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
 				let opacity = 1;
-				if(!isOnline){opacity = 0.3}
-				
-                // 建立 marker
-                let marker = L.marker([lat, lon], {
-                    title: name,
-                    icon: cusicon
-                }).bindTooltip(
-                    `<div>${name}</div>
+				let toolTip = `<div>${name}</div>
                     <div>${cname}</div>
                     <div>PGA(原始): ${pga_origin}</div>
                     <div>PGA(濾波): ${pga}</div>
                     <div>震度: ${shindo}</div>`
-                ).addTo(map).setOpacity(opacity);
+
+				if(!isOnline){
+					opacity = 0.3;
+					toolTip = `<div>${name}</div>
+                    <div>${cname}</div>
+                    <div>已斷線</div>`
+				}
+
+                // 建立 marker
+                let marker = L.marker([lat, lon], {
+                    title: name,
+                    icon: cusicon
+                }).bindTooltip(toolTip).addTo(map).setOpacity(opacity);
 
 				// 綁定點擊事件
 				marker.on('click', selectStation);
@@ -88,18 +93,23 @@
 
                 let cusicon = getStationIcon(pga, shindo, shakealert, isOnline)
 				let opacity = 1;
-				if(!isOnline){opacity = 0.3}
+				let toolTip = `<div>${name}</div>
+                    <div>${cname}</div>
+                    <div>PGA(原始): ${pga_origin}</div>
+                    <div>PGA(濾波): ${pga}</div>
+                    <div>震度: ${shindo}</div>`
+
+				if(!isOnline){
+					opacity = 0.3;
+					toolTip = `<div>${name}</div>
+                    <div>${cname}</div>
+                    <div>已斷線</div>`
+				}
                 if (station) {
                     // 已存在 → 更新 marker/circle
                     station.marker.setIcon(cusicon);
                     station.marker.setLatLng([lat, lon]);
-                    station.marker.setTooltipContent(
-                        `<div>${name}</div>
-                        <div>${cname}</div>
-                        <div>PGA(原始): ${pga_origin}</div>
-                        <div>PGA(濾波): ${pga}</div>
-                        <div>震度: ${shindo}</div>`
-                    );
+                    station.marker.setTooltipContent(toolTip);
 					
 					//console.log(flash)
                     if(shakealert && shindo != '0' && enable_warningArea !='false' && flash){
