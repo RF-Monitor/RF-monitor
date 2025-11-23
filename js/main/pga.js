@@ -150,7 +150,6 @@
 
             async function pgaupdate_async_ws(data){
 				if(1){
-					document.querySelector('.disconnected').style.display = "none";
 					let timer = Date.now();//計算500ms用 計時器
 					if(enable_shindo != "false"){//only for app///////////////////////////////////////////
 						
