@@ -73,50 +73,7 @@
 .register{
     display: none;
 }
-.disconnected{
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    opacity:0.7;
-    height: fit-content;
-    width: fit-content;
-    border: solid;
-    border-color: red;
-    border-width: 3px;
-    display: none;
-    background-color: black;
-    color: white;
-    position: absolute;
-    top:0;
-      left: calc(50% - (321px/2));
-    z-index: 15;
-}
-.disconnected_inside{
-    margin: 5px;
-}
-.backToMap{
-    height: 30px;
-    width: 50px;
-    position: absolute;
-    top:0;
-    right:250px;
-    display:none;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border: solid;
-    border-color: black;
-    border-width: 3px;
-    background-color: #272727;
-    color: white;
-    cursor: pointer;
-    z-index: 15;
-}
-.backToMap:hover{
-    border-color: white;
-}
+
 /*.navitem:hover {
     border-bottom: solid;
     border-bottom-width: 3px;

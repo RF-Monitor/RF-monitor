@@ -281,15 +281,7 @@
 					<p id="tsunami_moreInfo" style="cursor: pointer;">點此瞭解更多海嘯資訊</p>
 				</div>
 			</div>
-			<!--其他-->
-			<div class="others" style="display:none">
-				<div class="others_title_box">
-					<h4>其他特殊預報</h4>
-				</div>
-				<div class="others_main_box">
-					<span id="others_main"></span>
-				</div>
-			</div>
+			
 		</div>
 		<!--圖例-->
 		<div class="example">
@@ -412,23 +404,7 @@
 				<span id="Canvas4StaList"></span>
 			</select>
 		</div>
-		<!--斷線訊息-->
-		<div class="disconnected">
-			<div class="disconnected_inside">
-				<h6 class='lang_CNT' align="center">無法連接至伺服器，請檢查網路連線</h6>
-				<h6 class='lang_CNT'>如果問題持續發生，請至RF官方discord回報</h6>
-				<h6 class='lang_ENG' align="center">Cannot connect to server,please check the Internet connection</h6>
-				<h6 class='lang_ENG'>If this problem still happened,please report at RF official Discord server</h6>
-				<h6 class='lang_JP' align="center">サーバーに接続できません。インターネット接続を確認してください</h6>
-				<h6 class='lang_JP'>この問題が引き続き発生する場合は、RF 公式 Discord サーバーで報告してください</h6>
-				<h6 class='lang_CNS' align="center">无法连接服务器，请检查网络连接</h6>
-				<h6 class='lang_CNS'>如果问题持续发生，请向RF官方Discord反馈</h6>
-			</div>
-		</div>
-		<!--檢視地震報告返回按鈕-->
-		<div class="backToMap" onclick="backToMap()">
-			<h6 align="center">返回</h6>
-		</div>
+		
 		<!--地圖-->
 		<div class='center'>
 			<div id='mapid' class="map"></div>
@@ -614,7 +590,6 @@ server_url = storage.getItem('server_url');
 ws_server_url = storage.getItem('ws_server_url');
 </script>
 <script src="js/main/auth.js"></script>
-<!--<script src="trem-core/index.js"></script>-->
 <script src="js/main/replay.js"></script>
 <script src="js/main/webhook.js"></script>
 <script src="js/main/pga.js"></script>
@@ -624,7 +599,6 @@ ws_server_url = storage.getItem('ws_server_url');
 <script src="js/indexprocess.js"></script>
 <script type="text/javascript">
 
-	//only for app//////////////////////////////////////////////////////////////////////////////////////////////////////
 	require('./renderer.js');		
 	//navbar切頁
 	document.getElementById("nav_eew").onclick = function(){switchPage("page1")}

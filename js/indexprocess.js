@@ -1903,7 +1903,6 @@ function InfoUpdate()
 		/*----------RF station check----------*/
 		async function pgaupdate_async_ws2(data){
 				if(1){
-					document.querySelector('.disconnected').style.display = "none";
 					if(enable_shindo != "false"){//only for app///////////////////////////////////////////
 						let timer = Date.now();//計算500ms用 計時器
 						var station_count = 0;//上線測站計數
@@ -2273,7 +2272,7 @@ function InfoUpdate()
 						document.getElementById('stations_count').innerHTML = htmlText;
 					}
 				}else{
-					//document.querySelector('.disconnected').style.display = "block";
+					
 				}
 		}
 		/*----------波型----------*/
@@ -2831,13 +2830,10 @@ function InfoUpdate()
 						CanvasStaListUpdate(3);
 						CanvasStaListUpdate(4);
 						changeWaveSelectedSta();
-						document.querySelector('.disconnected').style.display = "none";
 				}else{
-					//document.querySelector('.disconnected').style.display = "block";
 					updateStaList()
 				}
 			}catch(error){
-				//document.querySelector('.disconnected').style.display = "block";
 				setTimeout(updateStaList,1000);
 			}
 		}
