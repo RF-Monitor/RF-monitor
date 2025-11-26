@@ -421,10 +421,10 @@ setInterval(()=>{
     let user = storage.getItem('login_user')
     if(user != ""){
         document.getElementById("login_success").style.display = "block";
-        document.getElementById('login_failed').style.display = "none";
+        document.getElementById('login_options').style.display = "none";
         document.getElementById("user").innerHTML = user;
     }else{
         document.getElementById("login_success").style.display = "none";
-        document.getElementById('login_failed').style.display = "block";
+        document.getElementById('login_options').style.display = "block";
     }
 },2000)

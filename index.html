@@ -464,7 +464,7 @@
 					<h6 class="lang_ENG" id="login_failed" style="color:red;display: none;">Login failed,cannot connect to the auth server.</h6>
 					<h6 class="lang_CNS" id="login_failed" style="color:red;display: none;">登录失败，请检查账密是否正确</h6>
 					<h6 class="lang_JP" id="login_failed" style="color:red;display: none;">ログインに失敗しました。アカ​​ウントとパスワードを確認してください</h6>
-					<button id="login_btn" type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="login()">
+					<button id="login_btn" type="button" class="btn btn-primary" style="margin-right: 20px;">
 						<div class="lang_CNT">登入</div>
 						<div class="lang_ENG">login</div>
 						<div class="lang_CNS">登录</div>
@@ -912,6 +912,23 @@ ws_server_url = storage.getItem('ws_server_url');
         document.getElementById("nowDiv").innerHTML = time2; 
 		//setTimeout("show()", 1000); 
 	}
+
+	/*----------按鈕綁定邏輯----------*/
+	document.getElementById("login_btn").addEventListener("click" ,async() => {
+		document.getElementById("login_btn").innerHTML = "登入中...";
+		document.getElementById("login_btn").disabled = true;
+		const username = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+		if(await login(username,password)){
+			console.log("login successful");
+			ipcRenderer.send('restart');
+		}else{
+			document.getElementById("login_btn").disabled = false;
+    		document.getElementById("login_failed").style.display = "block";
+    		document.getElementById("login_btn").innerHTML = "登入";
+			console.log("login failed");
+		}
+	})
 </script>
 
 <body>

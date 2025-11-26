@@ -105,14 +105,27 @@
 			<div style="margin-left: 50px;">
 				<h4>帳戶資料</h4>
 					<div id="login_success" style="display: block;">
-						<!--<label for="logout">
-							<p style='font-size: 22px;'>已登入</p>
-						</label>-->
 						<p style='font-size: 22px;'>已登入 登入身分:<span id="user"></span></p>
-						<button id="logout" name="logout type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="logout()">登出</button>
+						<button id="logout" name="logout" type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="logout()">登出</button>
 					</div>
-					<div id="login_failed" style="display: none;">
-						<p style='font-size: 22px;'>未登入</p>
+					<div id="login_options" style="display: none;">
+						<form>
+							<label for="email">
+								<p class="lang_CNT" style='font-size: 22px;color: white;'>電子郵件信箱</p>
+							</label>
+							<input type="text" value="" id="email" name="email" style="width:200px">
+							<br>
+							<label for="password">
+								<p class="lang_CNT" style='font-size: 22px;color: white;'>密碼</p>
+							</label>
+							<input type="password" value="" id="password" name="password" style="width:200px">
+							<br>
+							<!--<h6 style="color: white;">沒有帳號? 現在註冊，完全免費</h6>-->
+							<h6 class="lang_CNT" id="login_failed" style="color:red;display: none;">登入失敗，請檢查帳密是否正確</h6>
+							<button id="login_btn" type="button" class="btn btn-primary" style="margin-right: 20px;">
+								<div class="lang_CNT">登入</div>
+							</button>
+						</form>
 					</div>
 					<hr/>
 					<h4>語言</h4>
@@ -431,6 +444,31 @@
 		<button type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="submit()">套用(重新啟動以生效)</button>
 		<button type="button" class="btn btn-secondary" style="margin-right: 30px;" onclick="cancel()">取消</button>
 	</footer>
+	<script>
+		const axios = require('axios');
+		const crypto = require('crypto');
+		const { serialize } = require('v8');
+	</script>
+	<script src="js/main/utility.js"></script>
 	<script src="js/main/setting.js"></script>
+	<script src="js/main/auth.js"></script>
+	<script>
+		/*----------按鈕綁定邏輯----------*/
+		document.getElementById("login_btn").addEventListener("click" ,async() => {
+			document.getElementById("login_btn").innerHTML = "登入中...";
+			document.getElementById("login_btn").disabled = true;
+			const username = document.getElementById('email').value;
+			const password = document.getElementById('password').value;
+			if(await login(username,password)){
+				console.log("login successful");
+				ipcRenderer.send('restart');
+			}else{
+				document.getElementById("login_btn").disabled = false;
+				document.getElementById("login_failed").style.display = "block";
+				document.getElementById("login_btn").innerHTML = "登入";
+				console.log("login failed");
+			}
+		})
+	</script>
 </body>
 </html>

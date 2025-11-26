@@ -2,7 +2,6 @@
 const crypto = require('crypto');
 const { serialize } = require('v8');
 */
-//server_url = storage.getItem('server_url');
 
 // 生成帳號和密碼
 const username = 'myusername';
@@ -11,17 +10,15 @@ XHR_login = createXHR();
 XHR_register = createXHR()
 
 function requestKey() {
+  const server_url = storage.getItem('server_url');
   XHR_login.open('GET',server_url + ':8787/getKey',false);
   XHR_login.send(null);
   return JSON.parse(XHR_login.responseText);
 }
 
-function login(){
+async function login(username,password){
+  const server_url = storage.getItem('server_url');
   //請求公鑰
-  document.getElementById("login_btn").innerHTML = "登入中...";
-  document.getElementById("login_btn").disabled = true;
-  const username = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
   const keyRequested = requestKey() 
   //公鑰ID
   let id = keyRequested["id"];
@@ -39,24 +36,22 @@ function login(){
   publicKeyPEM = crypto.publicEncrypt(publicKeyFromServer,Buffer.from(publicKeyPEM,'utf8')).toString('base64')
   console.log(encryptedData)
   
-  axios.post(server_url + ':8787/login',{encryptedData,publicKeyPEM,id})
-    .then(response=>{
-      console.log(response.data)
-      let login_res = response.data;
-      const login_status = login_res.status;
-      const login_username = login_res.username; 
-      if(login_status == "success"){
-        let verifyKey = login_res.verifyKey
-        verifyKey = crypto.privateDecrypt(privateKey, Buffer.from(verifyKey, 'base64')).toString('utf8');
-        storage.setItem('login_user',login_username);
-        storage.setItem('verifyKey',verifyKey);
-        ipcRenderer.send('restart');
-      }else{
-        document.getElementById("login_btn").disabled = false;
-        document.getElementById("login_failed").style.display = "block";
-        document.getElementById("login_btn").innerHTML = "登入";
-      }
-    })
+  const response = await axios.post(server_url + ':8787/login',{encryptedData,publicKeyPEM,id})
+    
+  let login_res = response.data;
+  const login_status = login_res.status;
+  
+  const login_username = login_res.username;
+  //console.log(login_username); 
+  if(login_status == "success"){
+    let verifyKey = login_res.verifyKey
+    verifyKey = crypto.privateDecrypt(privateKey, Buffer.from(verifyKey, 'base64')).toString('utf8');
+    storage.setItem('login_user',login_username);
+    storage.setItem('verifyKey',verifyKey);
+    return true;
+  }else{
+    return false;
+  }
 }
 
 
@@ -68,11 +63,13 @@ function login(){
 
 
 function getCaptcha(){
+  const server_url = storage.getItem('server_url');
   XHR_register.open('GET',server_url + ':8787/captcha',false);
   XHR_register.send(null);
   document.getElementById("captcha_img").innerHTML = XHR_register.responseText
 }
 function register(){
+  const server_url = storage.getItem('server_url');
   const username = document.getElementById('email_register').value;
   const password = document.getElementById('password_register').value;
   const password_again = document.getElementById('password_again').value;
