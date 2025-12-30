@@ -88,19 +88,17 @@
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
+    overflow: hidden;
 }
 .RF_title{
     background-color: #0066CC;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
     height: 30px;
     padding-left: 5px;
 }
 .RF_list{
     /*background-color: #3c3c3c;*/
     background-color: #3c3c3c;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
     color: white;
     padding-bottom: 0px;
     /*height: 30px;*/
@@ -108,8 +106,6 @@
 .RFPLUS{
     /*background-color: #3c3c3c;*/
     background-color: #3c3c3c;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
     color: white;
     padding-bottom: 0px;
     /*height: 30px;*/
