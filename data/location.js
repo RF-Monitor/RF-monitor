@@ -1,4 +1,4 @@
-var locations = {
+export var locations = {
     "country":{
         "基隆市":{"lat":25.12582,"lon":121.72504},
         "臺北市":{"lat":25.06768,"lon":121.55235},
