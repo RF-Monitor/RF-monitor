@@ -209,6 +209,8 @@ class pgaUI{
         // 找最大震度
         let maxShindo = "0";
         let station_count = 0;
+        let topStations = [];
+        let shakealert = pga.shakealert;
         for (let s of pga.data) {
             let stationData = {
                 id: s["id"],
@@ -235,6 +237,13 @@ class pgaUI{
                 maxShindo = stationData.shindo;
             }
 
+            // 收集在線且震度 > 0 的測站
+            if (stationData.isOnline && this.shindo2float(stationData.shindo) > 0) {
+                topStations.push({
+                    cname: stationData.cname,
+                    shindo: stationData.shindo
+                });
+            }
         }
 
         // 顯示最大震度
@@ -243,7 +252,34 @@ class pgaUI{
         `
         // 顯示測站數
         document.getElementById('stations_count_online').innerHTML = station_count.toString();
-        
+
+        //若shakealert 顯示前六名測站
+        if(shakealert){
+            topStations.sort((a, b) => {
+                return this.shindo2float(b.shindo) - this.shindo2float(a.shindo);
+            });
+
+            // 取前六名
+            topStations = topStations.slice(0, 6);
+
+            if(this.shindo2float(maxShindo) >= 4){
+                document.getElementById("RF_status").innerHTML = "強震檢測";
+                document.getElementById("RF_status").style.backgroundColor = "red";
+            }else{
+                document.getElementById("RF_status").innerHTML = "搖晃檢測";
+                document.getElementById("RF_status").style.backgroundColor = "orange";
+            }
+
+            // 顯示前六名測站
+            let htmlText = ""
+            for(const station of topStations){
+                htmlText += `<div class="RF_item">
+                                <img src='shindo_icon/selected/${station.shindo}.png' height='30px'>
+                                <h5 style='color: white;'>${station.cname}</h5>
+                            </div>`;
+            }
+            document.getElementById("RF_list_1").innerHTML = htmlText;
+        }
     }
 
     shindo2float(shindo){
