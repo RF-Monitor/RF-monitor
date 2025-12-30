@@ -7,8 +7,45 @@ const { start } = require('repl');
 const isDevelopment = process.env.NODE_ENV !== "production";
 const config = require('./config');
 
+let services = {};
+
+async function bootServices() {
+  const {
+    startWebSocket,
+    setVerifyKey
+  } = await import('./main/wsClient.mjs');
+
+  const {
+    broadcastEvent,
+    broadcastState
+  } = await import('./main/ipcRouter.mjs');
+
+  const { registerTimeIPC } = await import('./main/ntp/ipcRouter.mjs');
+  registerTimeIPC();
+
+  const { syncNTP } = await import('./main/ntp/ntp.mjs');
+  await syncNTP(); // App 啟動時先同步一次
+  /*
+  const { 
+    syncNTP, 
+    getNtpOffset 
+  } = await import ('./ntp.mjs');
+   */
+  // 啟動 WebSocket
+  startWebSocket(
+    (ch, data) => broadcastEvent(ch, data),
+    (ch, data) => broadcastState(ch, data)
+  );
+
+  return { setVerifyKey };
+}
+
+
+/*----------處理設定檔----------*/
 config.repairIfBroken();
 config.applyDefaults();
+
+/*----------建立視窗----------*/
 let setting_win = null;
 let win =  null;
 
@@ -19,8 +56,9 @@ const createWindow = () => {
       minHeight: 750,
       minWidth: 1000,
       webPreferences:{
+        preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
-        contextIsolation: false,
+        contextIsolation: true,
         enableRemoteModule: true,
         backgroundThrottling: false,
         nativeWindowOpen: true,
@@ -94,21 +132,18 @@ const createWindow = () => {
   )
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    // 建立視窗
     createWindow()
-   /* const tray = new Tray('icon.png')
-    // 設定選單樣板
-    const contextMenu = Menu.buildFromTemplate([
-      { label: 'Item1', click: () => { console.log('click') } },
-      { label: 'Item2' },
-    ])
-    // 右下角 icon 被 hover 時的文字
-    tray.setToolTip('RF-monitor')
-    // 設定定應用程式右下角選單
-    tray.setContextMenu(contextMenu)*/
+
+    //開啟websocket
+    services = await bootServices();
+
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+    //tray
     if(storage.getItem('minimize_to_tray') != 'false'){
       const tray = new Tray(path.join(__dirname, 'icon.png'))
       console.log(path.join(__dirname, 'icon.png'))
@@ -154,6 +189,12 @@ app.on('before-quit', () => app.quitting = true)
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
+
+ipcMain.handle('auth:setVerifyKey', (_, key) => {
+  services.setVerifyKey?.(key);
+});
+
+ipcMain.handle('config:getAll', () => config.config);
 
 ipcMain.on('showSetting',() => {//顯示設定視窗
     setting_win.show();
