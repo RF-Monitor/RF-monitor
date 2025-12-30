@@ -1,5 +1,188 @@
-let ipcRenderer = require('electron').ipcRenderer;
+import { InfoUpdate_full_ws } from './renderer/report.js';
+import { EEWTWManager } from './renderer/EEWTW.js';
+import { RFPLUSManager } from './renderer/RFPLUS.js';
+import { pgaManager } from './renderer/pga.js';
+import { locations } from "./data/location.js";
+import { switchPage } from './renderer/ui.js';
+const cfg = await window.config.getAll();
 
+// 建立三個地圖
+var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
+/*
+var map_shakingArea = L.map('map_shakingArea', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false,attributionControl:false,zoomDelta: 0.1 }).setView([23.7, 120.924610], 8);
+var osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
+map_shakingArea.addLayer(osm);*/
+var map = L.map('mapid', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
+var osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+var osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
+map.addLayer(osm);
+var map2 = L.map('map2', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
+osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
+map2.addLayer(osm);
+
+var map3 = L.map('map3', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
+osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
+map3.addLayer(osm);
+
+// 地理資料
+var town_line = {};
+var town_ID_list = [];
+var country_geojson = {};
+
+$.getJSON("json/TOWN_MOI.json", function (r) {
+	country_geojson = r;
+	for (let i = 0; i < r["features"].length; i++) {
+		town_line[r["features"][i]["properties"]["TOWNCODE"]] = r["features"][i]
+	}
+});
+//town_ID
+$.getJSON("json/Town_ID.json", function (r) {
+	town_ID_list = r;
+})
+
+var country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
+var country_count = 0
+var geojson_list = {};
+
+$.ajaxSettings.async = false;
+
+for (let i = 0; i < country_list.length; i++) {
+	country_count = i
+	$.getJSON("json/countries/" + country_list[i] + ".json", function (r) {
+		geojson_list[country_list[country_count]] = r;
+	});
+};
+
+//panes
+	map.createPane("RFPLUS_shindo_list_layer");
+	map.createPane('eew_RF_shindo_list_layer');
+	map.createPane('eew_tw_shindo_list_layer');
+	map.createPane('countyline');
+	map.createPane('wave_layer');
+	map.createPane('shindo_icon_disconnected');
+	map.createPane('shindo_icon_0');
+	map.createPane('shindo_icon_0_0');
+	map.createPane('shindo_icon_0_1');
+	map.createPane('shindo_icon_0_2');
+	map.createPane('shindo_icon_0_3');
+	map.createPane('shindo_icon_1');
+	map.createPane('shindo_icon_2');
+	map.createPane('shindo_icon_3');
+	map.createPane('shindo_icon_4');
+	map.createPane('shindo_icon_5-');
+	map.createPane('shindo_icon_5+');
+	map.createPane('shindo_icon_6-');
+	map.createPane('shindo_icon_6+');
+	map.createPane('shindo_icon_7');
+	map2.createPane('shindo_icon_0');
+	map2.createPane('shindo_icon_1');
+	map2.createPane('shindo_icon_2');
+	map2.createPane('shindo_icon_3');
+	map2.createPane('shindo_icon_4');
+	map2.createPane('shindo_icon_5-');
+	map2.createPane('shindo_icon_5+');
+	map2.createPane('shindo_icon_6-');
+	map2.createPane('shindo_icon_6+');
+	map2.createPane('shindo_icon_7');
+	map3.createPane('weather_warning_layers');
+	map3.createPane('typhoon_layer');
+	map.getPane("eew_RF_shindo_list_layer").style.zIndex = 300;
+	map.getPane("RFPLUS_shindo_list_layer").style.zIndex = 310;
+	map.getPane('eew_tw_shindo_list_layer').style.zIndex = 410;
+	map.getPane('countyline').style.zIndex = 420;
+	map.getPane('wave_layer').style.zIndex = 450;
+	map.getPane('shindo_icon_0').style.zIndex = 601;
+	map.getPane('shindo_icon_disconnected').style.zIndex = 600;
+	map.getPane('shindo_icon_0_0').style.zIndex = 601;
+	map.getPane('shindo_icon_0_1').style.zIndex = 602;
+	map.getPane('shindo_icon_0_2').style.zIndex = 603;
+	map.getPane('shindo_icon_0_3').style.zIndex = 604;
+	map.getPane('shindo_icon_1').style.zIndex = 605;
+	map.getPane('shindo_icon_2').style.zIndex = 610;
+	map.getPane('shindo_icon_3').style.zIndex = 615;
+	map.getPane('shindo_icon_4').style.zIndex = 620;
+	map.getPane('shindo_icon_5-').style.zIndex = 625;
+	map.getPane('shindo_icon_5+').style.zIndex = 630;
+	map.getPane('shindo_icon_6-').style.zIndex = 635;
+	map.getPane('shindo_icon_6+').style.zIndex = 640;
+	map.getPane('shindo_icon_7').style.zIndex = 645;
+	map.getPane('wave_layer').style.zIndex = 450;
+	map2.getPane('shindo_icon_0').style.zIndex = 600;
+	map2.getPane('shindo_icon_1').style.zIndex = 605;
+	map2.getPane('shindo_icon_2').style.zIndex = 610;
+	map2.getPane('shindo_icon_3').style.zIndex = 615;
+	map2.getPane('shindo_icon_4').style.zIndex = 620;
+	map2.getPane('shindo_icon_5-').style.zIndex = 625;
+	map2.getPane('shindo_icon_5+').style.zIndex = 630;
+	map2.getPane('shindo_icon_6-').style.zIndex = 635;
+	map2.getPane('shindo_icon_6+').style.zIndex = 640;
+	map2.getPane('shindo_icon_7').style.zIndex = 645;
+	map3.getPane('weather_warning_layers').style.zIndex = 430;
+	map3.getPane('typhoon_layer').style.zIndex = 440;
+
+  $.ajaxSettings.async = true;
+
+	//Layers
+	var eew_tw_shindo_list_layer = L.layerGroup().addTo(map);
+	$.getJSON("json/taiwan_ADB.geojson", function (r) {
+		var countyline = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 ,pane:"countyline"})]).addTo(map);
+		var countyline2 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map2);
+		var countyline3 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map3);
+	});
+	
+	var weather_warning_layers = L.layerGroup().addTo(map3);
+	var typhoon_layer = L.layerGroup().addTo(map3);
+	var distributedLayer = L.layerGroup();
+
+// managers
+let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L);
+let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L);
+let PGAmanager = new pgaManager(map, L);
+
+//ws events
+if (!window.ws) {
+    console.error('window.ws not available');
+}
+window.ws.onEEWTW(async (data) => {
+    EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+});
+
+window.ws.onPGA(async (data) => {
+    PGAmanager.handle(data, await window.time.now());
+});
+
+window.ws.onReport((data) => {
+    InfoUpdate_full_ws(data);
+});
+
+
+//UI events
+document.getElementById("nav_eew").addEventListener("click",() => {switchPage("page1", map, map2, map3)})
+document.getElementById("nav_report").addEventListener("click",() => {switchPage("page2", map, map2, map3)})
+document.getElementById("nav_weather").addEventListener("click",() => {switchPage("page3", map, map2, map3)})
+document.getElementById('page2').style.display = "none";
+document.getElementById('page3').style.display = "none";
+document.getElementById("nav_eew").style.borderBottomColor = "#00FFFF";
+
+//時間
+setInterval(async () => {
+	function formatTimestamp(timestamp) {
+		const date = new Date(timestamp);
+
+		const YYYY = date.getFullYear();
+		const MM = String(date.getMonth() + 1).padStart(2, '0'); // 月份從0開始
+		const dd = String(date.getDate()).padStart(2, '0');
+		const hh = String(date.getHours()).padStart(2, '0');
+		const mm = String(date.getMinutes()).padStart(2, '0');
+		const ss = String(date.getSeconds()).padStart(2, '0');
+
+		return `${YYYY}-${MM}-${dd} ${hh}:${mm}:${ss}`;
+	}
+	document.getElementById("nowDiv").innerHTML = formatTimestamp(await window.time.now());
+},1000)
+/*
 //> close button
 let closeBtn = document.querySelector('#setting');
 let joinBtn = document.querySelector('#announcement');
@@ -13,3 +196,4 @@ joinBtn.addEventListener('click', () => {
     console.log('send');
     ipcRenderer.send('showAnnouncement');
 });
+*/
