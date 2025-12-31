@@ -13,7 +13,14 @@ contextBridge.exposeInMainWorld('ws', {
         console.log("[preload] sending EEWTW");
         ipcRenderer.on('event:eew:tw', (_, d) => cb(d))
     },
-  
+    onRFPLUS2: (cb) =>{
+        console.log("[preload] sending RFPLUS");
+        ipcRenderer.on('event:rfplus:2', (_, d) => cb(d))
+    },
+    onRFPLUS3: (cb) =>{
+        console.log("[preload] sending RFPLUS");
+        ipcRenderer.on('event:rfplus:3', (_, d) => cb(d))
+    },
     onWeather: (cb) =>{
         console.log("[preload] sending Weather");
         ipcRenderer.on('event:weather:alert', (_, d) => cb(d));
@@ -27,7 +34,15 @@ contextBridge.exposeInMainWorld('ws', {
 });
 
 contextBridge.exposeInMainWorld('config', {
-    getAll: () => ipcRenderer.invoke('config:getAll')
+    getAll: () => ipcRenderer.invoke('config:getAll'),
+    set: (key, value) => {
+      console.log("[preload] setting config",key ,value)
+      return ipcRenderer.invoke('config:set', key, value)
+    }
+});
+
+contextBridge.exposeInMainWorld('eq', {
+    getInfoDistribution: (id) => ipcRenderer.invoke('eq:reportDistribution',id)
 });
 
 contextBridge.exposeInMainWorld('time', {
@@ -45,4 +60,12 @@ contextBridge.exposeInMainWorld('auth', {
 
   onResult: (cb) =>
     ipcRenderer.on('state:auth:result', (_, d) => cb(d))
+});
+
+contextBridge.exposeInMainWorld('windowControl', {
+  showSetting: () =>
+    ipcRenderer.send('showSetting'),
+
+  showAnnouncement: () =>
+    ipcRenderer.send('showAnnouncement')
 });
