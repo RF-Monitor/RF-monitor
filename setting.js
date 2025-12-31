@@ -1,0 +1,157 @@
+function bindAutoSave() {
+    const elements = document.querySelectorAll(
+        "input, select, textarea"
+    );
+
+    elements.forEach(el => {
+        if (!el.id) return; // 沒 id 不處理
+
+        const handler = async () => {
+            let value;
+            //console.log("saving config")
+            if (el.type === "checkbox") {
+                value = String(el.checked);
+            } else {
+                value = el.value;
+            }
+
+            await window.config.set(el.id, value);
+        };
+
+        el.addEventListener("change", handler);
+        el.addEventListener("input", handler); // for text / range
+    });
+}
+
+// 載入設定值
+const config = await window.config.getAll();
+
+if(config.server.http == "http://RFEQSERVER.myqnapcloud.com"){
+    document.getElementById("server_select").value = "RFEQSERVER.myqnapcloud.com";
+}else if(config.server.http == "http://rexisstudio.tplinkdns.com"){
+    document.getElementById("server_select").value = "rexisstudio.tplinkdns.com";
+}
+document.getElementById("lat").value = config.user.lat;
+document.getElementById("lon").value = config.user.lon;
+
+
+if(config.system.enableGPU){
+    document.getElementById("enable_gpu").checked = true;
+}
+if(config.system.autoLaunch){
+    document.getElementById("enable_autolaunch").checked = true;
+}
+if(config.system.minimizeToTray){
+    document.getElementById("minimize_to_tray").checked = true;
+}
+if(config.system.windowPopup){
+    document.getElementById("enable_window_popup").checked = true;
+}
+if(config.weather.enabled){
+    document.getElementById("enable_weather").checked = true;
+}
+
+if(config.tsunami.enabled){
+    document.getElementById("enable_tsunami").checked = true;
+}
+if(config.weather.typhoon.enabled != "false"){
+    document.getElementById("enable_ty").checked = true;
+}
+if(config.weather.typhoon.analysis){
+    document.getElementById("enable_ty_analysis").checked = true;
+}
+if(config.shindo.enabled){
+    document.getElementById("enable_PGA").checked = true;
+}
+if(config.shindo.pgaWarnOnly){
+    document.getElementById("PGA_warn_only").checked = true;
+}
+if(config.user.localOnly){
+    document.getElementById("local_only").checked = true;
+}
+if(config.shindo.warningArea){
+    document.getElementById("enable_warningArea").checked = true;
+}
+if(config.wave.enabled){
+    document.getElementById("enable_wave").checked = true;
+}
+if(config.system.enableNotification){
+    document.getElementById("enable_notification").checked = true;
+}
+///////////音效/////////////
+if(config.sound.twEEW){
+    document.getElementById("enable_tw_eew_sound").checked = true;
+}
+if(config.sound.jpEEW){
+    document.getElementById("enable_jp_eew_sound").checked = true;
+}
+if(config.sound.shindo["1"]){
+    document.getElementById("enable_shindo_sounds_1").checked = true;
+}
+if(config.sound.shindo["2"]){
+    document.getElementById("enable_shindo_sounds_2").checked = true;
+}
+if(config.sound.shindo["3"]){
+    document.getElementById("enable_shindo_sounds_3").checked = true;
+}
+if(config.sound.shindo["4"]){
+    document.getElementById("enable_shindo_sounds_4").checked = true;
+}
+if(config.sound.shindo["5-"]){
+    document.getElementById("enable_shindo_sounds_5-").checked = true;
+}
+if(config.sound.shindo["5+"]){
+    document.getElementById("enable_shindo_sounds_5+").checked = true;
+}
+if(config.sound.shindo["6-"]){
+    document.getElementById("enable_shindo_sounds_6-").checked = true;
+}
+if(config.sound.shindo["6+"]){
+    document.getElementById("enable_shindo_sounds_6+").checked = true;
+}
+if(config.sound.shindo["7"]){
+    document.getElementById("enable_shindo_sounds_7").checked = true;
+}
+///////////////////////////////
+/*
+if(enable_shindo_TREM != "false"){
+    document.getElementById("enable_PGA_TREM").checked = true;
+}*/
+if(config.eew.jp){
+    document.getElementById("enable_eew_jp").checked = true;
+}
+if(config.eew.tw){
+    document.getElementById("enable_eew_tw").checked = true;
+}
+if(config.eew.rfplus){
+    document.getElementById("enable_RFPLUS").checked = true;
+}
+if(config.eew.rfplusType == "RFPLUS2"){
+    document.getElementById("RFPLUS_type_2").checked = true;
+}else{
+    document.getElementById("RFPLUS_type_3").checked = true;
+}
+if(config.sound.twRead){
+    document.getElementById("enable_eew_tw_read").checked = true;
+}
+if(config.system.opacity != null){
+    document.getElementById("opacity").value = config.system.opacity;
+}
+document.getElementById("webhook_url_shindo_sokuho").value = config.webhook.shindo.url;
+document.getElementById("webhook_header_shindo_sokuho").value = config.webhook.shindo.header;
+document.getElementById("webhook_url_TW_EEW").value = config.webhook.twEEW.url;
+document.getElementById("webhook_text_TW_EEW").value = config.webhook.twEEW.text;
+
+await bindAutoSave();
+
+document.getElementById("RFPLUS_type_2").addEventListener("change", async (e) => {
+    if (e.target.checked) {
+        await window.config.set("RFPLUS_type", "RFPLUS2");
+    }
+});
+
+document.getElementById("RFPLUS_type_3").addEventListener("change", async (e) => {
+    if (e.target.checked) {
+        await window.config.set("RFPLUS_type", "RFPLUS3");
+    }
+});
