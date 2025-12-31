@@ -69,8 +69,6 @@ export class pgaManager{
                 stationList.delete(id);
             }
         }
-
-        this.ui.update(pga, "", now)
     }
 }
 
@@ -244,6 +242,13 @@ class pgaUI{
                     shindo: stationData.shindo
                 });
             }
+            // 檢查是否被選取
+			if(stationData.name == selected){
+                document.getElementById("selected_name").innerHTML = stationData.name;
+				document.getElementById("selected_pgao").innerHTML = stationData.pga_origin;
+				document.getElementById("selected_pga").innerHTML = stationData.pga;
+				document.getElementById("selected_shindo").innerHTML = "<img src='shindo_icon/selected/"+stationData.shindo.toString()+".png' style='width:50px'>"
+			}
         }
 
         // 顯示最大震度
@@ -252,6 +257,9 @@ class pgaUI{
         `
         // 顯示測站數
         document.getElementById('stations_count_online').innerHTML = station_count.toString();
+
+        //顯示常駐測站
+
 
         //若shakealert 顯示前六名測站
         if(shakealert){
