@@ -5,7 +5,7 @@ const fs = require('fs');
 const { start } = require('repl');
 //require("./trem-core/index.js")
 const isDevelopment = process.env.NODE_ENV !== "production";
-const config = require('./config');
+const config = require('./config/index');
 
 let services = {};
 
@@ -37,13 +37,20 @@ async function bootServices() {
     (ch, data) => broadcastState(ch, data)
   );
 
+  const report = await import("./main/report.mjs");
+  ipcMain.handle('eq:reportDistribution', async (event, id) => {
+    return await report.getInfoDistribution(id);
+  })
+
   return { setVerifyKey };
 }
 
 
 /*----------處理設定檔----------*/
-config.repairIfBroken();
 config.applyDefaults();
+//console.log(storage.getAll());
+config.repairIfBroken();
+config.backupConfig();
 
 /*----------建立視窗----------*/
 let setting_win = null;
@@ -73,8 +80,9 @@ const createWindow = () => {
       minHeight: 600,
       minWidth: 800,
       webPreferences:{
+        preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
-        contextIsolation: false,
+        contextIsolation: true,
         enableRemoteModule: true,
         backgroundThrottling: false,
         nativeWindowOpen: true,
@@ -194,7 +202,14 @@ ipcMain.handle('auth:setVerifyKey', (_, key) => {
   services.setVerifyKey?.(key);
 });
 
-ipcMain.handle('config:getAll', () => config.config);
+ipcMain.handle('config:getAll', () => {
+  return config.config()
+});
+
+ipcMain.handle('config:set', (_, key, value) => {
+  console.log("[main] setting config",key ,value)
+  config.set(key, value)
+})
 
 ipcMain.on('showSetting',() => {//顯示設定視窗
     setting_win.show();
