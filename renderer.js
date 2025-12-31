@@ -1,11 +1,11 @@
-import { InfoUpdate_full_ws } from './renderer/report.js';
+import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js';
 import { EEWTWManager } from './renderer/EEWTW.js';
 import { RFPLUSManager } from './renderer/RFPLUS.js';
 import { pgaManager } from './renderer/pga.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
 const cfg = await window.config.getAll();
-
+console.log(cfg)
 // 建立三個地圖
 var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
 /*
@@ -140,6 +140,8 @@ for (let i = 0; i < country_list.length; i++) {
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L);
 let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L);
 let PGAmanager = new pgaManager(map, L);
+mapRendererInitialize(map2, L);
+
 
 //ws events
 if (!window.ws) {
@@ -149,13 +151,20 @@ window.ws.onEEWTW(async (data) => {
     EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 });
 
+
 window.ws.onPGA(async (data) => {
-    PGAmanager.handle(data, await window.time.now());
+	let now = await window.time.now()
+    PGAmanager.handle(data, now);
+	PGAmanager.ui.update(data, cfg.stations.selected, now)
 });
 
 window.ws.onReport((data) => {
-    InfoUpdate_full_ws(data);
+    InfoUpdate_full_ws(data, async (id) => {
+		// 取得震度分布的程式
+		return await window.eq.getInfoDistribution(id);
+	});
 });
+
 
 
 //UI events
@@ -182,18 +191,14 @@ setInterval(async () => {
 	}
 	document.getElementById("nowDiv").innerHTML = formatTimestamp(await window.time.now());
 },1000)
-/*
-//> close button
+
 let closeBtn = document.querySelector('#setting');
 let joinBtn = document.querySelector('#announcement');
 
 closeBtn.addEventListener('click', () => {
-    console.log('send');
-    ipcRenderer.send('showSetting');
+    window.windowControl.showSetting();
 });
 
 joinBtn.addEventListener('click', () => {
-    console.log('send');
-    ipcRenderer.send('showAnnouncement');
+	window.windowControl.showAnnouncement();
 });
-*/
