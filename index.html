@@ -8,10 +8,10 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet" />
 	<link href="css/leaflet.css" rel="stylesheet" />
 	<link href="css/index.css" rel="stylesheet" />
+	<link href="css/eew.css" rel="stylesheet" />
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/leaflet.js"></script>
-	<script src="js/main/utility.js"></script>
-	<script src="data/location.js"></script>
+	<!--<script src="js/main/utility.js"></script>-->
 	<script src="js/main/ui.js"></script>
 	<style>
 		
@@ -108,51 +108,8 @@
 			<div class="eew_tw">
 				<div class="eew_tw_title_box">
 					<h5 class='lang_CNT' style="color:white ;"><strong>臺灣地震速報(CWA)</strong></h5>
-					<strong><h5 class='lang_ENG' style="color:white ;"><strong>Taiwan EEW(CWA)</strong></h5></strong>
-					<strong><h5 class='lang_JP' style="color:white ;"><strong>緊急地震速報(台湾CWA)</strong></h5></strong>
-					<strong><h5 class='lang_CNS' style="color:white ;"><strong>台湾地震预警(CWA)</strong></h5></strong>
 				</div>
-				<div class='eew_tw_status_box'><h4 style='color:white'><span id='eew_tw_status'></h4></div>
-				<div class=' eew_tw_main_box'>
-					<div style="width:70px">
-						<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
-						<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
-						<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
-						<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-						<img id="eew_tw_maxshindo" style="width:70px">
-					</div>
-					<div style="width:160px;margin-left: 10px;">
-					
-					
-						<div>
-							<h4 style='color:white'>
-								<span id="eew_tw_epicenter"></span>
-							</h4>
-						</div>
-						<div>
-							<h6 style='color:white'>
-								<span id="eew_tw_time"></span>
-							</h6>
-						</div>
-						<div class='row'>
-							<div class='col-6'>
-								<h4 style='color:white' align='left'>
-									<span id="eew_tw_magnitude"></span>
-								</h4>
-							</div>
-							<div class='col-6'>
-								<h4 style='color:white' align='right'>
-									<span id="eew_tw_depth"></span>
-								</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="eew_tw_local">
-					<h5 class='lang_CNT'>預計本地震度:<span id="localshindo"></span></h5>
-					<h5 class='lang_ENG'>Expect local intensity:<span id="localshindo"></span></h5>
-					<h5 class='lang_JP'>予想ロカール震度:<span id="localshindo"></span></h5>
-					<h5 class='lang_CNS'>预计本地震度:<span id="localshindo"></span></h5>
+				<div id="eew_tw_list" class="eew_tw_list">
 				</div>
 			</div>
 			<!--RFEQ地震預警-->
@@ -164,88 +121,15 @@
 					<h5 class="lang_CNS" style="color:white ;"><strong>台湾地震预警(RFEQ)</strong></h5>
 					<h5 class="lang_JP" style="color:white ;"><strong>緊急地震速報(台湾RFEQ)</strong></h5>
 				</div>
-
-				<!--RFPLUS3-->
-				<div id="RFPLUS3" class="RFPLUS" style="display: none;">
-					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第<span id="RFPLUS3_report_num"></span>報)</h4>
-					</div>
-					<div class="RFPLUS_main_box">
-						<div style="width:70px">
-							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
-							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<img id="RFPLUS3_maxshindo" style="width:70px">
-						</div>
-						<div style="width:160px;margin-left: 10px">
-							<div>
-								<h4 style='color:white'>
-									<span id="RFPLUS3_epicenter"></span>
-								</h4>
-								<h6 style='color:white'>
-									<span id="RFPLUS3_time"></span>
-								</h6>
-							</div>
-							<div class="RFPLUS3_maindown">
-								<div class="RFPLUS3_scale"><h4>M<span id="RFPLUS3_scale"></span></h4></div>
-								<div class="RFPLUS3_depth"><h4><span id="RFPLUS3_depth"></span></h4></div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!--RFPLUS2-->
-				<div id="RFPLUS" class="RFPLUS" style="display: none;">
-					<div id="RFPLUS_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第<span id="RFPLUS_report_num"></span>報)</h4>
-					</div>
-					<div class="RFPLUS_main_box">
-						<div style="width:70px">
-							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
-							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<img id="RFPLUS_maxshindo" style="width:70px">
-						</div>
-						<div style="width:160px;margin-left: 10px;">
-							<div>
-								<h4 style='color:white'>
-									<span id="RFPLUS_epicenter"></span>
-								</h4>
-							</div>
-							<div>
-								<h5>無震源參數</h5>
-							</div>
-						</div>
-					</div>
+				<div id="RFPLUS_list">
+					
 				</div>
 
 				<!--RF-sensor alert list-->
 				<div class="RF_list">
-					<h4 id="RF_status" style="color:white ;display: block;">目前沒有地震速報</h4>
-					<div class="RF_lists">
-						<div id="RF_list_1">
-							<div id="RF_item_1" class="RF_item">
-								
-							</div>
-							<div id="RF_item_2" class="RF_item">
-								
-							</div>
-							<div id="RF_item_3" class="RF_item">
-								
-							</div>
+					<h4 id="RF_status" style="color:white ;display: block;padding: 3px;margin: 0;">目前沒有地震速報</h4>
+					<div id="RF_list_1">
 						
-							<div id="RF_item_4" class="RF_item">
-								
-							</div>
-							<div id="RF_item_5" class="RF_item">
-								
-							</div>
-							<div id="RF_item_6" class="RF_item">
-								
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -382,7 +266,7 @@
 			</div>
 		</div>
 		<!--波型視窗-->
-		<div id="wave" class="wave">
+		<div id="wave" class="wave" style="display: none;">
 			<canvas id="waveCanvas1" style="border: 2px white solid;position: absolute;top:0;right:0" width="396" height="98"></canvas>
 			<select id="Canvas1Sta" style="position: absolute;top:70px;left: 0;height: 30px;width: 198px;" onchange="CanvasChange(1)">
 			<!--<select id="Canvas1Sta" style="position: absolute;top:70px;left: 0;height: 30px;width: 198px;" onfocus="CanvasStaListUpdate(1)" onchange="CanvasChange(1)">-->
@@ -570,7 +454,7 @@
 
 </body>
 <script type="text/javascript">
-
+/*
 //using library
 const bytenode = require("bytenode");
 const crypto = require("crypto");
@@ -588,7 +472,9 @@ const fs = require('fs');
 storage.setStoragePath(path.join(__dirname, '../../../../RF-Monitor_config/config.json'));
 server_url = storage.getItem('server_url');
 ws_server_url = storage.getItem('ws_server_url');
+*/
 </script>
+<!--
 <script src="js/main/auth.js"></script>
 <script src="js/main/replay.js"></script>
 <script src="js/main/webhook.js"></script>
@@ -596,17 +482,14 @@ ws_server_url = storage.getItem('ws_server_url');
 <script src="js/main/EEW_TW.js"></script>
 <script src="js/main/RFPLUS.js"></script>
 <script src="js/main/tsunami.js"></script>
-<script src="js/indexprocess.js"></script>
+<script src="js/indexprocess.js"></script>-->
+<script type="module" src="renderer.js"></script>
 <script type="text/javascript">
 
-	require('./renderer.js');		
+	//require('./renderer.js');		
 	//navbar切頁
-	document.getElementById("nav_eew").onclick = function(){switchPage("page1")}
-	document.getElementById("nav_report").onclick = function(){switchPage("page2")}
-	document.getElementById('page2').style.display = "none";
-	document.getElementById("nav_weather").onclick = function(){switchPage("page3")}
-	document.getElementById('page3').style.display = "none";
-	document.getElementById("nav_eew").style.borderBottomColor = "#00FFFF";
+	
+	/*
 	//Rick Roll
 	if(enable_eew_jp == "false" && enable_eew_tw == "false" && enable_RFPLUS == "false" && enable_shindo == "false" && enable_weather == "false" && enable_typhoon == "false"){
 		shell.openExternal("https://youtu.be/dQw4w9WgXcQ");
@@ -622,61 +505,6 @@ ws_server_url = storage.getItem('ws_server_url');
 		document.querySelector('.eew_tw').style.display = "none";
 	}
 	document.getElementById("loading_text").innerHTML = "正在建構地圖...";
-	/*----------建構地圖----------*/
-	var BlackLayer = L.TileLayer.extend({
-		getTileUrl: function(coords) {
-			return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXY3B0dPwPAANNAcN9MwGSAAAAAElFTkSuQmCC'; // 一個 1x1 全黑的 PNG
-		},
-		tileSize: 256
-	});
-	var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
-	var osmUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
-	var map_shakingArea = L.map('map_shakingArea', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false,attributionControl:false,zoomDelta: 0.1 }).setView([23.7, 120.924610], 8);
-	var osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-	map_shakingArea.addLayer(osm);
-
-	var map = L.map('mapid', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-	osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-	osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-	//osm = new BlackLayer();
-	map.addLayer(osm);
-	var map2 = L.map('map2', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-	osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-	osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-	map2.addLayer(osm);
-
-	var map3 = L.map('map3', { maxBounds: bounds,maxBoundsViscosity: 1.0,zoomControl: false ,attributionControl:false,zoomDelta: 0.1}).setView([23.7, 120.924610], 8);
-	osmUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
-	osm = new L.TileLayer(osmUrl, { minZoom: 3, maxZoom: 16 });
-	map3.addLayer(osm);
-
-	//鄉鎮市區界
-	var town_line = {};
-	$.getJSON("json/TOWN_MOI.json", function (r) {
-		country_geojson = r;
-		for (i = 0; i < r["features"].length; i++) {
-			town_line[r["features"][i]["properties"]["TOWNCODE"]] = r["features"][i]
-		}
-	});
-	//town_ID
-	$.getJSON("json/Town_ID.json", function (r) {
-		town_ID_list = r;
-	})
-
-	country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
-	country_count = 0
-	var geojson_list = {};
-
-	$.ajaxSettings.async = false;
-
-	for (i = 0; i < country_list.length; i++) {
-		country_count = i
-		$.getJSON("json/countries/" + country_list[i] + ".json", function (r) {
-			geojson_list[country_list[country_count]] = r;
-		});
-	};
-
-	
 
 	var infoupchk = '';
 	var count = 0;
@@ -684,118 +512,8 @@ ws_server_url = storage.getItem('ws_server_url');
 	L.marker([userlat, userlon], { icon: L.icon({ iconUrl: "shindo_icon/house.png", iconSize: [10, 10] }), }).addTo(map);
 	//選取測站
 	document.getElementById("selected_name").innerHTML = selected_station;
-	//panes
-	map.createPane("RFPLUS_shindo_list_layer");
-	map.createPane('eew_RF_shindo_list_layer');
-	map.createPane('eew_tw_shindo_list_layer');
-	map.createPane('countyline');
-	//map.createPane('weather_warning_layers');
-	//map.createPane('typhoon_layer');
-	map.createPane('wave_layer');
-	map.createPane('shindo_icon_disconnected');
-	map.createPane('shindo_icon_0');
-	map.createPane('shindo_icon_0_0');
-	map.createPane('shindo_icon_0_1');
-	map.createPane('shindo_icon_0_2');
-	map.createPane('shindo_icon_0_3');
-	map.createPane('shindo_icon_1');
-	map.createPane('shindo_icon_2');
-	map.createPane('shindo_icon_3');
-	map.createPane('shindo_icon_4');
-	map.createPane('shindo_icon_5-');
-	map.createPane('shindo_icon_5+');
-	map.createPane('shindo_icon_6-');
-	map.createPane('shindo_icon_6+');
-	map.createPane('shindo_icon_7');
-	/*map_shakingArea.createPane('shindo_icon_0');
-	map_shakingArea.createPane('shindo_icon_1');
-	map_shakingArea.createPane('shindo_icon_2');
-	map_shakingArea.createPane('shindo_icon_3');
-	map_shakingArea.createPane('shindo_icon_4');
-	map_shakingArea.createPane('shindo_icon_5-');
-	map_shakingArea.createPane('shindo_icon_5+');
-	map_shakingArea.createPane('shindo_icon_6-');
-	map_shakingArea.createPane('shindo_icon_6+');
-	map_shakingArea.createPane('shindo_icon_7');*/
-	map2.createPane('shindo_icon_0');
-	map2.createPane('shindo_icon_1');
-	map2.createPane('shindo_icon_2');
-	map2.createPane('shindo_icon_3');
-	map2.createPane('shindo_icon_4');
-	map2.createPane('shindo_icon_5-');
-	map2.createPane('shindo_icon_5+');
-	map2.createPane('shindo_icon_6-');
-	map2.createPane('shindo_icon_6+');
-	map2.createPane('shindo_icon_7');
-	map3.createPane('weather_warning_layers');
-	map3.createPane('typhoon_layer');
-	map.getPane("eew_RF_shindo_list_layer").style.zIndex = 300;
-	map.getPane("RFPLUS_shindo_list_layer").style.zIndex = 310;
-	map.getPane('eew_tw_shindo_list_layer').style.zIndex = 410;
-	map.getPane('countyline').style.zIndex = 420;
-	//map.getPane('weather_warning_layers').style.zIndex = 430;
-	//map.getPane('typhoon_layer').style.zIndex = 440;
-	map.getPane('wave_layer').style.zIndex = 450;
-	map.getPane('shindo_icon_0').style.zIndex = 601;
-	map.getPane('shindo_icon_disconnected').style.zIndex = 600;
-	map.getPane('shindo_icon_0_0').style.zIndex = 601;
-	map.getPane('shindo_icon_0_1').style.zIndex = 602;
-	map.getPane('shindo_icon_0_2').style.zIndex = 603;
-	map.getPane('shindo_icon_0_3').style.zIndex = 604;
-	map.getPane('shindo_icon_1').style.zIndex = 605;
-	map.getPane('shindo_icon_2').style.zIndex = 610;
-	map.getPane('shindo_icon_3').style.zIndex = 615;
-	map.getPane('shindo_icon_4').style.zIndex = 620;
-	map.getPane('shindo_icon_5-').style.zIndex = 625;
-	map.getPane('shindo_icon_5+').style.zIndex = 630;
-	map.getPane('shindo_icon_6-').style.zIndex = 635;
-	map.getPane('shindo_icon_6+').style.zIndex = 640;
-	map.getPane('shindo_icon_7').style.zIndex = 645;
-	map.getPane('wave_layer').style.zIndex = 450;
-	map2.getPane('shindo_icon_0').style.zIndex = 600;
-	map2.getPane('shindo_icon_1').style.zIndex = 605;
-	map2.getPane('shindo_icon_2').style.zIndex = 610;
-	map2.getPane('shindo_icon_3').style.zIndex = 615;
-	map2.getPane('shindo_icon_4').style.zIndex = 620;
-	map2.getPane('shindo_icon_5-').style.zIndex = 625;
-	map2.getPane('shindo_icon_5+').style.zIndex = 630;
-	map2.getPane('shindo_icon_6-').style.zIndex = 635;
-	map2.getPane('shindo_icon_6+').style.zIndex = 640;
-	map2.getPane('shindo_icon_7').style.zIndex = 645;
-	/*map_shakingArea.getPane('shindo_icon_0').style.zIndex = 600;
-	map_shakingArea.getPane('shindo_icon_1').style.zIndex = 605;
-	map_shakingArea.getPane('shindo_icon_2').style.zIndex = 610;
-	map_shakingArea.getPane('shindo_icon_3').style.zIndex = 615;
-	map_shakingArea.getPane('shindo_icon_4').style.zIndex = 620;
-	map_shakingArea.getPane('shindo_icon_5-').style.zIndex = 625;
-	map_shakingArea.getPane('shindo_icon_5+').style.zIndex = 630;
-	map_shakingArea.getPane('shindo_icon_6-').style.zIndex = 635;
-	map_shakingArea.getPane('shindo_icon_6+').style.zIndex = 640;
-	map_shakingArea.getPane('shindo_icon_7').style.zIndex = 645;*/
-	/*map_shakingArea.getPane('shindo_icon_0').style.zIndex = 600;
-	map_shakingAreap.getPane('shindo_icon_1').style.zIndex = 605;
-	map_shakingArea.getPane('shindo_icon_2').style.zIndex = 610;
-	map_shakingArea.getPane('shindo_icon_3').style.zIndex = 615;
-	map_shakingArea.getPane('shindo_icon_4').style.zIndex = 620;
-	map_shakingArea.getPane('shindo_icon_5-').style.zIndex = 625;
-	map_shakingArea.getPane('shindo_icon_5+').style.zIndex = 630;
-	map_shakingArea.getPane('shindo_icon_6-').style.zIndex = 635;
-	map_shakingArea.getPane('shindo_icon_6+').style.zIndex = 640;
-	map_shakingArea.getPane('shindo_icon_7').style.zIndex = 645;*/
-	map3.getPane('weather_warning_layers').style.zIndex = 430;
-	map3.getPane('typhoon_layer').style.zIndex = 440;
-	$.ajaxSettings.async = true;
-	//Layers
-	var eew_tw_shindo_list_layer = L.layerGroup().addTo(map);
-	$.getJSON("json/taiwan_ADB.geojson", function (r) {
-		countyline = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 ,pane:"countyline"})]).addTo(map);
-		countyline2 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map2);
-		countyline3 = L.layerGroup([L.geoJSON(r, { color: "#D0D0D0", weight: 1 })]).addTo(map3);
-	});
 	
-	var weather_warning_layers = L.layerGroup().addTo(map3);
-	var typhoon_layer = L.layerGroup().addTo(map3);
-	distributedLayer = L.layerGroup();
+	
 
 	
 
@@ -912,8 +630,9 @@ ws_server_url = storage.getItem('ws_server_url');
         document.getElementById("nowDiv").innerHTML = time2; 
 		//setTimeout("show()", 1000); 
 	}
-
+	
 	/*----------按鈕綁定邏輯----------*/
+	/*
 	document.getElementById("login_btn").addEventListener("click" ,async() => {
 		document.getElementById("login_btn").innerHTML = "登入中...";
 		document.getElementById("login_btn").disabled = true;
@@ -928,7 +647,7 @@ ws_server_url = storage.getItem('ws_server_url');
     		document.getElementById("login_btn").innerHTML = "登入";
 			console.log("login failed");
 		}
-	})
+	})*/
 </script>
 
 <body>
