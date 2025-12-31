@@ -174,13 +174,13 @@
 					<input type="number" value="" id="opacity" name="opacity" style="width:50px" min="0" max="1" step="0.1">
 					<hr/>
 					<h4>即時地震資訊</h4>
-					<input class="maincheckbox" type="checkbox" value="" id="enable_tw_eew" name="enable_tw_eew" disabled>
-					<label for="enable_tw_eew">
+					<input class="maincheckbox" type="checkbox" value="" id="enable_eew_tw" name="enable_eew_tw" disabled>
+					<label for="enable_eew_tw">
 						<p style='font-size: 22px;'>顯示台灣地震速報(發布單位:CWA)(暫不支援，預計未來恢復)</p>
 					</label>
 					<br>
-					<input class="maincheckbox" type="checkbox" value="" id="enable_jp_eew" name="enable_jp_eew">
-					<label for="enable_jp_eew">
+					<input class="maincheckbox" type="checkbox" value="" id="enable_eew_jp" name="enable_eew_jp">
+					<label for="enable_eew_jp">
 						<p style='font-size: 22px;'>顯示日本地震速報(發布單位:NIED/JMA)</p>
 					</label>
 					<br>
@@ -317,48 +317,48 @@
 				<h6>音效設定完成後，可利用即時資訊->地震速報模擬進行音效測試</h6>
 				<hr/>
 				<h4>即時測站震度音效</h4>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_1" name="enable_int_1">
-				<label for="enable_int_1" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_1" name="enable_shindo_sounds_1">
+				<label for="enable_shindo_sounds_1" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度1</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_2" name="enable_int_2">
-				<label for="enable_int_2" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_2" name="enable_shindo_sounds_2">
+				<label for="enable_shindo_sounds_2" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度2</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_3" name="enable_int_3">
-				<label for="enable_int_3" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_3" name="enable_shindo_sounds_3">
+				<label for="enable_shindo_sounds_3" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度3</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_4" name="enable_int_4">
-				<label for="enable_int_4" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_4" name="enable_shindo_sounds_4">
+				<label for="enable_shindo_sounds_4" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度4</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_5-" name="enable_int_5-">
-				<label for="enable_int_5-" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_5-" name="enable_shindo_sounds_5-">
+				<label for="enable_shindo_sounds_5-" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度5弱</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_5k" name="enable_int_5k">
-				<label for="enable_int_5k" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_5+" name="enable_shindo_sounds_5+">
+				<label for="enable_shindo_sounds_5+" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度5強</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_6-" name="enable_int_6-">
-				<label for="enable_int_6-" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_6-" name="enable_shindo_sounds_6-">
+				<label for="enable_shindo_sounds_6-" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度6弱</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_6k" name="enable_int_6k">
-				<label for="enable_int_6k" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_6+" name="enable_shindo_sounds_6+">
+				<label for="enable_shindo_sounds_6+" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度6強</p>
 				</label>
 				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_int_7" name="enable_int_7">
-				<label for="enable_int_7" style="margin-bottom:1px">
+				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_7" name="enable_shindo_sounds_7">
+				<label for="enable_shindo_sounds_7" style="margin-bottom:1px">
 					<p style='font-size: 20px;margin-bottom:1px'>震度7</p>
 				</label>
 				<br>
@@ -444,16 +444,20 @@
 		<button type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="submit()">套用(重新啟動以生效)</button>
 		<button type="button" class="btn btn-secondary" style="margin-right: 30px;" onclick="cancel()">取消</button>
 	</footer>
+	<script src="./setting.js" type="module"></script>
 	<script>
+		/*
 		const axios = require('axios');
 		const crypto = require('crypto');
 		const { serialize } = require('v8');
+		*/
 	</script>
-	<script src="js/main/utility.js"></script>
+	<!--<script src="js/main/utility.js"></script>
 	<script src="js/main/setting.js"></script>
-	<script src="js/main/auth.js"></script>
+	<script src="js/main/auth.js"></script>-->
 	<script>
 		/*----------按鈕綁定邏輯----------*/
+		/*
 		document.getElementById("login_btn").addEventListener("click" ,async() => {
 			document.getElementById("login_btn").innerHTML = "登入中...";
 			document.getElementById("login_btn").disabled = true;
@@ -468,7 +472,7 @@
 				document.getElementById("login_btn").innerHTML = "登入";
 				console.log("login failed");
 			}
-		})
+		})*/
 	</script>
 </body>
 </html>
