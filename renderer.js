@@ -2,6 +2,7 @@ import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js'
 import { EEWTWManager } from './renderer/EEWTW.js';
 import { RFPLUSManager } from './renderer/RFPLUS.js';
 import { pgaManager } from './renderer/pga.js';
+import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
 const cfg = await window.config.getAll();
@@ -139,23 +140,44 @@ for (let i = 0; i < country_list.length; i++) {
 // managers
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L);
 let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L);
-let PGAmanager = new pgaManager(map, L);
+let PGAmanager = new pgaManager(map, L, {
+	onStationSelect: (name) => {
+        window.config.set("selected_station", name);
+
+        // 或之後改成：
+        // window.api.stationSelected(name)
+    }
+});
 mapRendererInitialize(map2, L);
 
+let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
 
 //ws events
 if (!window.ws) {
     console.error('window.ws not available');
 }
 window.ws.onEEWTW(async (data) => {
-    EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	if(await window.config.get("enable_eew_tw")){
+		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	}
+    
 });
 
-
 window.ws.onPGA(async (data) => {
-	let now = await window.time.now()
-    PGAmanager.handle(data, now);
-	PGAmanager.ui.update(data, cfg.stations.selected, now)
+	const [enable, now, selected] = await Promise.all([
+		window.config.get("enable_shindo"),
+		window.time.now(),
+		window.config.get("selected_station")
+	]);
+
+	if (!enable) return;
+
+	PGAmanager.handle(data, now);
+	PGAmanager.ui.update(data, selected, now);
+});
+
+window.ws.onWeather(async (data) => {
+	weatherManager.updateWeather(data);
 });
 
 window.ws.onReport((data) => {
