@@ -205,7 +205,10 @@ ipcMain.handle('auth:setVerifyKey', (_, key) => {
 ipcMain.handle('config:getAll', () => {
   return config.config()
 });
-
+ipcMain.handle('config:get', (_, key) => {
+  // console.log("[main] getting config",key);
+  return config.get(key);
+})
 ipcMain.handle('config:set', (_, key, value) => {
   console.log("[main] setting config",key ,value)
   config.set(key, value)
