@@ -1,5 +1,91 @@
-export function InfoUpdate_full_ws(earthquakeInfo) {
-    console.log("running infoUpdate")
+var infoMapRenderer = null
+class InfoMapRenderer{
+    constructor(map, L){
+        this.map = map;
+        this.L = L;
+        this.distributedLayer = this.L.layerGroup().addTo(this.map);
+        this.shindo_icons = {
+            "1":L.icon({iconUrl:"./shindo_icon/1.png",iconSize:[20,20]}),
+            "2":L.icon({iconUrl:"./shindo_icon/2.png",iconSize:[20,20]}),
+            "3":L.icon({iconUrl:"./shindo_icon/3.png",iconSize:[20,20]}),
+            "4":L.icon({iconUrl:"./shindo_icon/4.png",iconSize:[20,20]}),
+            "5-":L.icon({iconUrl:"./shindo_icon/5-.png",iconSize:[20,20]}),
+            "5+":L.icon({iconUrl:"./shindo_icon/5+.png",iconSize:[20,20]}),
+            "6-":L.icon({iconUrl:"./shindo_icon/6-.png",iconSize:[20,20]}),
+            "6+":L.icon({iconUrl:"./shindo_icon/6+.png",iconSize:[20,20]}),
+            "7":L.icon({iconUrl:"./shindo_icon/7.png",iconSize:[20,20]})
+        }
+    }
+    renderDistribution(distribution){
+        // 清空舊資料
+        this.distributedLayer.clearLayers();
+
+        const info = distribution.info;
+        const distributed = distribution.distributed;
+
+        // 震央
+        const epicenterLat = info.lat;
+        const epicenterLon = info.lon;
+        const epicenterName = info.epicenter;
+
+        const epicenterIcon = this.L.icon({
+            iconUrl: "./shindo_icon/epicenter_tw.png",
+            iconSize: [30, 30]
+        });
+
+        this.L.marker([epicenterLat, epicenterLon], {
+            icon: epicenterIcon,
+            title: epicenterName,
+            opacity: 1.0
+        }).addTo(this.distributedLayer);
+
+        // 震度分布
+        for (const s of distributed) {
+            const {
+                name,
+                lat,
+                lon,
+                shindo,
+                pga_sum: pga,
+                pgv_sum: pgv
+            } = s;
+
+            const shindoIcon = this.shindo_icons[shindo];
+            const paneName = `shindo_icon_${shindo}`;
+
+            // 確保 pane 存在（避免重疊層級錯亂）
+            if (!this.map.getPane(paneName)) {
+                this.map.createPane(paneName);
+            }
+
+            const tooltip =
+                `<div>${name}</div>` +
+                `<div>震度:${shindo}</div>` +
+                `<div>PGA:${pga}</div>` +
+                `<div>PGV:${pgv}</div>`;
+
+            this.L.marker([lat, lon], {
+                icon: shindoIcon,
+                title: name,
+                opacity: 1.0,
+                pane: paneName
+            })
+            .bindTooltip(tooltip)
+            .addTo(this.distributedLayer);
+        }
+
+        // 地圖移動
+        this.map.panTo([epicenterLat, epicenterLon]);
+        this.map.invalidateSize(true);
+    }
+}
+
+export function mapRendererInitialize(map, L){
+    infoMapRenderer = new InfoMapRenderer(map, L);
+}
+
+export function InfoUpdate_full_ws(earthquakeInfo,getDistributionFn) {
+    console.log("running infoUpdate");
     //earthquakeInfo = JSON.parse(earthquakeInfo);
 
     let htmlText = '';
@@ -73,9 +159,11 @@ export function InfoUpdate_full_ws(earthquakeInfo) {
     }
 
     for (let i = 0; i < earthquakeInfo.length; i++) {
-        const id = earthquakeInfo[i].id;
-        document.getElementById(id).onclick = function () {
-            //infoDistributed(id);
+        const eqId = earthquakeInfo[i].id;
+
+        document.getElementById(eqId).onclick = async () => {
+            const distribution = await getDistributionFn(eqId);
+            infoMapRenderer.renderDistribution(distribution);
         };
     }
 }
