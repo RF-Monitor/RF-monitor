@@ -35,6 +35,9 @@ contextBridge.exposeInMainWorld('ws', {
 
 contextBridge.exposeInMainWorld('config', {
     getAll: () => ipcRenderer.invoke('config:getAll'),
+    get: (key) => {
+      return ipcRenderer.invoke('config:get', key)
+    },
     set: (key, value) => {
       console.log("[preload] setting config",key ,value)
       return ipcRenderer.invoke('config:set', key, value)
