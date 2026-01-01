@@ -1,11 +1,12 @@
 export class pgaManager{
-    constructor(map, leaflet){
+    constructor(map, leaflet, { onStationSelect } = {}){
         this.map = map;
         this.L = leaflet;
         //this.mapRenderer = new pgaMapRenderer(this.map, this.L);
         this.ui = new pgaUI();
         this.stationList = new Map();
         this.shake_alert = false;
+        this.onStationSelect = onStationSelect;
     }
 
     handle(pga, now){
@@ -51,7 +52,12 @@ export class pgaManager{
                             this.map,
                             this.L,
                             stationData,
-                            this.shakealert
+                            this.shakealert,
+                            {
+                                onSelect: (name) => {
+                                    this.onStationSelect?.(name)
+                                }
+                            }
                         )
                     }
                 );
@@ -73,9 +79,11 @@ export class pgaManager{
 }
 
 class Station{
-    constructor(map, L, stationData, shakealert){
+    constructor(map, L, stationData, shakealert, { onSelect } = {}){
         this.stationData = stationData;
-        this.mapRenderer = new pgaMapRenderer(map,L);
+        this.mapRenderer = new pgaMapRenderer(map,L, {
+            onSelect
+        });
         this.mapRenderer.create(stationData, shakealert);
     }
     
@@ -90,11 +98,12 @@ class Station{
     }
 }
 class pgaMapRenderer{
-    constructor(map, leaflet){
+    constructor(map, leaflet, { onSelect } = {}){
         this.map = map;
         this.L = leaflet;
         this.marker = null;
         this.circle = null;
+        this.onSelect = onSelect;
         this.shindo_color = {
             "0":"white",
             "1":"white",
@@ -160,6 +169,10 @@ class pgaMapRenderer{
         this.marker.setLatLng([lat, lon]);
         this.marker.setTooltipContent(toolTip);
         this.marker.setOpacity(opacity);
+
+        this.marker.on('click', () => {
+            this.onSelect?.(name);
+        });
 
         let circleRadius = 0;
         this.circle.setLatLng([lat, lon]);
