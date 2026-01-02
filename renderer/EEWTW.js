@@ -317,7 +317,7 @@ class EEWTWUI {
         div.innerHTML = `
             
 						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第1報)</h4>
+							<h4 style='color:white;background-color: orange;'>地震速報(第${alert.report_num}報)</h4>
 						</div>
 						<div class="eew_tw_main_box">
 							<div style="width:70px">
@@ -325,20 +325,20 @@ class EEWTWUI {
 								<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 								<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-								<img id="eew_tw_maxshindo" style="width:70px">
+								<img id="eew_tw_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 							</div>
 							<div style="width:160px;margin-left: 10px">
 								<div>
 									<h4 style='color:white'>
-										臺灣附近
+										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										2025-12-27 00:15:30
+										${alert.time}
 									</h6>
 								</div>
 								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M5.0</span></h4></div>
-									<div class="eew_tw_depth"><h4>10KM</h4></div>
+									<div class="eew_tw_scale"><h4>M${alert.center.scale}</span></h4></div>
+									<div class="eew_tw_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>
 						</div>
@@ -354,7 +354,7 @@ class EEWTWUI {
         this.dom.innerHTML = `
             
 						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第1報)</h4>
+							<h4 style='color:white;background-color: orange;'>地震速報(第${alert.report_num}報)</h4>
 						</div>
 						<div class="eew_tw_main_box">
 							<div style="width:70px">
@@ -362,20 +362,20 @@ class EEWTWUI {
 								<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 								<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-								<img id="eew_tw_maxshindo" style="width:70px">
+								<img id="eew_tw_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 							</div>
 							<div style="width:160px;margin-left: 10px">
 								<div>
 									<h4 style='color:white'>
-										臺灣附近
+										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										2025-12-27 00:15:30
+										${alert.time}
 									</h6>
 								</div>
 								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M5.0</span></h4></div>
-									<div class="eew_tw_depth"><h4>10KM</h4></div>
+									<div class="eew_tw_scale"><h4>M${alert.center.scale}</span></h4></div>
+									<div class="eew_tw_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>
 						</div>
