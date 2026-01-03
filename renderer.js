@@ -5,6 +5,17 @@ import { pgaManager } from './renderer/pga.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
+
+function showLogin(){
+  document.getElementById("login").style.display = "block"
+}
+function hideLogin(){
+  document.getElementById("login").style.display = "none"
+}
+function login(username, password){
+	window.auth.login(username, password);
+}
+
 const cfg = await window.config.getAll();
 console.log(cfg)
 // 建立三個地圖
@@ -197,6 +208,12 @@ document.getElementById('page2').style.display = "none";
 document.getElementById('page3').style.display = "none";
 document.getElementById("nav_eew").style.borderBottomColor = "#00FFFF";
 
+document.getElementById("login_btn").addEventListener("click", () => {
+	let username = document.getElementById("email").value;
+	let password = document.getElementById("password").value;
+	login(username, password);
+})
+
 //時間
 setInterval(async () => {
 	function formatTimestamp(timestamp) {
@@ -224,3 +241,20 @@ closeBtn.addEventListener('click', () => {
 joinBtn.addEventListener('click', () => {
 	window.windowControl.showAnnouncement();
 });
+
+window.auth.onStatus(({ status }) => {
+	if(status == "logged_out"){
+		showLogin();
+	}else if(status == "logged_in"){
+		hideLogin()
+	}
+})
+
+window.auth.onResult(({ status }) => {
+	console.log(status)
+	if(status == "success"){
+		hideLogin();
+	}else{
+		showLogin()
+	}
+})
