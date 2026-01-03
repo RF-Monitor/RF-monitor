@@ -58,11 +58,22 @@ contextBridge.exposeInMainWorld('time', {
 });
 
 contextBridge.exposeInMainWorld('auth', {
+  onStatus: (cb) =>{
+        console.log("[preload] auth status updated");
+        ipcRenderer.on('state:auth:status', (_, d) => cb(d))
+    },
   setVerifyKey: (key) =>
     ipcRenderer.invoke('auth:setVerifyKey', key),
-
-  onResult: (cb) =>
+  login: (username, password) => 
+    ipcRenderer.invoke('auth:login', username, password),
+  onResult: (cb) =>{
+    console.log("[preload] login finished")
     ipcRenderer.on('state:auth:result', (_, d) => cb(d))
+  },
+  logout: () => {
+    ipcRenderer.invoke('auth:logout');
+  }
+    
 });
 
 contextBridge.exposeInMainWorld('windowControl', {
