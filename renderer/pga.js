@@ -1,3 +1,4 @@
+
 export class pgaManager{
     constructor(map, leaflet, { onStationSelect } = {}){
         this.map = map;
@@ -214,6 +215,17 @@ class pgaUI{
     constructor(){
         this.selected = null;
         this.maxShindo = "0";
+        this.shindoAudio = {
+            "1": new Audio("./audio/tw/shindo/1.mp3"),
+            "2": new Audio("./audio/tw/shindo/2.mp3"),
+            "3": new Audio("./audio/tw/shindo/3.mp3"),
+            "4": new Audio("./audio/tw/shindo/4.mp3"),
+            "5-": new Audio("./audio/tw/shindo/5-.mp3"),
+            "5+": new Audio("./audio/tw/shindo/5+.mp3"),
+            "6-": new Audio("./audio/tw/shindo/6-.mp3"),
+            "6+": new Audio("./audio/tw/shindo/6+.mp3"),
+            "7": new Audio("./audio/tw/shindo/7.mp3")
+        }
     }
 
     update(pga, selected, now){
@@ -255,7 +267,7 @@ class pgaUI{
                     shindo: stationData.shindo
                 });
             }
-            // 檢查是否被選取
+            // 顯示常駐測站
 			if(stationData.name == selected){
                 document.getElementById("selected_name").innerHTML = stationData.name;
 				document.getElementById("selected_pgao").innerHTML = stationData.pga_origin;
@@ -268,11 +280,15 @@ class pgaUI{
         document.getElementById("max_shindo_img").innerHTML = `
         <img src='shindo_icon/selected/${maxShindo}.png' style='width: 90px;height: 90px;'>
         `
+
+        //最大震度音效(當最大震度上升時)
+        if(shindo2float(maxShindo) > shindo2float(this.maxShindo)){
+            this.shindoAudio[maxShindo].play();
+        }
+        this.maxShindo = maxShindo;
+
         // 顯示測站數
         document.getElementById('stations_count_online').innerHTML = station_count.toString();
-
-        //顯示常駐測站
-
 
         //若shakealert 顯示前六名測站
         if(shakealert){
