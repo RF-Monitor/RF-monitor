@@ -1,23 +1,35 @@
 import WebSocket from 'ws';
 import crypto from 'crypto';
 
-let socket;
+let socket = null;
 let verifyKey = '';
+
+let sendEvent = null;
+let sendState = null;
 
 export function setVerifyKey(key) {
   verifyKey = key || '';
 }
 
+export function wsVerify() {
+  if(socket !== null){
+    console.log("[ws]requesting key")
+    sendState('auth:status', { status: 'logging_in' });
+    socket.send(JSON.stringify({ request: 'getKey' }));
+  }
+}
 
-export function startWebSocket(sendEvent, sendState) {
+
+export function startWebSocket(Event, State, {onLogin} = {}) {
+  sendEvent = Event;
+  sendState = State
   socket = new WebSocket('ws://RFEQSERVER.myqnapcloud.com:8788');
 
   socket.on('open', () => {
     sendState('ws:status', { status: 'online' });
 
     if (verifyKey) {
-      sendState('auth:status', { status: 'logging_in' });
-      socket.send(JSON.stringify({ request: 'getKey' }));
+      wsVerify();
     } else {
       sendState('auth:status', { status: 'logged_out' });
     }
@@ -31,7 +43,7 @@ export function startWebSocket(sendEvent, sendState) {
       return;
     }
 
-    routeMessage(data, sendEvent, sendState);
+    routeMessage(data, sendEvent, sendState, { onLogin });
   });
 
   socket.on('close', () => {
@@ -40,7 +52,7 @@ export function startWebSocket(sendEvent, sendState) {
   });
 }
 
-function routeMessage(data, sendEvent, sendState) {
+function routeMessage(data, sendEvent, sendState, { onLogin } = {}) {
   const { type, content } = data;
 
   switch (type) {
@@ -78,10 +90,18 @@ function routeMessage(data, sendEvent, sendState) {
       break;
 
     case 'key':
+      console.log("[ws]got key")
       handleKeyExchange(data.key);
       break;
 
     case 'login':
+      console.log("[ws]login result:", data)
+      let status = data.status;
+      let user = data.user;
+      if(status == "success"){
+        sendState('auth:status', { status: 'logged_in' });
+      }
+      onLogin?.(status, user);
       sendState('auth:result', data);
       break;
   }
