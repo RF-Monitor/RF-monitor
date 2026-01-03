@@ -12,13 +12,16 @@ let services = {};
 async function bootServices() {
   const {
     startWebSocket,
-    setVerifyKey
+    setVerifyKey,
+    wsVerify
   } = await import('./main/wsClient.mjs');
 
   const {
     broadcastEvent,
     broadcastState
   } = await import('./main/ipcRouter.mjs');
+
+  const { login } = await import('./main/auth.mjs');
 
   const { registerTimeIPC } = await import('./main/ntp/ipcRouter.mjs');
   registerTimeIPC();
@@ -31,11 +34,43 @@ async function bootServices() {
     getNtpOffset 
   } = await import ('./ntp.mjs');
    */
+  //如果有verifyKey， 則輸入websocket
+  let verifyKey = config.get("verifyKey");
+  if(verifyKey){
+    console.log("[main]setting verifyKey")
+    setVerifyKey(verifyKey);
+  }
+  
   // 啟動 WebSocket
   startWebSocket(
     (ch, data) => broadcastEvent(ch, data),
-    (ch, data) => broadcastState(ch, data)
+    (ch, data) => broadcastState(ch, data),
+    {
+      onLogin: (status, user) => {
+        console.log("[main]On login")
+        if(status == "success"){
+          config.set("login_user", user);
+        }else{
+          config.set("login_user", "");
+        }
+      }
+    }
   );
+
+  ipcMain.handle('auth:login', async (event, username, password) => {
+      const{ login_user, verifyKey } = await login(username, password, await config.get("server_url"))
+      if(verifyKey){
+        config.set("verifyKey", verifyKey);
+        setVerifyKey(verifyKey);
+        wsVerify();
+      }
+  })
+
+  ipcMain.handle('auth:logout', async (event) => {
+      config.set("verifyKey", "");
+      app.relaunch();
+      app.exit();
+  })
 
   const report = await import("./main/report.mjs");
   ipcMain.handle('eq:reportDistribution', async (event, id) => {
