@@ -282,7 +282,7 @@ class pgaUI{
         `
 
         //最大震度音效(當最大震度上升時)
-        if(shindo2float(maxShindo) > shindo2float(this.maxShindo)){
+        if(this.shindo2float(maxShindo) > this.shindo2float(this.maxShindo) && shakealert){
             this.shindoAudio[maxShindo].play();
         }
         this.maxShindo = maxShindo;
