@@ -1,3 +1,5 @@
+import { AudioQueue } from "./utils/audioQueue.js";
+
 class EEWTWManager {
     constructor(map,locations,town_ID_list,town_line,leaflet) {
         this.instances = new Map(); // id → EEW
@@ -34,6 +36,7 @@ class EEWTW {
     constructor(alert, renderer, ui) {
         this.alert = alert;
         this.renderer = renderer;
+        this.audio = new EEWTWaudio();
         this.ui = ui;
         this.time = 0;
         this.id = "";
@@ -44,35 +47,41 @@ class EEWTW {
     }
 
     handleNew(userlat, userlon, alert) {
-        this.alert = alert
+        this.alert = alert;
         //添加假想震央icon //初始化震波圓
-        this.renderer.initAlert(alert);
+        this.renderer.initAlert(this.alert);
 
         //計算本地震度
-        const localPGA = this.EEW_TW_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
-        alert.localshindo = this.PGA2shindo(localPGA);
+        const localPGA = this.EEW_TW_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, this.alert.scale);
+        this.alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
-        alert = this.renderer.renderShindo(alert);
+        this.alert = this.renderer.renderShindo(this.alert);
 
         //UI顯示
-        this.ui.init(alert);
+        this.ui.init(this.alert);
+
+        //播放音效
+        this.audio.init(this.alert);
     }
 
     handleUpdate(userlat, userlon, alert) {
         this.alert = alert
         //更新假想震央icon//更新震波圓位置
-        this.renderer.updateCenter(alert);
+        this.renderer.updateCenter(this.alert);
         
         //計算本地震度
-        const localPGA = this.EEW_TW_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
-        alert.localshindo = this.PGA2shindo(localPGA);
+        const localPGA = this.EEW_TW_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, this.alert.scale);
+        this.alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
-        this.alert = this.renderer.renderShindo(alert);
+        this.alert = this.renderer.renderShindo(this.alert);
 
         //UI顯示
         this.ui.update(this.alert);
+
+        //播放音效
+        this.audio.update(this.alert);
     }
 
     updateCircleRadius(now) {
@@ -86,9 +95,11 @@ class EEWTW {
         } // 3 分鐘
         return false;
     }
+
     destroy(){
         this.renderer.end();
         this.ui.end();
+        this.audio = null;
     }
 
     EEW_TW_localPGA(townlat,townlon,centerlat,centerlon,scale){
@@ -181,6 +192,7 @@ class EEWTWMapRenderer {
         let time = alert["time"];
         let id = alert["id"];
         let center = alert["center"];
+        let depth = center.depth;
         let scale = alert["scale"];
         //----------檢查layer是否已創建(是)----------//
         if(this.hasOwnProperty("shindoLayer")){
@@ -204,7 +216,7 @@ class EEWTWMapRenderer {
                     }
                 }
                 //計算pga
-                let PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],scale);
+                let PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],scale,depth);
                 //確認震度顏色
                 let localshindo = this.PGA2shindo(PGA);
                 let localcolor = this.shindo_color[localshindo];
@@ -243,11 +255,10 @@ class EEWTWMapRenderer {
         if (this.center.Swave) this.map.removeLayer(this.center.Swave);
     }
 
-    localPGA(townlat,townlon,centerlat,centerlon,scale){
-        let depth = 10;
+    localPGA(townlat,townlon,centerlat,centerlon,scale,depth){
         let distance = Math.sqrt(Math.pow(Math.abs(townlat + (centerlat * -1)) * 111, 2) + Math.pow(Math.abs(townlon + (centerlon * -1)) * 101, 2) + Math.pow(depth, 2));
         ///let distance = Math.sqrt(Math.pow(depth, 2) + Math.pow(surface, 2) + Math.pow(depth, 2));
-        let PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607)).toFixed(3);
+        let PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607));
         return PGA;
     }
 
@@ -306,9 +317,9 @@ class EEWTWMapRenderer {
 class EEWTWUI {
     constructor() {
         this.dom = null; // 存放對應這筆 eew 的 DOM 節點
-        
     }
     init(alert) {
+        // UI
         const container = document.getElementById("eew");
 
         const div = document.createElement("div");
@@ -388,6 +399,24 @@ class EEWTWUI {
         this.dom.remove();   // 從 DOM tree 移除
         this.dom = null;
     }
+}
+
+class EEWTWaudio{
+    constructor(){
+        this.audioQueue = new AudioQueue();
+        this.localshindo = ""
+    }
+    init(alert){
+        this.localshindo = alert.localshindo;
+        this.audioQueue.play(['./audio/tw/eew/new/EEW.mp3' ,'./audio/tw/eew/new/' +this.localshindo+ '.mp3']);
+    }
+    update(alert){
+        if(alert.localshindo != this.localshindo){
+            this.audioQueue.play(['./audio/tw/eew/new/' +alert.localshindo+ '.mp3'])
+        }
+        this.localshindo = alert.localshindo;
+    }
+
 }
 
 function formatTimestamp(timestamp) {
