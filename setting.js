@@ -23,6 +23,41 @@ function bindAutoSave() {
     });
 }
 
+function hideLogin(user){
+    document.getElementById("login_success").style.display = "block";
+    document.getElementById("login_options").style.display = "none";
+    document.getElementById("user").innerHTML = user;
+}
+function showLogin(){
+    document.getElementById("login_success").style.display = "none";
+    document.getElementById("login_options").style.display = "block";
+}
+const user = await window.config.get("login_user")
+if(user){
+    hideLogin(user);
+}else{
+    showLogin(user);
+}
+window.auth.onStatus(async ({ status }) => {
+	if(status == "logged_out"){
+		showLogin();
+	}else if(status == "logged_in"){
+		hideLogin(await window.config.get("login_user"))
+	}
+})
+
+window.auth.onResult(async ({ status }) => {
+	console.log(status)
+	if(status == "success"){
+		hideLogin(await window.config.get("login_user"));
+	}else{
+		showLogin()
+	}
+})
+
+document.getElementById("logout").addEventListener("click", async () => {
+    await window.auth.logout()
+})
 // 載入設定值
 const config = await window.config.getAll();
 
