@@ -152,6 +152,7 @@ class EEWTWMapRenderer {
         this.map = map;
         this.locations = locations;
         this.town_ID_list = town_ID_list
+        //console.log(this.town_ID_list)
         this.country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
         this.town_line = town_line
         this.shindo_color = {
@@ -172,10 +173,11 @@ class EEWTWMapRenderer {
             Pwave: null,
             Swave: null
         };
+        this.shindoLayer = this.L.layerGroup().addTo(this.map);
     }
 
     initAlert(alert) {
-        const icon = this.L.icon({iconUrl : 'img/shindo_icon/epicenter_tw.png',iconSize : [30,30],});
+        const icon = this.L.icon({iconUrl : 'shindo_icon/epicenter_tw.png',iconSize : [30,30],});
         this.center.icon = this.L.marker([alert.center.lat,alert.center.lon],{icon : icon,opacity : 1.0}).addTo(this.map);
         this.center.Pwave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(this.map);
         this.center.Swave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(this.map);
@@ -188,19 +190,14 @@ class EEWTWMapRenderer {
     }
 
     renderShindo(alert) {
+        
         let max_shindo = "0";
         let time = alert["time"];
         let id = alert["id"];
         let center = alert["center"];
         let depth = center.depth;
         let scale = alert["scale"];
-        //----------檢查layer是否已創建(是)----------//
-        if(this.hasOwnProperty("shindoLayer")){
-            this.shindoLayer.clearLayers();
-        //----------若無 創建layer----------//
-        }else{
-            this.shindoLayer = this.L.layerGroup().addTo(this.map);
-        }
+        this.shindoLayer.clearLayers();
         //----------各縣市----------//
         for(let i = 0; i < this.country_list.length;i++){
             //----------各鄉鎮市區----------//
@@ -215,6 +212,7 @@ class EEWTWMapRenderer {
                         town_ID = this.town_ID_list[j]["TOWNCODE"].toString();
                     }
                 }
+                console.log(town_ID, this.town_line[town_ID]);
                 //計算pga
                 let PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],scale,depth);
                 //確認震度顏色
@@ -320,7 +318,7 @@ class EEWTWUI {
     }
     init(alert) {
         // UI
-        const container = document.getElementById("eew");
+        const container = document.getElementById("eew_tw_list");
 
         const div = document.createElement("div");
         div.id = `eew-${alert.id}`;
@@ -344,11 +342,11 @@ class EEWTWUI {
 										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										${alert.time}
+										${formatTimestamp(alert.time)}
 									</h6>
 								</div>
 								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M${alert.center.scale}</span></h4></div>
+									<div class="eew_tw_scale"><h4>M${alert.scale.toFixed(1)}</span></h4></div>
 									<div class="eew_tw_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>
@@ -381,11 +379,11 @@ class EEWTWUI {
 										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										${alert.time}
+										${formatTimestamp(alert.time)}
 									</h6>
 								</div>
 								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M${alert.center.scale}</span></h4></div>
+									<div class="eew_tw_scale"><h4>M${alert.scale.toFixed(1)}</span></h4></div>
 									<div class="eew_tw_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>

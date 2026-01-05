@@ -41,6 +41,7 @@ class RFPLUS {
         this.id = "";
         this.center = {};
         this.scale = 0;
+        this.rate = 0;
         this.depth = 0;
         this.report_num = 0;
     }
@@ -48,10 +49,13 @@ class RFPLUS {
     handleNew(userlat, userlon, alert) {
         this.alert = alert
         //添加假想震央icon //初始化震波圓
-        this.renderer.initAlert(alert);
+        this.renderer.initAlert(this.alert);
 
         //計算本地震度
-        const localPGA = this.RFPLUS_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
+        const localPGA = this.RFPLUS_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, {
+            scale: this.alert.scale,
+            rate: this.alert.rate
+        });
         this.alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
@@ -67,10 +71,13 @@ class RFPLUS {
     handleUpdate(userlat, userlon, alert) {
         this.alert = alert
         //更新假想震央icon//更新震波圓位置
-        this.renderer.updateCenter(alert);
+        this.renderer.updateCenter(this.alert);
         
         //計算本地震度
-        const localPGA = this.RFPLUS_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
+        const localPGA = this.RFPLUS_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, {
+            scale: this.alert.scale,
+            rate: this.alert.rate
+        });        
         this.alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
@@ -100,11 +107,15 @@ class RFPLUS {
         this.audio = null;
     }
 
-    RFPLUS_localPGA(townlat,townlon,centerlat,centerlon,scale){
-        let depth = 10;
+    RFPLUS_localPGA(townlat,townlon,centerlat,centerlon,{scale = null, rate = null, depth = 10}){
         let distance = Math.sqrt(Math.pow(Math.abs(townlat + (centerlat * -1)) * 111, 2) + Math.pow(Math.abs(townlon + (centerlon * -1)) * 101, 2) + Math.pow(depth, 2));
         ///let distance = Math.sqrt(Math.pow(depth, 2) + Math.pow(surface, 2) + Math.pow(depth, 2));
-        let PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607)).toFixed(3);
+        let PGA = 0;
+        if(scale !== null && scale !== undefined){
+            PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607));
+        }else if(rate !== null && rate !== undefined){
+            PGA = rate * Math.pow(distance,-1.607);
+        } 
         return PGA;
     }
     /*----------PGA轉震度----------*/
@@ -173,7 +184,7 @@ class RFPLUSMapRenderer {
     }
 
     initAlert(alert) {
-        const icon = this.L.icon({iconUrl : 'img/shindo_icon/epicenter_tw.png',iconSize : [30,30],});
+        const icon = this.L.icon({iconUrl : 'shindo_icon/epicenter_tw.png',iconSize : [30,30],});
         this.center.icon = this.L.marker([alert.center.lat,alert.center.lon],{icon : icon,opacity : 1.0}).addTo(this.map);
         this.center.Pwave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(this.map);
         this.center.Swave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(this.map);
@@ -335,10 +346,10 @@ class RFPLUSUI {
         const div = document.createElement("div");
         div.className = "RFPLUS";
         div.id = `eew-${alert.id}`;
-
-        div.innerHTML = `
+        if(alert.type == "RFPLUS3"){
+            div.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第報)</h4>
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">
@@ -346,34 +357,64 @@ class RFPLUSUI {
 							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<img id="RFPLUS3_maxshindo" style="width:70px">
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 						</div>
 						<div style="width:160px;margin-left: 10px">
 							<div>
 								<h4 style='color:white'>
-									<span id="RFPLUS3_epicenter"></span>
+									${alert.center.cname}
 								</h4>
 								<h6 style='color:white'>
-									<span id="RFPLUS3_time"></span>
+									${formatTimestamp(alert.time)}
 								</h6>
 							</div>
 							<div class="RFPLUS3_maindown">
-								<div class="RFPLUS3_scale"><h4>M<span id="RFPLUS3_scale"></span></h4></div>
-								<div class="RFPLUS3_depth"><h4><span id="RFPLUS3_depth"></span></h4></div>
+								<div class="RFPLUS3_scale"><h4>M${alert.scale.toFixed(1)}</h4></div>
+								<div class="RFPLUS3_depth"><h4>${alert.center.depth}KM</span></h4></div>
 							</div>
 						</div>
 					</div>
-        `
+            `
+        }else{
+            div.innerHTML = `
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+					</div>
+					<div class="RFPLUS_main_box">
+						<div style="width:70px">
+							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
+							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
+						</div>
+						<div style="width:160px;margin-left: 10px">
+							<div>
+								<h4 style='color:white'>
+									${alert.center.cname}
+								</h4>
+								<h6 style='color:white'>
+									${formatTimestamp(alert.time)}
+								</h6>
+							</div>
+							<div class="RFPLUS3_maindown">
+								<h4>無震央參數</h4>
+							</div>
+						</div>
+					</div>
+            `
+        }
+        
 
         container.appendChild(div);
         this.dom = div;
     }
     update(alert) {
         if (!this.dom) this.init(alert);
-
-        this.dom.innerHTML += `
-            <div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第報)</h4>
+        if(alert.type == "RFPLUS3"){
+            div.innerHTML = `
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">
@@ -381,24 +422,53 @@ class RFPLUSUI {
 							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-							<img id="RFPLUS3_maxshindo" style="width:70px">
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 						</div>
 						<div style="width:160px;margin-left: 10px">
 							<div>
 								<h4 style='color:white'>
-									<span id="RFPLUS3_epicenter"></span>
+									${alert.center.cname}
 								</h4>
 								<h6 style='color:white'>
-									<span id="RFPLUS3_time"></span>
+									${formatTimestamp(alert.time)}
 								</h6>
 							</div>
 							<div class="RFPLUS3_maindown">
-								<div class="RFPLUS3_scale"><h4>M<span id="RFPLUS3_scale"></span></h4></div>
-								<div class="RFPLUS3_depth"><h4><span id="RFPLUS3_depth"></span></h4></div>
+								<div class="RFPLUS3_scale"><h4>M${alert.scale.toFixed(1)}</h4></div>
+								<div class="RFPLUS3_depth"><h4>${alert.center.depth}KM</span></h4></div>
 							</div>
 						</div>
 					</div>
-        `
+            `
+        }else{
+            div.innerHTML = `
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+					</div>
+					<div class="RFPLUS_main_box">
+						<div style="width:70px">
+							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
+							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
+						</div>
+						<div style="width:160px;margin-left: 10px">
+							<div>
+								<h4 style='color:white'>
+									${alert.center.cname}
+								</h4>
+								<h6 style='color:white'>
+									${formatTimestamp(alert.time)}
+								</h6>
+							</div>
+							<div class="RFPLUS3_maindown">
+								<h4>無震央參數</h4>
+							</div>
+						</div>
+					</div>
+            `
+        }
     }
     end(){
         if (!this.dom) return;
