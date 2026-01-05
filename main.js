@@ -186,6 +186,13 @@ app.whenReady().then(async () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 
+    //開機自啟動
+    let autolaunch = config.system.autoLaunch;
+    app.setLoginItemSettings({
+      openAtLogin: autolaunch,      // 是否開機自啟動
+      openAsHidden: false      // 啟動時不顯示視窗（Windows/macOS）
+    });
+
     //tray
     if(storage.getItem('minimize_to_tray') != 'false'){
       const tray = new Tray(path.join(__dirname, 'icon.png'))
