@@ -43,14 +43,14 @@ var town_line = {};
 var town_ID_list = [];
 var country_geojson = {};
 
-$.getJSON("json/TOWN_MOI.json", function (r) {
+await $.getJSON("json/TOWN_MOI.json", function (r) {
 	country_geojson = r;
 	for (let i = 0; i < r["features"].length; i++) {
 		town_line[r["features"][i]["properties"]["TOWNCODE"]] = r["features"][i]
 	}
 });
 //town_ID
-$.getJSON("json/Town_ID.json", function (r) {
+await $.getJSON("json/Town_ID.json", function (r) {
 	town_ID_list = r;
 })
 
@@ -62,7 +62,7 @@ $.ajaxSettings.async = false;
 
 for (let i = 0; i < country_list.length; i++) {
 	country_count = i
-	$.getJSON("json/countries/" + country_list[i] + ".json", function (r) {
+	await $.getJSON("json/countries/" + country_list[i] + ".json", function (r) {
 		geojson_list[country_list[country_count]] = r;
 	});
 };
@@ -150,7 +150,13 @@ for (let i = 0; i < country_list.length; i++) {
 
 // managers
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L);
+setInterval(async () => {
+	EEWTWmanager.tick(await window.time.now())
+},100)
 let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L);
+setInterval(async () => {
+	RFPLUSmanager.tick(await window.time.now())
+},100)
 let PGAmanager = new pgaManager(map, L, {
 	onStationSelect: (name) => {
         window.config.set("selected_station", name);
@@ -173,6 +179,39 @@ window.ws.onEEWTW(async (data) => {
 	}
     
 });
+let data = {
+                        "id":"1749301625",
+                        "type":"RFPLUS3",
+                        "time": 1767460264000,
+                        "center":{
+                            "lat":24.818,//float
+                            "lon":121.02,///float
+                            "cname":"新竹縣竹北市",//float
+                            "depth":10
+                        },
+                        "scale":5.123456789,
+                        "rate":0,
+                        "report_num":1,
+                        "final":false
+                    }
+					let data2 = {
+                        "id":"888",
+                        "type":"RFPLUS2",
+                        "time": 1767460264000,
+                        "center":{
+                            "lat":25.818,//float
+                            "lon":120.02,///float
+                            "cname":"新竹縣竹北市",//float
+                            "depth":10
+                        },
+                        "rate":5000,
+                        "report_num":1,
+                        "final":false
+                    }
+/*
+setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data),5000)
+setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data2),10000)
+*/
 
 window.ws.onPGA(async (data) => {
 	const [enable, now, selected] = await Promise.all([
@@ -258,3 +297,5 @@ window.auth.onResult(({ status }) => {
 		showLogin()
 	}
 })
+
+
