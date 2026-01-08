@@ -46,14 +46,13 @@ class EEWJP {
         this.renderer.initAlert(alert);
 
         //計算本地震度
-        /*
-        const localPGA = this.EEW_TW_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
+        
+        const localPGA = this.EEW_JP_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
         alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
-        alert = this.renderer.renderShindo(alert);
-        */
-
+        //alert = this.renderer.renderShindo(alert);
+        
         //UI顯示
         this.ui.init(alert);
     }
@@ -64,10 +63,10 @@ class EEWJP {
         this.renderer.updateCenter(alert);
         
         //計算本地震度
-        /*
-        const localPGA = this.EEW_TW_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
+        
+        const localPGA = this.EEW_JP_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
         alert.localshindo = this.PGA2shindo(localPGA);
-        */
+        
         //計算各地震度
         //this.alert = this.renderer.renderShindo(alert);
 
@@ -164,7 +163,7 @@ class EEWJPMapRenderer {
     }
 
     initAlert(alert) {
-        const icon = this.L.icon({iconUrl : 'img/shindo_icon/epicenter_tw.png',iconSize : [30,30],});
+        const icon = this.L.icon({iconUrl : 'shindo_icon/epicenter_jp.png',iconSize : [30,30],});
         this.center.icon = this.L.marker([alert.center.lat,alert.center.lon],{icon : icon,opacity : 1.0}).addTo(this.map);
         this.center.Pwave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(this.map);
         this.center.Swave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(this.map);
@@ -175,7 +174,7 @@ class EEWJPMapRenderer {
         this.center.Pwave.setLatLng([alert.center.lat, alert.center.lon]);
         this.center.Swave.setLatLng([alert.center.lat, alert.center.lon]);
     }
-    /*
+    
     renderShindo(alert) {
         let max_shindo = "0";
         let time = alert["time"];
@@ -221,7 +220,7 @@ class EEWJPMapRenderer {
         }
         alert["max_shindo"] = max_shindo;
         return alert;
-    }*/
+    }
 
     updateCircleRadius(alert, now) {
         const elapsed = now - alert["time"];
