@@ -2,9 +2,11 @@ import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js'
 import { EEWTWManager } from './renderer/EEWTW.js';
 import { RFPLUSManager } from './renderer/RFPLUS.js';
 import { pgaManager } from './renderer/pga.js';
+import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
+import { shell } from 'electron';
 
 function showLogin(){
   document.getElementById("login").style.display = "block"
@@ -167,6 +169,10 @@ let PGAmanager = new pgaManager(map, L, {
 });
 mapRendererInitialize(map2, L);
 
+let tsunamiManager = new TsunamiManager({
+	openExternal: (url) => shell.openExternal(url)
+});
+
 let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
 
 //ws events
@@ -176,6 +182,12 @@ if (!window.ws) {
 window.ws.onEEWTW(async (data) => {
 	if(await window.config.get("enable_eew_tw")){
 		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	}
+    
+});
+window.ws.onRFPLUS3(async (data) => {
+	if(await window.config.get("enable_RFPLUS")){
+		RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
     
 });
@@ -224,6 +236,17 @@ window.ws.onPGA(async (data) => {
 
 	PGAmanager.handle(data, now);
 	PGAmanager.ui.update(data, selected, now);
+});
+
+
+window.ws.onTsunami(async (data) => {
+	const [enable, now] = await Promise.all([
+		window.config.get("enable_tsunami"),
+		window.time.now()
+	]);
+	if(!enable) return;
+		
+	tsunamiManager.handle(data, now);
 });
 
 window.ws.onWeather(async (data) => {

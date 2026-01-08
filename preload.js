@@ -21,6 +21,9 @@ contextBridge.exposeInMainWorld('ws', {
         console.log("[preload] sending RFPLUS");
         ipcRenderer.on('event:rfplus:3', (_, d) => cb(d))
     },
+    onTsunami: (cb) => {
+      ipcRenderer.on('event:tsunami', (_, d) => cb(d))
+    },
     onWeather: (cb) =>{
         console.log("[preload] sending Weather");
         ipcRenderer.on('event:weather:alert', (_, d) => cb(d));
