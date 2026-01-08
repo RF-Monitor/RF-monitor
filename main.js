@@ -187,7 +187,7 @@ app.whenReady().then(async () => {
     })
 
     //開機自啟動
-    let autolaunch = config.system.autoLaunch;
+    let autolaunch = config.config().system.autoLaunch;
     app.setLoginItemSettings({
       openAtLogin: autolaunch,      // 是否開機自啟動
       openAsHidden: false      // 啟動時不顯示視窗（Windows/macOS）
