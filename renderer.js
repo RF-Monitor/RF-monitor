@@ -6,7 +6,6 @@ import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
-import { shell } from 'electron';
 
 function showLogin(){
   document.getElementById("login").style.display = "block"
