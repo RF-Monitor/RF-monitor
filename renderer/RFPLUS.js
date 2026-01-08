@@ -10,6 +10,7 @@ class RFPLUSManager {
     }
 
     handleAlert(userlat, userlon, alert) {
+        if(alert.type == "none") return;
         if (!this.instances.has(alert.id)) {
             this.instances.set(alert.id, new RFPLUS(alert, new RFPLUSMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new RFPLUSUI));
             this.instances.get(alert.id).handleNew(userlat, userlon, alert);
