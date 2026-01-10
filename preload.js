@@ -89,8 +89,8 @@ contextBridge.exposeInMainWorld('windowControl', {
 });
 
 contextBridge.exposeInMainWorld('update', {
-  onUpdateAvailable: (cb) =>{
-    console.log("[preload] An update is available.");
-    ipcRenderer.on('event:update:available', (_, d) => cb(d))
+  onStatus: (cb) =>{
+    console.log("[preload] Update state updated.");
+    ipcRenderer.on('state:update:status', (_, d) => cb(d))
   },
 });

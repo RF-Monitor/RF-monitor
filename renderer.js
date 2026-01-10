@@ -320,4 +320,12 @@ window.auth.onResult(({ status }) => {
 	}
 })
 
+window.update.onStatus(({status, ver}) => {
+	if(status == "New update available"){
+		document.getElementById("ver").innerHTML = `<p style='color:white;position:absolute;right:0;bottom: 0;margin-bottom: 0;' onclick='downnewver()'>點擊此處下載更新</p>`;
+	}else{
+		document.getElementById("ver").innerHTML = "<p style='color:white;position:absolute;right:0;bottom: 0;margin-bottom: 0;'>目前為最新版本</p>";
+	}
+})
+
 
