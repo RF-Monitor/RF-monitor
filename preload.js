@@ -94,3 +94,9 @@ contextBridge.exposeInMainWorld('update', {
     ipcRenderer.on('state:update:status', (_, d) => cb(d))
   },
 });
+
+contextBridge.exposeInMainWorld('webhook', {
+  send: (url, sendContent) => {
+    ipcRenderer.invoke('webhook:send', url, sendContent);
+  }
+})

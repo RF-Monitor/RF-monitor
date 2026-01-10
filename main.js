@@ -4,7 +4,6 @@ const path = require('path');
 const storage = require('electron-localstorage');
 const fs = require('fs');
 const { start } = require('repl');
-//require("./trem-core/index.js")
 const isDevelopment = process.env.NODE_ENV !== "production";
 const config = require('./config/index');
 
@@ -112,7 +111,11 @@ async function bootServices() {
     },
     5000
   )
-
+  /*----------webhook----------*/
+  const { send_webhook } = await import("./main/webhook.mjs")
+  ipcMain.handle('webhook:send', async (event, url, sendContent) => {
+    send_webhook(url, sendContent)
+  })
   return { setVerifyKey };
 }
 
