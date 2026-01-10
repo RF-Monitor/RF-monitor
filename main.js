@@ -1,4 +1,5 @@
 const { app, BrowserWindow ,ipcMain,Tray,Menu} = require('electron')
+const { dialog, shell } = require("electron");
 const path = require('path');
 const storage = require('electron-localstorage');
 const fs = require('fs');
@@ -8,6 +9,36 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const config = require('./config/index');
 
 let services = {};
+const version = "2.7.0";
+
+async function checkUpdate(currentVer) {
+  let response = await fetch("http://rfeqserver.myqnapcloud.com:8787/monitorVersion");
+  let text = await response.text();
+  if(currentVer != text) return { status: "New update available", ver: text}
+  else return { status: "Already latest version", ver: text}
+}
+
+function showUpdatePrompt(mainWindow, latestVersion) {
+  //if (!appJustLaunched) return;
+  //if (updatePromptShown) return;
+
+  updatePromptShown = true;
+
+  dialog.showMessageBox(mainWindow, {
+    type: "info",
+    title: "有新版本可用",
+    message: `偵測到新版本 ${latestVersion}`,
+    detail: "是否前往下載頁面進行更新？",
+    buttons: ["前往下載", "稍後再說"],
+    defaultId: 0,
+    cancelId: 1,
+    noLink: true
+  }).then(result => {
+    if (result.response === 0) {
+      shell.openExternal("https://rfeqserver.myqnapcloud.com/RFEQservice");
+    }
+  });
+}
 
 async function bootServices() {
   const {
@@ -77,6 +108,14 @@ async function bootServices() {
     return await report.getInfoDistribution(id);
   })
 
+  /*----------檢查是否有更新----------*/
+  setInterval(
+    async () => { 
+      broadcastState("update:status", await checkUpdate(version)) 
+    },
+    5000
+  )
+
   return { setVerifyKey };
 }
 
@@ -91,7 +130,7 @@ config.backupConfig();
 let setting_win = null;
 let win =  null;
 
-const createWindow = () => {
+const createWindow = async () => {
     win = new BrowserWindow({
       width: 1250,
       height: 800,
@@ -108,6 +147,12 @@ const createWindow = () => {
     })
   
     win.loadFile('index.html')
+
+    // 顯示更新視窗(如果有)
+    let update = await checkUpdate(version);
+    if(update.status == "New update available"){
+      showUpdatePrompt(win, update.ver);
+    }
 
     setting_win = new BrowserWindow({
       height:600,
@@ -177,7 +222,7 @@ const createWindow = () => {
 
 app.whenReady().then(async () => {
     // 建立視窗
-    createWindow()
+    await createWindow()
 
     //開啟websocket
     services = await bootServices();
@@ -287,3 +332,5 @@ if (process.platform === 'win32')
 {
     app.setAppUserModelId(app.name);
 }
+
+/*----------檢查更新----------*/
