@@ -21,9 +21,6 @@ async function checkUpdate(currentVer) {
 function showUpdatePrompt(mainWindow, latestVersion) {
   //if (!appJustLaunched) return;
   //if (updatePromptShown) return;
-
-  updatePromptShown = true;
-
   dialog.showMessageBox(mainWindow, {
     type: "info",
     title: "有新版本可用",
