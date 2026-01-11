@@ -6,7 +6,7 @@ import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
-
+import { formatShindoTitle, shindo2float } from './renderer/utils/shindo.js';
 function showLogin(){
   document.getElementById("login").style.display = "block"
 }
@@ -161,10 +161,37 @@ setInterval(async () => {
 let PGAmanager = new pgaManager(map, L, {
 	onStationSelect: (name) => {
         window.config.set("selected_station", name);
-
         // 或之後改成：
         // window.api.stationSelected(name)
-    }
+    },
+	onShindoReport: (values) => {
+		let url = window.config.get("webhook_url_shindo_sokuho");
+		let header =  window.config.get("webhook_header_shindo_sokuho");
+		let text = `>>> # ${header}\n`;
+		const shindoGroups = new Map();
+		for (const station of values) {
+			if (!shindoGroups.has(station.maxShindo)) {
+				shindoGroups.set(station.maxShindo, []);
+			}
+			shindoGroups.get(station.maxShindo).push(station);
+		}
+
+		const sortedShindos = Array.from(shindoGroups.keys()).sort((a, b) => {
+			return shindo2float(b) - shindo2float(a);
+		});
+
+		for (const shindo of sortedShindos) {
+			console.log(formatShindoTitle(shindo));
+			text += ( formatShindoTitle(shindo) + "\n" )
+
+			for (const station of shindoGroups.get(shindo)) {
+				text += (station.cname + "\n")
+				console.log(`${station.cname}`);
+			}
+		}
+
+		window.webhook.send(url, text);
+	}
 });
 mapRendererInitialize(map2, L);
 

@@ -1,24 +1,38 @@
 
 export class pgaManager{
-    constructor(map, leaflet, { onStationSelect } = {}){
+    constructor(map, leaflet, { onStationSelect, onShindoReport } = {}){
         this.map = map;
         this.L = leaflet;
         //this.mapRenderer = new pgaMapRenderer(this.map, this.L);
         this.ui = new pgaUI();
         this.stationList = new Map();
-        this.shake_alert = false;
+        this.prevShakealert = false;
+        this.shindoReport = null;
+        this.shakealert = false;
         this.onStationSelect = onStationSelect;
+        this.onShindoReport = onShindoReport;
     }
 
     handle(pga, now){
-        let station_count = 0;
-        let seenIds = new Set();
-        if(pga["shake_alert"]){
-		    this.shakealert = true;
-        }else{
-            this.shakealert = false;
-        }			
+        this.prevShakealert = this.shakealert;
+        this.shakealert = !!pga.shake_alert;
 
+        //----------建立速報----------//
+        if (!this.prevShakealert && this.shakealert) {
+            this.shindoReport = new ShindoReport(now, {
+                onFinish: this.onShindoReport
+            });
+        }
+
+        //----------結算速報----------//
+        if (this.prevShakealert && !this.shakealert && this.shindoReport) {
+            this.shindoReport.finish();
+            this.shindoReport = null;
+        }
+
+        let station_count = 0;
+        let seenIds = new Set();		
+        //----------遍歷每台測站----------//
         for (let s of pga.data) {
             let stationData = {
                 id: s["id"],
@@ -66,6 +80,14 @@ export class pgaManager{
 
             const station = this.stationList.get(stationData.id);
             station.station.update(stationData, this.shakealert);
+
+            // 更新震度速報
+            if (this.shakealert && this.shindoReport) {
+                this.shindoReport.updateStation(
+                    stationData,
+                    this.ui.shindo2float.bind(this.ui)
+                );
+            }
         }
 
         //----------移除未出現在本次資料的測站----------//
@@ -334,4 +356,58 @@ class pgaUI{
         }
         return parseFloat(shindo);
     }
+    formatShindoTitle(shindo) {
+        const map = {
+            "7": "7級",
+            "6+": "6強",
+            "6-": "6弱",
+            "5+": "5強",
+            "5-": "5弱",
+            "4": "4級",
+            "3": "3級",
+            "2": "2級",
+            "1": "1級"
+        };
+        return map[shindo] || shindo;
+    }
+}
+class ShindoReport {
+    constructor(startTime, { onFinish } = {}) {
+        this.startTime = startTime;
+        // Map<stationId, { name, cname, maxShindo }>
+        this.stationMax = new Map();
+        this.onFinish = onFinish;
+    }
+
+    updateStation(stationData, shindo2floatFn) {
+        if (!stationData.isOnline) return;
+
+        const current = shindo2floatFn(stationData.shindo);
+        if (current <= 0) return;
+
+        const prev = this.stationMax.get(stationData.id);
+
+        if (!prev || current > shindo2floatFn(prev.maxShindo)) {
+            this.stationMax.set(stationData.id, {
+                id: stationData.id,
+                name: stationData.name,
+                cname: stationData.cname,
+                maxShindo: stationData.shindo
+            });
+        }
+    }
+
+    finish() {
+        console.log("[pga]===== 震度速報結算 =====");
+        console.log(`[pga]開始時間: ${this.startTime}`);
+
+        for (const station of this.stationMax.values()) {
+            console.log(
+                `[pga][${station.id}] ${station.cname} 最大震度 ${station.maxShindo}`
+            );
+        }
+        this.onFinish?.(this.stationMax.values());
+
+        console.log("[pga]===== 震度速報結束 =====");
+    } 
 }
