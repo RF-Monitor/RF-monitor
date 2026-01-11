@@ -109,7 +109,7 @@ async function bootServices() {
     async () => { 
       broadcastState("update:status", await checkUpdate(version)) 
     },
-    5000
+    30000
   )
   /*----------webhook----------*/
   const { send_webhook } = await import("./main/webhook.mjs")
