@@ -3,112 +3,135 @@ import crypto from 'crypto';
 
 let socket = null;
 let verifyKey = '';
+let reconnectTimer = null;
+let reconnecting = false;
 
 let sendEvent = null;
 let sendState = null;
+let onLoginCb = null;
+
+const WS_URL = 'ws://RFEQSERVER.myqnapcloud.com:8788';
+const RECONNECT_DELAY = 3000;
 
 export function setVerifyKey(key) {
   verifyKey = key || '';
 }
 
-export function wsVerify() {
-  if(socket !== null){
-    console.log("[ws]requesting key")
-    sendState('auth:status', { status: 'logging_in' });
-    socket.send(JSON.stringify({ request: 'getKey' }));
-  }
+export function startWebSocket(Event, State, { onLogin } = {}) {
+  sendEvent = Event;
+  sendState = State;
+  onLoginCb = onLogin;
+
+  connect();
 }
 
+function connect() {
+  if (socket) {
+    socket.removeAllListeners();
+    socket.terminate();
+    socket = null;
+  }
 
-export function startWebSocket(Event, State, {onLogin} = {}) {
-  sendEvent = Event;
-  sendState = State
-  socket = new WebSocket('ws://RFEQSERVER.myqnapcloud.com:8788');
+  reconnecting = false;
+  sendState?.('ws:status', { status: 'connecting' });
+
+  socket = new WebSocket(WS_URL);
 
   socket.on('open', () => {
-    sendState('ws:status', { status: 'online' });
+    sendState?.('ws:status', { status: 'online' });
 
     if (verifyKey) {
       wsVerify();
     } else {
-      sendState('auth:status', { status: 'logged_out' });
+      sendState?.('auth:status', { status: 'logged_out' });
     }
   });
 
-  socket.on('message', (raw) => {
+  socket.on('message', raw => {
     let data;
     try {
       data = JSON.parse(raw.toString());
     } catch {
       return;
     }
-
-    routeMessage(data, sendEvent, sendState, { onLogin });
+    routeMessage(data);
   });
 
-  socket.on('close', () => {
-    sendState('ws:status', { status: 'offline' });
-    setTimeout(() => startWebSocket(sendEvent, sendState), 3000);
-  });
+  socket.on('close', handleDisconnect);
+  socket.on('error', handleDisconnect);
 }
 
-function routeMessage(data, sendEvent, sendState, { onLogin } = {}) {
+function handleDisconnect() {
+  if (reconnecting) return;
+
+  reconnecting = true;
+  sendState?.('ws:status', { status: 'offline' });
+
+  reconnectTimer && clearTimeout(reconnectTimer);
+  reconnectTimer = setTimeout(() => {
+    connect();
+  }, RECONNECT_DELAY);
+}
+
+export function wsVerify() {
+  if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
+  sendState?.('auth:status', { status: 'logging_in' });
+  socket.send(JSON.stringify({ request: 'getKey' }));
+}
+
+function routeMessage(data) {
   const { type, content } = data;
 
   switch (type) {
     case 'eew_tw':
-      sendEvent('event:eew:tw', content);
+      sendEvent?.('event:eew:tw', content);
       break;
 
     case 'eew_jp':
-      sendEvent('event:eew:jp', content);
+      sendEvent?.('event:eew:jp', content);
       break;
 
     case 'RFPLUS2':
-      sendEvent('event:rfplus:2', content);
+      sendEvent?.('event:rfplus:2', content);
       break;
 
     case 'RFPLUS3':
-      sendEvent('event:rfplus:3', content);
+      sendEvent?.('event:rfplus:3', content);
       break;
 
     case 'report':
-      console.log("sending report");
-      sendEvent('event:eq:report', content);
+      sendEvent?.('event:eq:report', content);
       break;
 
     case 'weather':
-      sendEvent('event:weather:alert', content);
+      sendEvent?.('event:weather:alert', content);
       break;
 
     case 'pga':
-      sendEvent('event:pga', content);
+      sendEvent?.('event:pga', content);
       break;
 
     case 'tsunami':
-      sendEvent('event:tsunami', content);
+      sendEvent?.('event:tsunami', content);
       break;
 
     case 'key':
-      console.log("[ws]got key")
       handleKeyExchange(data.key);
       break;
 
     case 'login':
-      console.log("[ws]login result:", data)
-      let status = data.status;
-      let user = data.user;
-      if(status == "success"){
-        sendState('auth:status', { status: 'logged_in' });
+      if (data.status === 'success') {
+        sendState?.('auth:status', { status: 'logged_in' });
       }
-      onLogin?.(status, user);
-      sendState('auth:result', data);
+      onLoginCb?.(data.status, data.user);
+      sendState?.('auth:result', data);
       break;
   }
 }
 
 function handleKeyExchange(publicKey) {
-  if (!verifyKey) return;
+  if (!verifyKey || !socket) return;
 
   const encrypted = crypto.publicEncrypt(
     publicKey,
