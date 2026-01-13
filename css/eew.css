@@ -100,7 +100,6 @@
     /*background-color: #3c3c3c;*/
     background-color: #3c3c3c;
     color: white;
-    padding-bottom: 0px;
     /*height: 30px;*/
 }
 .RFPLUS{
@@ -130,6 +129,7 @@
     padding: 5px;
 }
 .RF_item{
+    margin: 5px;
     display:flex;
     flex-wrap: nowrap;
 }

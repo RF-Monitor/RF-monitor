@@ -331,13 +331,24 @@ class pgaUI{
 
             // 顯示前六名測站
             let htmlText = ""
+            let first = true
             for(const station of topStations){
-                htmlText += `<div class="RF_item">
-                                <img src='shindo_icon/selected/${station.shindo}.png' height='30px'>
-                                <h5 style='color: white;'>${station.cname}</h5>
+                if(first){
+                    htmlText += `<div class="RF_item">
+                                <img src='shindo_icon/selected/${station.shindo}.png' height='60px'>
+                                <h3 style='color: white; margin-left: 5px;'>${station.cname}</h3>
                             </div>`;
+                    first = false;
+                }else{
+                    htmlText += `<div class="RF_item">
+                                <img src='shindo_icon/selected/${station.shindo}.png' height='30px'>
+                                <h5 style='color: white; margin-left: 5px;'>${station.cname}</h5>
+                            </div>`;
+                }
             }
             document.getElementById("RF_list_1").innerHTML = htmlText;
+        }else{
+            document.getElementById("RF_status").innerHTML = "";
         }
     }
 
