@@ -23,7 +23,7 @@
 .eew_jp_main_box {
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-around;
     background-color: #3c3c3c;
     color: white;
     border-bottom-left-radius: 7px;
@@ -59,7 +59,7 @@
 .eew_tw_main_box{
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-around;
     background-color: #3c3c3c;
     color: white;
     display: flex;
@@ -142,7 +142,7 @@
 .RFPLUS_main_box{
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-around;
     background-color: #3c3c3c;
     color: white;
     display: flex;
