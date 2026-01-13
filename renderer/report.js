@@ -1,4 +1,5 @@
 var infoMapRenderer = null
+var infoUI = null
 class InfoMapRenderer{
     constructor(map, L){
         this.map = map;
@@ -82,6 +83,33 @@ class InfoMapRenderer{
 
 export function mapRendererInitialize(map, L){
     infoMapRenderer = new InfoMapRenderer(map, L);
+    infoUI = new InfoUI();
+}
+
+class InfoUI{
+    constructor(){
+
+    }
+    update(distribution){
+        let info = distribution;
+        let cwbno = info["info"]["cwbNo"];
+		let epicenter = info["info"]["epicenter"];
+		let epicenter_lat = info["info"]["lat"];//float
+		let epicenter_lon = info["info"]["lon"];//float
+		let datetime = info["info"]["datetime"];
+		let magnitude = info["info"]["magnitude"];
+		let max_shindo = info["info"]["max_shindo"];
+		let depth = info["info"]["depth"];
+        //右側地震報告
+		document.getElementById("epitime").innerHTML = datetime;
+		document.getElementById("epicenter").innerHTML = epicenter;
+		document.getElementById("lat").innerHTML = epicenter_lat;
+		document.getElementById("lon").innerHTML = epicenter_lon;
+		document.getElementById("magnitude").innerHTML = magnitude;
+		document.getElementById("depth").innerHTML = depth;
+		document.getElementById("shindo").innerHTML = max_shindo;
+		document.getElementById("report_details").style.display = "block";
+    }
 }
 
 export function InfoUpdate_full_ws(earthquakeInfo,getDistributionFn) {
@@ -164,6 +192,7 @@ export function InfoUpdate_full_ws(earthquakeInfo,getDistributionFn) {
         document.getElementById(eqId).onclick = async () => {
             const distribution = await getDistributionFn(eqId);
             infoMapRenderer.renderDistribution(distribution);
+            infoUI.update(distribution);
         };
     }
 }
