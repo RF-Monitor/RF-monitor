@@ -211,6 +211,9 @@ window.ws.onEEWTW(async (data) => {
 	}
     
 });
+window.eq.onEEWsim((data) => {
+	EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+})
 window.ws.onRFPLUS3(async (data) => {
 	if(await window.config.get("enable_RFPLUS")){
 		RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);

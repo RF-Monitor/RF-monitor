@@ -49,7 +49,14 @@ contextBridge.exposeInMainWorld('config', {
 });
 
 contextBridge.exposeInMainWorld('eq', {
-    getInfoDistribution: (id) => ipcRenderer.invoke('eq:reportDistribution',id)
+    getInfoDistribution: (id) => ipcRenderer.invoke('eq:reportDistribution',id),
+    sendEEWsim: (data) => {
+      ipcRenderer.send('EEWsim_submit', data);
+    },
+    onEEWsim: (cb) => {
+      console.log("[preload] EEW sim")
+      ipcRenderer.on('EEWsim', (_, d) => cb(d))
+    }
 });
 
 contextBridge.exposeInMainWorld('time', {

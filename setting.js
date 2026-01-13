@@ -190,3 +190,45 @@ document.getElementById("RFPLUS_type_3").addEventListener("change", async (e) =>
         await window.config.set("RFPLUS_type", "RFPLUS3");
     }
 });
+
+function EEWsim(){
+    let EEWsim_magnitude = document.getElementById("EEWsim_magnitude").value;
+    let EEWsim_depth = document.getElementById("EEWsim_depth").value;
+    let EEWsim_lat = document.getElementById("EEWsim_lat").value;
+    let EEWsim_lon = document.getElementById("EEWsim_lon").value;
+    if(EEWsim_magnitude != "" && EEWsim_depth != "" && EEWsim_lat != "" && EEWsim_lon != "" ){
+        /*
+        let EEWsim_y = date.getFullYear(); 
+        let EEWsim_m = date.getMonth(); 
+        let EEWsim_d = date.getDate();
+        let EEWsim_H = date.getHours()
+        let EEWsim_M = date.getMinutes();
+        let EEWsim_S = date.getSeconds();
+        */
+        let time = (Date.now());
+        let id = time.toString();
+        let report_num = "999";
+        let max_shindo = "不明";
+        let epicenter = "自定義震央";
+        
+        let eew = {
+            "id": id,
+            "type": "eew-test",
+            "time": time,
+            "center": {
+                "lon": EEWsim_lon,
+                "lat": EEWsim_lat,
+                "depth": EEWsim_depth,
+                "cname": epicenter,
+            },
+            "scale": Number(EEWsim_magnitude),
+            "report_num": parseInt(report_num),
+            "id": "1120405",
+            "cancel": false,
+            "max": 5,
+            "alert":true
+        }
+        window.eq.sendEEWsim(eew)
+    }
+}
+document.getElementById("EEWsim").addEventListener("click", EEWsim)

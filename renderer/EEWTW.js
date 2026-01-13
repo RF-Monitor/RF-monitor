@@ -322,11 +322,14 @@ class EEWTWUI {
 
         const div = document.createElement("div");
         div.id = `eew-${alert.id}`;
-
+        let reportNumText = `第${alert.report_num}報`;
+        if(alert.type == "eew-test"){
+            reportNumText = "測試"
+        }
         div.innerHTML = `
             
 						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第${alert.report_num}報)</h4>
+							<h4 style='color:white;background-color: orange;'>地震速報(${reportNumText})</h4>
 						</div>
 						<div class="eew_tw_main_box">
 							<div style="width:70px">

@@ -321,7 +321,7 @@ ipcMain.on('restart',() => {//重新啟動
 ipcMain.on('showMain',() => {//顯示主視窗
     win.show()
 })
-ipcMain.on('EEWsim_sub', (event, data) => {
+ipcMain.on('EEWsim_submit', (event, data) => {
   console.log(data)
   win.webContents.send('EEWsim', data);
 });
