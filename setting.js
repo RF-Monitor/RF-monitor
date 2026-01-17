@@ -66,8 +66,8 @@ if(config.server.http == "http://RFEQSERVER.myqnapcloud.com"){
 }else if(config.server.http == "http://rexisstudio.tplinkdns.com"){
     document.getElementById("server_select").value = "rexisstudio.tplinkdns.com";
 }
-document.getElementById("lat").value = config.user.lat;
-document.getElementById("lon").value = config.user.lon;
+document.getElementById("userlat").value = config.user.lat;
+document.getElementById("userlon").value = config.user.lon;
 
 
 if(config.system.enableGPU){
