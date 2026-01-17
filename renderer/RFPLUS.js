@@ -423,7 +423,7 @@ class RFPLUSUI {
         if(alert.type == "RFPLUS3"){
             div.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">
@@ -452,7 +452,7 @@ class RFPLUSUI {
         }else{
             div.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">

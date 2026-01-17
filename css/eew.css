@@ -54,7 +54,8 @@
 .eew_tw_status_box{
     background-color: #3c3c3c;
     color: white;
-    height: 30px;
+    height: fit-content;
+    padding: 2px;
 }
 .eew_tw_main_box{
     flex-direction: row;
@@ -136,8 +137,8 @@
 .RFPLUS_status_box{
     background-color: #3c3c3c;
     color: white;
-    height: 30px;
-    padding-left: 5px;
+    height: fit-content;
+    padding: 2px;
 }
 .RFPLUS_main_box{
     flex-direction: row;

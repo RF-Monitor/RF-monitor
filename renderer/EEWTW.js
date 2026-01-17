@@ -336,8 +336,8 @@ class EEWTWUI {
         }
         div.innerHTML = `
             
-						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(${reportNumText})</h4>
+						<div id="eew_tw_status_box" class="eew_tw_status_box" style="background-color: orange;">
+							<h5 style='color:white; margin: 0;'><strong>地震速報(${reportNumText})</strong></h5>
 						</div>
 						<div class="eew_tw_main_box">
 							<div style="width:70px">
@@ -373,8 +373,8 @@ class EEWTWUI {
 
         this.dom.innerHTML = `
             
-						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第${alert.report_num}報)</h4>
+						<div id="eew_tw_status_box" class="eew_tw_status_box" style="background-color: orange;">
+							<h5 style='color:white; margin: 0;'><strong>地震速報(${reportNumText})</strong></h5>
 						</div>
 						<div class="eew_tw_main_box">
 							<div style="width:70px">
