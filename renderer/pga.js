@@ -239,11 +239,9 @@ class pgaMapRenderer{
         this.marker.setLatLng([lat, lon]);
         this.marker.setTooltipContent(toolTip);
         this.marker.setOpacity(opacity);
-
-        let circleRadius = 0;
         
         this.circle.setLatLng([lat, lon]);
-        this.circle.setRadius(circleRadius);
+        //this.circle.setRadius(circleRadius);
         this.circle.setStyle({ color: this.shindo_color[shindo] });
         this.circle.setStyle({opacity: opacity, fillOpacity: opacity});
     }
