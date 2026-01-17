@@ -1,4 +1,42 @@
 
+export const Flasher = {
+    state: false,
+    flashControl: true,
+    listeners: new Set(),
+
+    update(){
+        if(this.flashControl){
+            this.state = !this.state
+        }else{
+            this.state = false;
+        }
+        this.notify();
+		return this.state;
+	},
+    start(){
+        this.flashControl = true;
+    },
+    stop(){
+        this.flashControl = false
+    },
+    subscribe(fn){
+        this.listeners.add(fn);
+        // 回傳 unsubscribe，方便解除
+        return () => this.listeners.delete(fn);
+    },
+    notify(){
+        for(const fn of this.listeners){
+            fn(this.state);
+        }
+    }
+};
+setInterval(
+    () => {
+        Flasher.update();
+    },
+    500
+)
+
 export class pgaManager{
     constructor(map, leaflet, { onStationSelect, onShindoReport } = {}){
         this.map = map;
@@ -127,6 +165,10 @@ class pgaMapRenderer{
         this.marker = null;
         this.circle = null;
         this.onSelect = onSelect;
+
+        this.unsubscribeFlasher = Flasher.subscribe(
+            (state) => this.onFlashUpdate(state)
+        );
         this.shindo_color = {
             "0":"white",
             "1":"white",
@@ -139,6 +181,7 @@ class pgaMapRenderer{
             "6+":"#A50021",
             "7":"purple"
         };
+
     }
     create(stationData, shakealert){
         const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline } = stationData;
@@ -169,6 +212,10 @@ class pgaMapRenderer{
             title: name,
             icon: cusicon
         }).bindTooltip(toolTip).addTo(this.map).setOpacity(opacity);
+
+        this.marker.on('click', () => {
+            this.onSelect?.(name);
+        });
     }
     update(stationData, shakealert){
         const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline } = stationData;
@@ -193,11 +240,8 @@ class pgaMapRenderer{
         this.marker.setTooltipContent(toolTip);
         this.marker.setOpacity(opacity);
 
-        this.marker.on('click', () => {
-            this.onSelect?.(name);
-        });
-
         let circleRadius = 0;
+        
         this.circle.setLatLng([lat, lon]);
         this.circle.setRadius(circleRadius);
         this.circle.setStyle({ color: this.shindo_color[shindo] });
@@ -205,8 +249,14 @@ class pgaMapRenderer{
     }
 
     remove(){
-        map.removeLayer(this.marker);
-        map.removeLayer(this.circle);
+        this.map.removeLayer(this.marker);
+        this.map.removeLayer(this.circle);
+        this.unsubscribeFlasher?.();
+    }
+
+    onFlashUpdate(state){
+        if(!this.circle || !this.shakealert) return;
+        this.circle.setRadius(state ? 20000 : 0);
     }
 
     getStationIcon(pga, shindo, shakealert, isOnline, size = 10) {

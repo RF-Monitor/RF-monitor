@@ -1,7 +1,7 @@
 import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js';
 import { EEWTWManager } from './renderer/EEWTW.js';
 import { RFPLUSManager } from './renderer/RFPLUS.js';
-import { pgaManager } from './renderer/pga.js';
+import { pgaManager, Flasher } from './renderer/pga.js';
 import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
@@ -150,11 +150,33 @@ for (let i = 0; i < country_list.length; i++) {
 	var distributedLayer = L.layerGroup();
 
 // managers
-let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L);
+let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
+	onNewAlert: () => {
+		Flasher.stop();
+	},
+	onAlertEnd: () => {
+		if(EEWTWmanager.hasAlert() || RFPLUSmanager.hasAlert()){
+			Flasher.stop();
+		}else{
+			Flasher.start();
+		}
+	}
+});
 setInterval(async () => {
 	EEWTWmanager.tick(await window.time.now())
 },100)
-let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L);
+let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L,{
+	onNewAlert: () => {
+		Flasher.stop();
+	},
+	onAlertEnd: () => {
+		if(EEWTWmanager.hasAlert() || RFPLUSmanager.hasAlert()){
+			Flasher.stop();
+		}else{
+			Flasher.start();
+		}
+	}
+});
 setInterval(async () => {
 	RFPLUSmanager.tick(await window.time.now())
 },100)
@@ -193,6 +215,8 @@ let PGAmanager = new pgaManager(map, L, {
 		window.webhook.send(url, text);
 	}
 });
+/*
+*/
 mapRendererInitialize(map2, L);
 
 let tsunamiManager = new TsunamiManager({
@@ -209,7 +233,6 @@ window.ws.onEEWTW(async (data) => {
 	if(await window.config.get("enable_eew_tw")){
 		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
-    
 });
 window.eq.onEEWsim((data) => {
 	EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
