@@ -303,7 +303,7 @@ class pgaUI{
         let maxShindo = "0";
         let station_count = 0;
         let topStations = [];
-        let shakealert = pga.shakealert;
+        let shakealert = pga.shake_alert;
         for (let s of pga.data) {
             let stationData = {
                 id: s["id"],
@@ -465,7 +465,7 @@ class ShindoReport {
                 `[pga][${station.id}] ${station.cname} 最大震度 ${station.maxShindo}`
             );
         }
-        this.onFinish?.(this.stationMax.values());
+        this.onFinish?.(Array.from(this.stationMax.values()));
 
         console.log("[pga]===== 震度速報結束 =====");
     } 
