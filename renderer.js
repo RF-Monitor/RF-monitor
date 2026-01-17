@@ -7,6 +7,7 @@ import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
 import { switchPage } from './renderer/ui.js';
 import { formatShindoTitle, shindo2float } from './renderer/utils/shindo.js';
+import { emitConfigChange, onConfigChange } from './renderer/utils/configWatcher.js';
 function showLogin(){
   document.getElementById("login").style.display = "block"
 }
@@ -17,8 +18,14 @@ function login(username, password){
 	window.auth.login(username, password);
 }
 
-const cfg = await window.config.getAll();
+/*----------初始化設定值以及變化監聽器----------*/
+let cfg = await window.config.getAll();
 console.log(cfg)
+window.config.onChange((data) => {
+  // data = { key, value }
+  emitConfigChange(data);
+});
+
 // 建立三個地圖
 var bounds = L.latLngBounds(L.latLng(90, 360), L.latLng(-90, -180));
 /*
@@ -224,6 +231,29 @@ let tsunamiManager = new TsunamiManager({
 });
 
 let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
+
+class CommonMapRenderer{
+	constructor(map, leaflet){
+		this.map = map;
+        this.L = leaflet;
+		this.home = this.L.marker([0, 0], { icon: this.L.icon({ iconUrl: "shindo_icon/house.png", iconSize: [10, 10] }), }).addTo(this.map);;
+	}
+	setHomeLatLon(location){
+		this.home.setLatLng(location);
+	}
+}
+
+
+const commonMapRenderer = new CommonMapRenderer(map, L);
+commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
+onConfigChange('userlat', async (value) => {
+	let cfg = await window.config.getAll();
+	commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
+})
+onConfigChange('userlon', async (value) => {
+	let cfg = await window.config.getAll();
+	commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
+})
 
 //ws events
 if (!window.ws) {
