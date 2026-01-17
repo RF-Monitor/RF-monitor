@@ -38,6 +38,12 @@ contextBridge.exposeInMainWorld('ws', {
 });
 
 contextBridge.exposeInMainWorld('config', {
+    onChange: (cb) => {
+      ipcRenderer.on('event:config:update', (_, d) => {
+        cb(d)
+        console.log("[preload] config updated")
+      })
+    },
     getAll: () => ipcRenderer.invoke('config:getAll'),
     get: (key) => {
       return ipcRenderer.invoke('config:get', key)

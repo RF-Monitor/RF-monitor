@@ -7,6 +7,9 @@ const { start } = require('repl');
 const isDevelopment = process.env.NODE_ENV !== "production";
 const config = require('./config/index');
 
+let broadcastEvent = null;
+let broadcastState = null;
+
 let services = {};
 const version = "2.7.0";
 
@@ -43,10 +46,11 @@ async function bootServices() {
     wsVerify
   } = await import('./main/wsClient.mjs');
 
-  const {
-    broadcastEvent,
-    broadcastState
-  } = await import('./main/ipcRouter.mjs');
+  const ipcRouter = await import('./main/ipcRouter.mjs');
+
+  broadcastEvent = ipcRouter.broadcastEvent;
+  broadcastState = ipcRouter.broadcastState;
+
 
   const { login } = await import('./main/auth.mjs');
 
@@ -116,7 +120,7 @@ async function bootServices() {
   ipcMain.handle('webhook:send', async (event, url, sendContent) => {
     send_webhook(url, sendContent)
   })
-  return { setVerifyKey };
+  return { setVerifyKey };  
 }
 
 
@@ -298,7 +302,11 @@ ipcMain.handle('config:get', (_, key) => {
 })
 ipcMain.handle('config:set', (_, key, value) => {
   console.log("[main] setting config",key ,value)
-  config.set(key, value)
+  config.set(key, value);
+  broadcastEvent?.('event:config:update', {
+    key,
+    value
+  });
 })
 
 ipcMain.on('showSetting',() => {//顯示設定視窗
