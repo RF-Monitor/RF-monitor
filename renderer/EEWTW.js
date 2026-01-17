@@ -1,19 +1,22 @@
 import { AudioQueue } from "./utils/audioQueue.js";
 
 class EEWTWManager {
-    constructor(map,locations,town_ID_list,town_line,leaflet) {
+    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertEnd} = {}) {
         this.instances = new Map(); // id → EEW
         this.map = map;
         this.locations = locations;
         this.town_ID_list = town_ID_list;
         this.town_line = town_line;
         this.leaflet = leaflet;
+        this.onNewAlert = onNewAlert;
+        this.onAlertEnd = onAlertEnd;
     }
 
     handleAlert(userlat, userlon, alert) {
         if (!this.instances.has(alert.id)) {
             this.instances.set(alert.id, new EEWTW(alert, new EEWTWMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new EEWTWUI));
             this.instances.get(alert.id).handleNew(userlat, userlon, alert);
+            this.onNewAlert?.();
         }else{
             this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
         }
@@ -26,8 +29,13 @@ class EEWTWManager {
             if (EEW.checkExpired(now)) {
                 EEW.destroy();          // 清理地圖/UI
                 this.instances.delete(key);
+                onAlertEnd?.();
             }
         }
+    }
+
+    hasAlert(){
+        return this.instances.size > 0;
     }
 
 }
