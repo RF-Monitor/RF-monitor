@@ -161,11 +161,13 @@ if(config.eew.tw){
 if(config.eew.rfplus){
     document.getElementById("enable_RFPLUS").checked = true;
 }
+/*
 if(config.eew.rfplusType == "RFPLUS2"){
     document.getElementById("RFPLUS_type_2").checked = true;
 }else{
     document.getElementById("RFPLUS_type_3").checked = true;
 }
+    */
 if(config.sound.twRead){
     document.getElementById("enable_eew_tw_read").checked = true;
 }
@@ -179,6 +181,7 @@ document.getElementById("webhook_text_TW_EEW").value = config.webhook.twEEW.text
 
 await bindAutoSave();
 
+/*
 document.getElementById("RFPLUS_type_2").addEventListener("change", async (e) => {
     if (e.target.checked) {
         await window.config.set("RFPLUS_type", "RFPLUS2");
@@ -190,7 +193,7 @@ document.getElementById("RFPLUS_type_3").addEventListener("change", async (e) =>
         await window.config.set("RFPLUS_type", "RFPLUS3");
     }
 });
-
+*/
 function EEWsim(){
     let EEWsim_magnitude = document.getElementById("EEWsim_magnitude").value;
     let EEWsim_depth = document.getElementById("EEWsim_depth").value;
