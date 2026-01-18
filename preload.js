@@ -113,3 +113,9 @@ contextBridge.exposeInMainWorld('webhook', {
     ipcRenderer.invoke('webhook:send', url, sendContent);
   }
 })
+
+contextBridge.exposeInMainWorld('notify', {
+  send: (title, content, iconpath) => {
+    ipcRenderer.invoke('notify:send', title, content, iconpath);
+  }
+})

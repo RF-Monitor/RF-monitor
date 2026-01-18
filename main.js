@@ -1,4 +1,4 @@
-const { app, BrowserWindow ,ipcMain,Tray,Menu} = require('electron')
+const { app, BrowserWindow ,ipcMain,Tray,Menu, Notification} = require('electron')
 const { dialog, shell } = require("electron");
 const path = require('path');
 const storage = require('electron-localstorage');
@@ -307,6 +307,18 @@ ipcMain.handle('config:set', (_, key, value) => {
     key,
     value
   });
+})
+
+ipcMain.handle('notify:send', (_, title, content, iconpath) => {
+  if(config.config().system.enableNotification){
+    console.log("[main] Sending notification",title ,content)
+    new Notification({
+      title: title,
+      body: content,
+      icon: path.join(__dirname, iconpath)
+    }).show();
+  }
+  
 })
 
 ipcMain.on('showSetting',() => {//顯示設定視窗
