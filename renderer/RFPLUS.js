@@ -1,6 +1,6 @@
 import { AudioQueue } from "./utils/audioQueue.js";
 class RFPLUSManager {
-    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertEnd} = {}) {
+    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertUpdate, onAlertEnd} = {}) {
         this.instances = new Map(); // id → EEW
         this.map = map;
         this.locations = locations;
@@ -8,6 +8,7 @@ class RFPLUSManager {
         this.town_line = town_line;
         this.leaflet = leaflet;
         this.onNewAlert = onNewAlert;
+        this.onAlertUpdate = onAlertUpdate;
         this.onAlertEnd = onAlertEnd;
     }
 
@@ -15,10 +16,11 @@ class RFPLUSManager {
         if(alert.type == "none") return;
         if (!this.instances.has(alert.id)) {
             this.instances.set(alert.id, new RFPLUS(alert, new RFPLUSMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new RFPLUSUI));
-            this.instances.get(alert.id).handleNew(userlat, userlon, alert);
-            this.onNewAlert?.();
+            alert = this.instances.get(alert.id).handleNew(userlat, userlon, alert);
+            this.onNewAlert?.(alert);
         }else{
-            this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            this.onAlertUpdate?.(alert)
         }
         
     }
@@ -75,6 +77,8 @@ class RFPLUS {
 
         // audio
         this.audio.init(this.alert);
+
+        return alert;
     }
 
     handleUpdate(userlat, userlon, alert) {
@@ -97,6 +101,8 @@ class RFPLUS {
 
         //audio
         this.audio.update(this.alert);
+
+        return alert;
     }
 
     updateCircleRadius(now) {

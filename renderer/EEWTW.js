@@ -1,7 +1,7 @@
 import { AudioQueue } from "./utils/audioQueue.js";
 
 class EEWTWManager {
-    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertEnd} = {}) {
+    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertUpdate, onAlertEnd} = {}) {
         this.instances = new Map(); // id → EEW
         this.map = map;
         this.locations = locations;
@@ -9,16 +9,18 @@ class EEWTWManager {
         this.town_line = town_line;
         this.leaflet = leaflet;
         this.onNewAlert = onNewAlert;
+        this.onAlertUpdate = onAlertUpdate
         this.onAlertEnd = onAlertEnd;
     }
 
     handleAlert(userlat, userlon, alert) {
         if (!this.instances.has(alert.id)) {
             this.instances.set(alert.id, new EEWTW(alert, new EEWTWMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new EEWTWUI));
-            this.instances.get(alert.id).handleNew(userlat, userlon, alert);
-            this.onNewAlert?.();
+            alert = this.instances.get(alert.id).handleNew(userlat, userlon, alert);
+            this.onNewAlert?.(alert);
         }else{
-            this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            this.onAlertUpdate?.(alert);
         }
         
     }
@@ -71,6 +73,8 @@ class EEWTW {
 
         //播放音效
         this.audio.init(this.alert);
+
+        return this.alert;
     }
 
     handleUpdate(userlat, userlon, alert) {
@@ -90,6 +94,8 @@ class EEWTW {
 
         //播放音效
         this.audio.update(this.alert);
+
+        return this.alert;
     }
 
     updateCircleRadius(now) {
