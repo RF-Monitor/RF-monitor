@@ -345,6 +345,10 @@ window.ws.onTsunami(async (data) => {
 window.ws.onWeather(async (data) => {
 	weatherManager.updateWeather(data);
 });
+window.ws.onTyphoon(async (data) => {
+	const enableAnalysis = await window.config.get("enable_ty_analysis");
+	weatherManager.updateTyphoon(data, enableAnalysis);
+});
 
 window.ws.onReport((data) => {
     InfoUpdate_full_ws(data, async (id) => {

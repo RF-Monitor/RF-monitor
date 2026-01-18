@@ -29,7 +29,10 @@ contextBridge.exposeInMainWorld('ws', {
         console.log("[preload] sending Weather");
         ipcRenderer.on('event:weather:alert', (_, d) => cb(d));
     },
-    
+    onTyphoon: (cb) => {
+        console.log("[preload] sending Typhoon");
+        ipcRenderer.on('event:weather:typhoon', (_, d) => cb(d));
+    },
     onReport: (cb) => {
         console.log("[preload] sending report")
         ipcRenderer.on('event:eq:report', (_, d) => cb(d))
