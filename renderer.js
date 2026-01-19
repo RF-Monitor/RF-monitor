@@ -182,7 +182,7 @@ let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L,{
 	onNewAlert: (alert) => {
 		Flasher.stop();
 		window.notify.send(
-			"中央氣象署地震速報",
+			"參與式進階地震預警(RFPLUS)",
 			`預計震度${formatShindoTitle(alert.localshindo)}，規模${alert.scale}`,
 			`shindo_icon/selected/${alert.localshindo}.png`
 		)
@@ -354,6 +354,15 @@ window.ws.onReport((data) => {
     InfoUpdate_full_ws(data, async (id) => {
 		// 取得震度分布的程式
 		return await window.eq.getInfoDistribution(id);
+	},
+	{
+		onUpdate: (info) => {
+			window.notify.send(
+				"地震報告",
+				`${info.datetime} ${info.epicenter}發生規模${info.magnitude}地震，最大震度${formatShindoTitle(info.max_shindo)}`,
+				`icon.png`
+			)
+		}
 	});
 });
 
