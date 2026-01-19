@@ -94,7 +94,7 @@
 			<li class="nav-item"><a href="#ew" data-toggle="tab" class="nav-link"><p>即時資訊</p></a></li>
 			<li class="nav-item"><a href="#sounds" data-toggle="tab" class="nav-link"><p>音效</p></a></li>
 			<li class="nav-item"><a href="#sync" data-toggle="tab" class="nav-link"><p>連動</p></a></li>
-			<li class="nav-item"><a href="#others" data-toggle="tab" class="nav-link"><p>其他</p></a></li>
+			<li class="nav-item"><a href="#others" data-toggle="tab" class="nav-link"><p>系統</p></a></li>
 			<li class="nav-item"><a href="#about" data-toggle="tab" class="nav-link"><p>關於RF-monitor</p></a></li>
 		</ul>
 	</div>
@@ -163,11 +163,7 @@
 						<p style='font-size: 22px;'>有地震速報時彈出視窗</p>
 					</label>
 					<br>
-					<input class="maincheckbox" type="checkbox" value="" id="enable_notification" name="enable_notification">
-					<label for="enable_notification">
-						<p style='font-size: 22px;'>顯示系統通知</p>
-					</label>
-					<br>
+					
 					<label for="opacity">
 						<p style='font-size: 22px;'>即時資訊列表透明度</p>
 					</label>
@@ -402,6 +398,12 @@
 		</div>
 		<div class="container tab-pane" id="others">
 			<div style="margin-left: 50px;">
+				<input class="maincheckbox" type="checkbox" value="" id="enable_notification" name="enable_notification">
+				<label for="enable_notification">
+					<p style='font-size: 22px; margin-bottom: 1px;'>顯示系統通知</p>
+				</label>
+				<p style="font-size: 15px;">Windows也需開啟通知才會正確顯示</p>
+				<br>
 				<input class="maincheckbox" type="checkbox" value="" id="enable_autolaunch" name="enable_autolaunch">
 				<label for="enable_autolaunch">
 					<p style='font-size: 22px;margin-bottom: 1px;'>開機自啟動</p>
@@ -442,7 +444,7 @@
 	</div>
 	<hr/>
 	<footer class="bottom">
-		<h6 class="ganhua">每日一幹話:「<span id="ganhua"></span>」</h6>
+		<!--<h6 class="ganhua">每日一幹話:「<span id="ganhua"></span>」</h6>-->
 		<button type="button" class="btn btn-primary" style="margin-right: 20px;">重新啟動</button>
 	</footer>
 	<script src="./setting.js" type="module"></script>
