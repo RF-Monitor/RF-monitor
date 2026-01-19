@@ -112,7 +112,9 @@ class InfoUI{
     }
 }
 
-export function InfoUpdate_full_ws(earthquakeInfo,getDistributionFn) {
+let lastReports = null;
+
+export function InfoUpdate_full_ws(earthquakeInfo, getDistributionFn, {onInitial, onUpdate} = {}) {
     console.log("running infoUpdate");
     //earthquakeInfo = JSON.parse(earthquakeInfo);
 
@@ -181,7 +183,11 @@ export function InfoUpdate_full_ws(earthquakeInfo,getDistributionFn) {
                 "</tr>" +
             "</table>";
     }
-
+    if (lastReports === null) {
+        onInitial?.(earthquakeInfo);
+    } else if (lastReports[0].id !== earthquakeInfo[0].id) {
+        onUpdate?.(earthquakeInfo[0]);
+    }
     if (htmlText !== '') {
         document.getElementById("earthquakeInfo").innerHTML = htmlText;
     }
