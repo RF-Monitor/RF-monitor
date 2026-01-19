@@ -397,6 +397,7 @@ class pgaUI{
             document.getElementById("RF_list_1").innerHTML = htmlText;
         }else{
             document.getElementById("RF_status").innerHTML = "";
+            document.getElementById("RF_list_1").innerHTML = "";
         }
     }
 
