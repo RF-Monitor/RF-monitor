@@ -88,7 +88,7 @@ function routeMessage(data) {
       sendEvent?.('event:eew:tw', content);
       break;
 
-    case 'eew_jp':
+    case 'eew_JP':
       sendEvent?.('event:eew:jp', content);
       break;
 
