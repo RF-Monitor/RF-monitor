@@ -2,8 +2,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('ws', {
     onStatus: (cb) =>{
-        console.log("[preload] status updated");
-        ipcRenderer.on('state:ws:status', (_, d) => cb(d))
+        ipcRenderer.on('state:ws:status', (_, d) => {
+          cb(d);
+          console.log("[preload] status updated");
+        }
+      ) 
     },
     onPGA: (cb) =>{
         console.log("[preload] sending PGA");
