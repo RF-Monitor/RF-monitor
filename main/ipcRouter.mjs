@@ -8,7 +8,9 @@ export function broadcastEvent(channel, payload) {
 }
 
 export function broadcastState(channel, payload) {
-  BrowserWindow.getAllWindows().forEach(win =>
+  BrowserWindow.getAllWindows().forEach(win => {
     win.webContents.send(`state:${channel}`, payload)
+    //console.log(`state:${channel}`, payload)
+  }
   );
 }
