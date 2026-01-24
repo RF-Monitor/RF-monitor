@@ -266,6 +266,19 @@ onConfigChange('userlon', async (value) => {
 	commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
 })
 
+//ws status
+window.ws.onStatus((data) => {
+	console.log(data)
+	let status = data.status;
+	if(status == "online"){
+		document.getElementById("websocket_status").innerHTML = "正常";
+		document.getElementById("websocket_status").style.color = "green";
+	}else{
+		document.getElementById("websocket_status").innerHTML = "離線";
+		document.getElementById("websocket_status").style.color = "red";
+	}
+})
+
 //ws events
 if (!window.ws) {
     console.error('window.ws not available');
