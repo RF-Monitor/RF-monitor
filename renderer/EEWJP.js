@@ -1,16 +1,26 @@
+import { AudioQueue } from "./utils/audioQueue.js";
+
 class EEWJPManager {
-    constructor(map,leaflet) {
+    constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertUpdate, onAlertEnd} = {}) {
         this.instances = new Map(); // id → EEW
         this.map = map;
+        this.locations = locations;
+        this.town_ID_list = town_ID_list;
+        this.town_line = town_line;
         this.leaflet = leaflet;
+        this.onNewAlert = onNewAlert;
+        this.onAlertUpdate = onAlertUpdate
+        this.onAlertEnd = onAlertEnd;
     }
 
-    handleAlert(alert) {
+    handleAlert(userlat, userlon, alert) {
         if (!this.instances.has(alert.id)) {
-            this.instances.set(alert.id, new EEWJP(alert, new EEWJPMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new EEWTWUI));
-            this.instances.get(alert.id).handleNew(alert);
+            this.instances.set(alert.id, new EEWJP(alert, new EEWJPMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new EEWJPUI));
+            alert = this.instances.get(alert.id).handleNew(userlat, userlon, alert);
+            this.onNewAlert?.(alert);
         }else{
-            this.instances.get(alert.id).handleUpdate(alert);
+            alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            this.onAlertUpdate?.(alert);
         }
         
     }
@@ -21,8 +31,13 @@ class EEWJPManager {
             if (EEW.checkExpired(now)) {
                 EEW.destroy();          // 清理地圖/UI
                 this.instances.delete(key);
+                onAlertEnd?.();
             }
         }
+    }
+
+    hasAlert(){
+        return this.instances.size > 0;
     }
 
 }
@@ -31,6 +46,7 @@ class EEWJP {
     constructor(alert, renderer, ui) {
         this.alert = alert;
         this.renderer = renderer;
+        this.audio = new EEWJPaudio();
         this.ui = ui;
         this.time = 0;
         this.id = "";
@@ -41,37 +57,45 @@ class EEWJP {
     }
 
     handleNew(userlat, userlon, alert) {
-        this.alert = alert
+        this.alert = alert;
         //添加假想震央icon //初始化震波圓
-        this.renderer.initAlert(alert);
+        this.renderer.initAlert(this.alert);
 
         //計算本地震度
-        
-        const localPGA = this.EEW_JP_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
-        alert.localshindo = this.PGA2shindo(localPGA);
+        const localPGA = this.EEW_JP_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, this.alert.scale);
+        this.alert.localshindo = this.PGA2shindo(localPGA);
 
         //計算各地震度
-        //alert = this.renderer.renderShindo(alert);
-        
+        this.alert = this.renderer.renderShindo(this.alert);
+
         //UI顯示
-        this.ui.init(alert);
+        this.ui.init(this.alert);
+
+        //播放音效
+        //this.audio.init(this.alert);
+
+        return this.alert;
     }
 
-    handleUpdate(alert) {
-        this.alert = alert;
+    handleUpdate(userlat, userlon, alert) {
+        this.alert = alert
         //更新假想震央icon//更新震波圓位置
-        this.renderer.updateCenter(alert);
+        this.renderer.updateCenter(this.alert);
         
         //計算本地震度
-        
-        const localPGA = this.EEW_JP_localPGA(userlat, userlon, alert.center.lat, alert.center.lon, alert.scale);
-        alert.localshindo = this.PGA2shindo(localPGA);
-        
+        const localPGA = this.EEW_JP_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, this.alert.scale);
+        this.alert.localshindo = this.PGA2shindo(localPGA);
+
         //計算各地震度
-        //this.alert = this.renderer.renderShindo(alert);
+        this.alert = this.renderer.renderShindo(this.alert);
 
         //UI顯示
         this.ui.update(this.alert);
+
+        //播放音效
+        this.audio.update(this.alert);
+
+        return this.alert;
     }
 
     updateCircleRadius(now) {
@@ -85,9 +109,11 @@ class EEWJP {
         } // 3 分鐘
         return false;
     }
+
     destroy(){
         this.renderer.end();
         this.ui.end();
+        this.audio = null;
     }
 
     EEW_JP_localPGA(townlat,townlon,centerlat,centerlon,scale){
@@ -136,12 +162,13 @@ class EEWJP {
 }
 
 class EEWJPMapRenderer {
-    constructor(map,leaflet) {
+    constructor(map,locations,town_ID_list,town_line,leaflet) {
         this.map = map;
-        //this.locations = locations;
-        //this.town_ID_list = town_ID_list
-        // this.country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
-        //this.town_line = town_line
+        this.locations = locations;
+        this.town_ID_list = town_ID_list
+        //console.log(this.town_ID_list)
+        this.country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
+        this.town_line = town_line
         this.shindo_color = {
             "0":"white",
             "1":"white",
@@ -160,10 +187,11 @@ class EEWJPMapRenderer {
             Pwave: null,
             Swave: null
         };
+        this.shindoLayer = this.L.layerGroup().addTo(this.map);
     }
 
     initAlert(alert) {
-        const icon = this.L.icon({iconUrl : 'shindo_icon/epicenter_jp.png',iconSize : [30,30],});
+        const icon = this.L.icon({iconUrl : 'shindo_icon/epicenter_JP.png',iconSize : [30,30],});
         this.center.icon = this.L.marker([alert.center.lat,alert.center.lon],{icon : icon,opacity : 1.0}).addTo(this.map);
         this.center.Pwave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'blue' , radius:0 , fill : false,pane:"wave_layer"}).addTo(this.map);
         this.center.Swave = this.L.circle([alert.center.lat,alert.center.lon],{color : 'red' , radius:0,pane:"wave_layer"}).addTo(this.map);
@@ -174,20 +202,16 @@ class EEWJPMapRenderer {
         this.center.Pwave.setLatLng([alert.center.lat, alert.center.lon]);
         this.center.Swave.setLatLng([alert.center.lat, alert.center.lon]);
     }
-    
+
     renderShindo(alert) {
+        
         let max_shindo = "0";
         let time = alert["time"];
         let id = alert["id"];
         let center = alert["center"];
+        let depth = center.depth;
         let scale = alert["scale"];
-        //----------檢查layer是否已創建(是)----------//
-        if(this.hasOwnProperty("shindoLayer")){
-            this.shindoLayer.clearLayers();
-        //----------若無 創建layer----------//
-        }else{
-            this.shindoLayer = this.L.layerGroup().addTo(this.map);
-        }
+        this.shindoLayer.clearLayers();
         //----------各縣市----------//
         for(let i = 0; i < this.country_list.length;i++){
             //----------各鄉鎮市區----------//
@@ -202,8 +226,9 @@ class EEWJPMapRenderer {
                         town_ID = this.town_ID_list[j]["TOWNCODE"].toString();
                     }
                 }
+                console.log(town_ID, this.town_line[town_ID]);
                 //計算pga
-                let PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],scale);
+                let PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],scale,depth);
                 //確認震度顏色
                 let localshindo = this.PGA2shindo(PGA);
                 let localcolor = this.shindo_color[localshindo];
@@ -242,11 +267,10 @@ class EEWJPMapRenderer {
         if (this.center.Swave) this.map.removeLayer(this.center.Swave);
     }
 
-    localPGA(townlat,townlon,centerlat,centerlon,scale){
-        let depth = 10;
+    localPGA(townlat,townlon,centerlat,centerlon,scale,depth){
         let distance = Math.sqrt(Math.pow(Math.abs(townlat + (centerlat * -1)) * 111, 2) + Math.pow(Math.abs(townlon + (centerlon * -1)) * 101, 2) + Math.pow(depth, 2));
         ///let distance = Math.sqrt(Math.pow(depth, 2) + Math.pow(surface, 2) + Math.pow(depth, 2));
-        let PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607)).toFixed(3);
+        let PGA = (1.657 * Math.pow(Math.E, (1.533 * scale)) * Math.pow(distance, -1.607));
         return PGA;
     }
 
@@ -302,42 +326,45 @@ class EEWJPMapRenderer {
     }
 }
 
-class EEWTWUI {
+class EEWJPUI {
     constructor() {
         this.dom = null; // 存放對應這筆 eew 的 DOM 節點
-        
     }
     init(alert) {
-        const container = document.getElementById("eew");
+        // UI
+        const container = document.getElementById("eew_jp_list");
 
         const div = document.createElement("div");
         div.id = `eew-${alert.id}`;
-
+        let reportNumText = `第${alert.report_num}報`;
+        if(alert.type == "eew-test"){
+            reportNumText = "測試"
+        }
         div.innerHTML = `
             
-						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第1報)</h4>
+						<div id="eew_jp_status_box" class="eew_jp_status_box" style="background-color: orange;">
+							<h5 style='color:white; margin: 0;'><strong>地震速報(${reportNumText})</strong></h5>
 						</div>
-						<div class="eew_tw_main_box">
+						<div class="eew_jp_main_box">
 							<div style="width:70px">
 								<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 								<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-								<img id="eew_tw_maxshindo" style="width:70px">
+								<img id="eew_jp_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 							</div>
 							<div style="width:160px;margin-left: 10px">
 								<div>
 									<h4 style='color:white'>
-										臺灣附近
+										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										2025-12-27 00:15:30
+										${formatTimestamp(alert.time)}
 									</h6>
 								</div>
-								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M5.0</span></h4></div>
-									<div class="eew_tw_depth"><h4>10KM</h4></div>
+								<div class="eew_jp_maindown">
+									<div class="eew_jp_scale"><h4>M${alert.scale.toFixed(1)}</span></h4></div>
+									<div class="eew_jp_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>
 						</div>
@@ -352,29 +379,29 @@ class EEWTWUI {
 
         this.dom.innerHTML = `
             
-						<div id="eew_tw_status_box" class="eew_tw_status_box">
-							<h4 style='color:white;background-color: orange;'>地震速報(第1報)</h4>
+						<div id="eew_jp_status_box" class="eew_jp_status_box" style="background-color: orange;">
+							<h5 style='color:white; margin: 0;'><strong>地震速報(${reportNumText})</strong></h5>
 						</div>
-						<div class="eew_tw_main_box">
+						<div class="eew_jp_main_box">
 							<div style="width:70px">
 								<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
 								<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
 								<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
-								<img id="eew_tw_maxshindo" style="width:70px">
+								<img id="eew_jp_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
 							</div>
 							<div style="width:160px;margin-left: 10px">
 								<div>
 									<h4 style='color:white'>
-										臺灣附近
+										${alert.center.cname}
 									</h4>
 									<h6 style='color:white'>
-										2025-12-27 00:15:30
+										${formatTimestamp(alert.time)}
 									</h6>
 								</div>
-								<div class="eew_tw_maindown">
-									<div class="eew_tw_scale"><h4>M5.0</span></h4></div>
-									<div class="eew_tw_depth"><h4>10KM</h4></div>
+								<div class="eew_jp_maindown">
+									<div class="eew_jp_scale"><h4>M${alert.scale.toFixed(1)}</span></h4></div>
+									<div class="eew_jp_depth"><h4>${alert.center.depth}KM</h4></div>
 								</div>
 							</div>
 						</div>
@@ -387,6 +414,24 @@ class EEWTWUI {
         this.dom.remove();   // 從 DOM tree 移除
         this.dom = null;
     }
+}
+
+class EEWJPaudio{
+    constructor(){
+        this.audioQueue = new AudioQueue();
+        this.localshindo = ""
+    }
+    init(alert){
+        this.localshindo = alert.localshindo;
+        this.audioQueue.play(['./audio/JP/eew/new/EEW.mp3' ,'./audio/JP/eew/new/' +this.localshindo+ '.mp3']);
+    }
+    update(alert){
+        if(alert.localshindo != this.localshindo){
+            this.audioQueue.play(['./audio/JP/eew/new/' +alert.localshindo+ '.mp3'])
+        }
+        this.localshindo = alert.localshindo;
+    }
+
 }
 
 function formatTimestamp(timestamp) {
@@ -402,4 +447,4 @@ function formatTimestamp(timestamp) {
   return `${YYYY}-${MM}-${dd} ${hh}:${mm}:${ss}`;
 }
 
-export { EEWTWManager };
+export { EEWJPManager };
