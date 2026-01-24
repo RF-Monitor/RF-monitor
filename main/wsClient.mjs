@@ -1,6 +1,12 @@
 import WebSocket from 'ws';
 import crypto from 'crypto';
 
+let heartbeatTimer = null;
+let lastPongTime = 0;
+
+const HEARTBEAT_INTERVAL = 5000;   // 每 5 秒檢查一次
+const HEARTBEAT_TIMEOUT  = 10000;  // 10 秒沒 pong  視為斷線
+
 let socket = null;
 let verifyKey = '';
 let reconnectTimer = null;
@@ -25,20 +31,59 @@ export function startWebSocket(Event, State, { onLogin } = {}) {
   connect();
 }
 
+function startHeartbeat() {
+  stopHeartbeat(); // 確保不疊加
+
+  heartbeatTimer = setInterval(() => {
+    if (!socket) return;
+
+    const now = Date.now();
+
+    // 超時 → 強制判定斷線
+    if (now - lastPongTime > HEARTBEAT_TIMEOUT) {
+      console.warn('[WS] heartbeat timeout, force terminate');
+
+      // 這一行是關鍵：一定會觸發 close
+      socket.terminate();
+      return;
+    }
+
+    // 正常狀態下送 ping
+    if (socket.readyState === WebSocket.OPEN) {
+      try {
+        socket.ping();
+      } catch (e) {
+        console.error('[WS ping failed]', e.message);
+      }
+    }
+  }, HEARTBEAT_INTERVAL);
+}
+
+function stopHeartbeat() {
+  if (heartbeatTimer) {
+    clearInterval(heartbeatTimer);
+    heartbeatTimer = null;
+  }
+}
+
 function connect() {
+  reconnectTimer && clearTimeout(reconnectTimer);
+  reconnectTimer = null;
+
   if (socket) {
     socket.removeAllListeners();
     socket.terminate();
     socket = null;
   }
-
-  reconnecting = false;
   sendState?.('ws:status', { status: 'connecting' });
 
   socket = new WebSocket(WS_URL);
 
-  socket.on('open', () => {
+  socket.once('open', () => {
     sendState?.('ws:status', { status: 'online' });
+
+    lastPongTime = Date.now();
+    startHeartbeat();
 
     if (verifyKey) {
       wsVerify();
@@ -57,18 +102,33 @@ function connect() {
     routeMessage(data);
   });
 
-  socket.on('close', handleDisconnect);
-  socket.on('error', handleDisconnect);
+  socket.on('pong', () => {
+    lastPongTime = Date.now();
+  });
+
+  socket.once('close', onClose);
+  socket.once('error', onError);
+}
+
+function onError(err) {
+  console.error('[WS error]', err.message);
+  handleDisconnect();
+}
+
+function onClose(code, reason) {
+  console.warn('[WS closed]', code, reason?.toString());
+  handleDisconnect();
 }
 
 function handleDisconnect() {
-  if (reconnecting) return;
+  stopHeartbeat();
 
-  reconnecting = true;
   sendState?.('ws:status', { status: 'offline' });
 
-  reconnectTimer && clearTimeout(reconnectTimer);
+  if (reconnectTimer) return;
+
   reconnectTimer = setTimeout(() => {
+    reconnectTimer = null;
     connect();
   }, RECONNECT_DELAY);
 }
