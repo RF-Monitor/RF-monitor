@@ -14,11 +14,29 @@ let services = {};
 const version = "2.7.0";
 
 async function checkUpdate(currentVer) {
-  let response = await fetch("http://rfeqserver.myqnapcloud.com:8787/monitorVersion");
-  let text = await response.text();
-  if(currentVer != text) return { status: "New update available", ver: text}
-  else return { status: "Already latest version", ver: text}
+  try {
+    const response = await fetch("http://rfeqserver.myqnapcloud.com:8787/monitorVersion", {
+      timeout: 5000
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const text = await response.text();
+
+    if (currentVer !== text) {
+      return { status: "New update available", ver: text };
+    } else {
+      return { status: "Already latest version", ver: text };
+    }
+
+  } catch (err) {
+    console.error("[checkUpdate] fetch failed:", err.message);
+    return { status: "Update check failed", error: err.message };
+  }
 }
+
 
 function showUpdatePrompt(mainWindow, latestVersion) {
   //if (!appJustLaunched) return;
