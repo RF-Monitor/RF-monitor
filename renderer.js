@@ -1,5 +1,6 @@
 import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js';
 import { EEWTWManager } from './renderer/EEWTW.js';
+import { EEWJPManager } from './renderer/EEWJP.js';
 import { RFPLUSManager } from './renderer/RFPLUS.js';
 import { pgaManager, Flasher } from './renderer/pga.js';
 import { TsunamiManager } from './renderer/tsunami.js';
@@ -175,6 +176,7 @@ let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
 		}
 	}
 });
+let EEWJPmanager = new EEWJPManager(map,locations,town_ID_list,town_line,L,{});
 setInterval(async () => {
 	EEWTWmanager.tick(await window.time.now())
 },100)
@@ -270,13 +272,15 @@ onConfigChange('userlon', async (value) => {
 window.ws.onStatus((data) => {
 	console.log(data)
 	let status = data.status;
-	if(status == "online"){
-		document.getElementById("websocket_status").innerHTML = "正常";
-		document.getElementById("websocket_status").style.color = "green";
-	}else{
+	if(status != "online"){
 		document.getElementById("websocket_status").innerHTML = "離線";
 		document.getElementById("websocket_status").style.color = "red";
 	}
+})
+window.ws.onPing((data) => {
+	let ping = data.ping;
+	document.getElementById("websocket_status").innerHTML = ping.toString() + "ms";
+	document.getElementById("websocket_status").style.color = "green";
 })
 
 //ws events
@@ -284,15 +288,38 @@ if (!window.ws) {
     console.error('window.ws not available');
 }
 window.ws.onEEWTW(async (data) => {
-	if(await window.config.get("enable_eew_tw")){
+	const [enable, now] = await Promise.all([
+		window.config.get("enable_eew_tw"),
+		window.time.now()
+	])
+	if(enable && (now - data.time) < 180000){
 		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
 });
-window.eq.onEEWsim((data) => {
-	EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+window.ws.onEEWJP(async (data) => {
+	const [enable, now] = await Promise.all([
+		window.config.get("enable_eew_jp"),
+		window.time.now()
+	])
+	if(enable && (now - data.time) < 180000){
+		EEWJPmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	}
+});
+window.eq.onEEWsim(async (data) => {
+	const [enable, now] = await Promise.all([
+		window.config.get("enable_eew_tw"),
+		window.time.now()
+	])
+	if((now - data.time) < 180000){
+		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	}
 })
 window.ws.onRFPLUS3(async (data) => {
-	if(await window.config.get("enable_RFPLUS")){
+	const [enable, now] = await Promise.all([
+		window.config.get("enable_RFPLUS"),
+		window.time.now()
+	])
+	if(enable && (now - data.time) < 180000){
 		RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
     
