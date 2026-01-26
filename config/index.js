@@ -46,11 +46,20 @@ function backupConfig() {
     fs.copyFileSync(sourcePath, destinationPath);
     console.log('File copied to config_backup.json successfully.');
 }
+
+function get(key) {
+    const value = storage.getItem(key);
+
+    if (value === "true") return true;
+    if (value === "false") return false;
+
+    return value;
+}
 module.exports = {
     applyDefaults,
     repairIfBroken,
     backupConfig,
-    get: storage.getItem,
+    get: get,
     set: storage.setItem,
     config: config.getConfig
 };
