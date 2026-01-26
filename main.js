@@ -246,9 +246,6 @@ app.whenReady().then(async () => {
     // 建立視窗
     await createWindow()
 
-    //開啟websocket
-    services = await bootServices();
-
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
@@ -306,6 +303,10 @@ app.on('before-quit', () => app.quitting = true)
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
+
+ipcMain.once('renderer:ready', async () => {
+  services = await bootServices();
+});
 
 ipcMain.handle('auth:setVerifyKey', (_, key) => {
   services.setVerifyKey?.(key);
@@ -370,5 +371,3 @@ if (process.platform === 'win32')
 {
     app.setAppUserModelId(app.name);
 }
-
-/*----------檢查更新----------*/

@@ -44,8 +44,10 @@ contextBridge.exposeInMainWorld('ws', {
         ipcRenderer.on('event:weather:typhoon', (_, d) => cb(d));
     },
     onReport: (cb) => {
-        console.log("[preload] sending report")
-        ipcRenderer.on('event:eq:report', (_, d) => cb(d))
+        ipcRenderer.on('event:eq:report', (_, d) => {
+          cb(d);
+          console.log("[preload] sending report");
+        })
     }
         
 });
@@ -130,5 +132,11 @@ contextBridge.exposeInMainWorld('webhook', {
 contextBridge.exposeInMainWorld('notify', {
   send: (title, content, iconpath) => {
     ipcRenderer.invoke('notify:send', title, content, iconpath);
+  }
+})
+
+contextBridge.exposeInMainWorld('renderer', {
+  ready: () => {
+    ipcRenderer.send('renderer:ready');
   }
 })

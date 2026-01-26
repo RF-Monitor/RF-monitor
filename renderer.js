@@ -475,4 +475,6 @@ window.update.onStatus(({status, ver}) => {
 	}
 })
 
+window.renderer.ready();
+
 
