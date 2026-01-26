@@ -5,7 +5,7 @@ let heartbeatTimer = null;
 let lastPongTime = 0;
 
 const HEARTBEAT_INTERVAL = 5000;   // 每 5 秒檢查一次
-const HEARTBEAT_TIMEOUT  = 10000;  // 10 秒沒 pong  視為斷線
+const HEARTBEAT_TIMEOUT  = 3000;  // 3 秒沒 pong  視為斷線
 
 let socket = null;
 let verifyKey = '';
@@ -35,29 +35,38 @@ function startHeartbeat() {
   stopHeartbeat(); // 確保不疊加
 
   heartbeatTimer = setInterval(() => {
-    if (!socket) return;
+    if (!socket || socket.readyState !== WebSocket.OPEN) return;
 
-    const now = Date.now();
+    const pingTime = Date.now();
+    let timeoutTimer = null;
 
-    // 超時 → 強制判定斷線
-    if (now - lastPongTime > HEARTBEAT_TIMEOUT) {
-      console.warn('[WS] heartbeat timeout, force terminate');
+    const onPong = () => {
+      clearTimeout(timeoutTimer);
+      lastPongTime = Date.now();
+      //console.log('[WS] pong received, rtt =', lastPongTime - pingTime);
+      sendState?.('ws:ping', { ping: lastPongTime - pingTime });
+    };
 
-      // 這一行是關鍵：一定會觸發 close
-      socket.terminate();
-      return;
-    }
+    try {
+      // 只等待「下一個」pong
+      socket.once('pong', onPong);
 
-    // 正常狀態下送 ping
-    if (socket.readyState === WebSocket.OPEN) {
-      try {
-        socket.ping();
-      } catch (e) {
-        console.error('[WS ping failed]', e.message);
-      }
+      // 發送 ping
+      socket.ping();
+
+      // pong 超時判定
+      timeoutTimer = setTimeout(() => {
+        socket.off('pong', onPong);
+        console.warn('[WS] pong timeout, force terminate');
+        socket.terminate();
+      }, HEARTBEAT_TIMEOUT);
+
+    } catch (err) {
+      console.error('[WS ping error]', err.message);
     }
   }, HEARTBEAT_INTERVAL);
 }
+
 
 function stopHeartbeat() {
   if (heartbeatTimer) {
