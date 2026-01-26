@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('ws', {
         }
       ) 
     },
+    onPing: (cb) => {
+        ipcRenderer.on('state:ws:ping', (_, d) => cb(d))
+    },
     onPGA: (cb) =>{
         console.log("[preload] sending PGA");
         ipcRenderer.on('event:pga', (_, d) => cb(d))
@@ -15,6 +18,10 @@ contextBridge.exposeInMainWorld('ws', {
     onEEWTW: (cb) =>{
         console.log("[preload] sending EEWTW");
         ipcRenderer.on('event:eew:tw', (_, d) => cb(d))
+    },
+    onEEWJP: (cb) =>{
+        console.log("[preload] sending EEWJP");
+        ipcRenderer.on('event:eew:jp', (_, d) => cb(d))
     },
     onRFPLUS2: (cb) =>{
         console.log("[preload] sending RFPLUS");
