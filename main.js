@@ -337,7 +337,10 @@ ipcMain.handle('notify:send', (_, title, content, iconpath) => {
       icon: path.join(__dirname, iconpath)
     }).show();
   }
-  
+})
+
+ipcMain.on('showMain',() => {//顯示主視窗
+    win.show()
 })
 
 ipcMain.on('showSetting',() => {//顯示設定視窗
@@ -357,9 +360,7 @@ ipcMain.on('restart',() => {//重新啟動
     app.relaunch();
     app.exit();
 })
-ipcMain.on('showMain',() => {//顯示主視窗
-    win.show()
-})
+
 ipcMain.on('EEWsim_submit', (event, data) => {
   console.log(data)
   win.webContents.send('EEWsim', data);
