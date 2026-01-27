@@ -109,6 +109,8 @@ contextBridge.exposeInMainWorld('auth', {
 });
 
 contextBridge.exposeInMainWorld('windowControl', {
+  showMain: () => 
+    ipcRenderer.send('showMain'),
   showSetting: () =>
     ipcRenderer.send('showSetting'),
 
@@ -138,5 +140,10 @@ contextBridge.exposeInMainWorld('notify', {
 contextBridge.exposeInMainWorld('renderer', {
   ready: () => {
     ipcRenderer.send('renderer:ready');
+  }
+})
+contextBridge.exposeInMainWorld('system', {
+  restart: () => {
+    ipcRenderer.send('restart');
   }
 })
