@@ -159,13 +159,16 @@ for (let i = 0; i < country_list.length; i++) {
 
 // managers
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
-	onNewAlert: (alert) => {
+	onNewAlert:async (alert) => {
 		Flasher.stop();
 		window.notify.send(
 			"中央氣象署地震速報",
 			`預計震度${formatShindoTitle(alert.localshindo)}，規模${alert.scale}`,
 			`shindo_icon/selected/${alert.localshindo}.png`
 		)
+		if(await window.config.get("enable_window_popup")){
+			window.windowControl.showMain();
+		}
 	},
 	
 	onAlertEnd: () => {
@@ -181,13 +184,16 @@ setInterval(async () => {
 	EEWTWmanager.tick(await window.time.now())
 },100)
 let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L,{
-	onNewAlert: (alert) => {
+	onNewAlert: async (alert) => {
 		Flasher.stop();
 		window.notify.send(
 			"參與式進階地震預警(RFPLUS)",
 			`預計震度${formatShindoTitle(alert.localshindo)}，規模${alert.scale}`,
 			`shindo_icon/selected/${alert.localshindo}.png`
 		)
+		if(await window.config.get("enable_window_popup")){
+			window.windowControl.showMain();
+		}
 	},
 	onAlertEnd: () => {
 		if(EEWTWmanager.hasAlert() || RFPLUSmanager.hasAlert()){
