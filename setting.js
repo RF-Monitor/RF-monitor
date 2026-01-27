@@ -58,6 +58,10 @@ window.auth.onResult(async ({ status }) => {
 document.getElementById("logout").addEventListener("click", async () => {
     await window.auth.logout()
 })
+
+document.getElementById("restart").addEventListener("click", () => {
+    window.system.restart();
+})
 // 載入設定值
 const config = await window.config.getAll();
 
