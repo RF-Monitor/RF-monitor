@@ -367,7 +367,7 @@ setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data2),1000
 
 window.ws.onPGA(async (data) => {
 	const [enable, now, selected] = await Promise.all([
-		window.config.get("enable_shindo"),
+		window.config.get("enable_PGA"),
 		window.time.now(),
 		window.config.get("selected_station")
 	]);
