@@ -24,7 +24,7 @@
 		<h1 id="loading_text" style="text-align: center;color: white;"><span id="loading_text"></span></p>
 	</div>
 	
-	<nav class="navbar">
+	<nav id="navbar" class="navbar">
 		<div onclick='' id="nav_eew" class="navitem">
 			<h5 align="center" class="lang_CNT" style="color: white;margin-bottom: 0;">地震即時資訊</h5>
 			<h5 align="center" class="lang_JP" style="color: white;margin-bottom: 0;">緊急地震速報</h5>
@@ -60,7 +60,7 @@
 	</nav>
 
 	<div id="page1" class='page' style="height: 100%;">
-		<div class='left'>
+		<div id="left" class='left'>
 			<!--地震速報-->
 			<!---
 			<div class="eew_jp">
@@ -179,7 +179,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="max_shindo">
+		<div id="max_shindo" class="max_shindo">
 			<h6 class="lang_CNT" align="center" style="color: white;">最大震度</h6>
 			<h6 class="lang_ENG" align="center" style="color: white;">max int.</h6>
 			<h6 class="lang_CNS" align="center" style="color: white;">最大震度</h6>
@@ -194,7 +194,7 @@
 			<!--<h6>p2p連線:<span id="p2p_status" style="color: green;">正常</span></h6>-->
 		</div>
 		<!--常駐測站-->
-		<div class="selected">
+		<div id="selected" class="selected">
 			<div class="selected_inside">
 				<div class="selected_inside_info">
 					<div class="selected_info_pga" style="margin-right:5px">
@@ -260,7 +260,7 @@
 			<div id='map_shakingArea' class="map_shakingArea"></div>
 		</div>
 
-		<div class="sta_count">
+		<div id="sta_count" class="sta_count">
 			<div style="display: flex;flex-direction: row;flex-wrap: nowrap;">
 				<h6 class="lang_CNT" align="center" style="color:white;margin: 3px;">測站數:</h6>
 				<h6 class="lang_ENG" align="center" style="color:white;margin: 3px;">stations:</h6>
@@ -272,7 +272,7 @@
 		</div>
 		<!--<button class="btn_setting" id="setting" style="border-radius:5px">設定</button>
 		<button class="btn_join" id="join" style="border-radius:5px">加入地震觀測計畫</button>-->
-		<div class="time_now">
+		<div id="time_now" class="time_now">
 			<h6 align="center" style="color:white;margin: 3px;"><span style="color:white;" id= "nowDiv"; > </span> </h6>
 		</div>
 		<!--登入頁面-->
