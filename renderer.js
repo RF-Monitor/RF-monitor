@@ -6,7 +6,7 @@ import { pgaManager, Flasher } from './renderer/pga.js';
 import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
-import { switchPage } from './renderer/ui.js';
+import { switchPage, setUIopacity } from './renderer/ui.js';
 import { formatShindoTitle, shindo2float } from './renderer/utils/shindo.js';
 import { emitConfigChange, onConfigChange } from './renderer/utils/configWatcher.js';
 function showLogin(){
@@ -251,6 +251,7 @@ let tsunamiManager = new TsunamiManager({
 
 let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
 
+// common map
 class CommonMapRenderer{
 	constructor(map, leaflet){
 		this.map = map;
@@ -262,7 +263,6 @@ class CommonMapRenderer{
 	}
 }
 
-
 const commonMapRenderer = new CommonMapRenderer(map, L);
 commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
 onConfigChange('userlat', async (value) => {
@@ -273,6 +273,7 @@ onConfigChange('userlon', async (value) => {
 	let cfg = await window.config.getAll();
 	commonMapRenderer.setHomeLatLon([cfg.user.lat, cfg.user.lon]);
 })
+
 
 //ws status
 window.ws.onStatus((data) => {
@@ -426,6 +427,11 @@ document.getElementById("login_btn").addEventListener("click", () => {
 	let username = document.getElementById("email").value;
 	let password = document.getElementById("password").value;
 	login(username, password);
+})
+
+setUIopacity(cfg.system.opacity)
+onConfigChange("opacity", async (value) => {
+	setUIopacity(value);
 })
 
 //時間
