@@ -216,38 +216,12 @@
 						<p style='font-size: 22px;'>顯示RF-sensor即時測站</p>
 					</label>
 					<br>
-					<input class="maincheckbox" type="checkbox" value="" id="PGA_warn_only" name="PGA_warn_only">
-					<label for="PGA_warn_only">
-						<p style='font-size: 22px;'>僅在震動檢測時顯示震度</p>
-					</label>
-					<br>
 					<input class="maincheckbox" type="checkbox" value="" id="enable_warningArea" name="enable_warningArea">
 					<label for="enable_warningArea">
 						<p style='font-size: 22px;margin-bottom: 1px;'> 震動檢測時，測站點會以震度顏色將測站顯眼標記</p>
 					</label>
 					<br>
 					<h6 style="margin-bottom: 30px;">標記方式為以測站為圓心，在地圖上半徑20公里內閃爍震度顏色</h6>
-					<input style="margin-bottom: 1px;" class="maincheckbox" type="checkbox" value="" id="local_only" name="local_only">
-					<label for="local_only">
-						<p style='font-size: 22px;margin-bottom: 1px;'> RF-sensor即時測站本地模式</p>
-					</label>
-					<br>
-					<h6>開啟此選項後，RF-sensor即時測站的音效將只取決於鄰近您20公里內的測站</h6>
-					<h6>若關閉此選項，即時測站的音效將取決於全台灣偵測到的最大震度</h6>
-					<input style="display: none;" class="maincheckbox" type="checkbox" value="" id="enable_PGA_TREM" name="enable_PGA_TREM" disabled>
-					<label  style='margin-bottom: 0px;' for="enable_PGA_TREM">
-						<p style='display: none;font-size: 22px;margin-bottom: 1px;'>顯示TREM即時測站</p>
-					</label>
-					<br>
-					<div style="display: none;">
-						<h6>TREM測站僅在震度大於3時顯示震度</h6>
-						<label for="station_select">RF-sensor即時測站顯示模式</label>
-						<select style="display: none;" name="station_select" id="station_select">
-							<option value="shindo" id="station_select_shindo">震度</option>
-							<option value="pga" id="station_select_pga">原始加速度</option>
-						</select>
-						<br>
-					</div>
 					<hr/>
 					<h4>天氣警特報</h4>
 					<input class="maincheckbox" type="checkbox" value="" id="enable_weather" name="enableㄧ˙_weather">

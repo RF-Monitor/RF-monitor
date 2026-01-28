@@ -102,12 +102,14 @@ if(config.weather.typhoon.analysis){
 if(config.shindo.enabled){
     document.getElementById("enable_PGA").checked = true;
 }
+/*
 if(config.shindo.pgaWarnOnly){
     document.getElementById("PGA_warn_only").checked = true;
 }
 if(config.user.localOnly){
     document.getElementById("local_only").checked = true;
 }
+    */
 if(config.shindo.warningArea){
     document.getElementById("enable_warningArea").checked = true;
 }
