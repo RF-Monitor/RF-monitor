@@ -15,3 +15,13 @@ export function switchPage(pageid, map, map2, map3){
     map3.panTo([23.7, 120.924610])
     map3.invalidateSize(true);   
 }
+
+export function setUIopacity(opacity){
+    document.getElementById("navbar").style.opacity = opacity;
+    document.getElementById("left").style.opacity = opacity;
+    document.getElementById("max_shindo").style.opacity = opacity;
+    document.getElementById("selected").style.opacity = opacity;
+    document.getElementById("sta_count").style.opacity = opacity;
+    document.getElementById("time_now").style.opacity = opacity;
+
+}
