@@ -182,9 +182,6 @@ if(config.system.opacity != null){
 }
 document.getElementById("webhook_url_shindo_sokuho").value = config.webhook.shindo.url;
 document.getElementById("webhook_header_shindo_sokuho").value = config.webhook.shindo.header;
-document.getElementById("webhook_url_TW_EEW").value = config.webhook.twEEW.url;
-document.getElementById("webhook_text_TW_EEW").value = config.webhook.twEEW.text;
-
 await bindAutoSave();
 
 /*
