@@ -157,7 +157,7 @@ for (let i = 0; i < country_list.length; i++) {
 	var typhoon_layer = L.layerGroup().addTo(map3);
 	var distributedLayer = L.layerGroup();
 
-// managers
+// ----- managers ----- //
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
 	onNewAlert:async (alert) => {
 		Flasher.stop();
@@ -183,6 +183,8 @@ let EEWJPmanager = new EEWJPManager(map,locations,town_ID_list,town_line,L,{});
 setInterval(async () => {
 	EEWTWmanager.tick(await window.time.now())
 },100)
+
+// RFPLUS manager
 let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L,{
 	onNewAlert: async (alert) => {
 		Flasher.stop();
@@ -206,15 +208,17 @@ let RFPLUSmanager = new RFPLUSManager(map,locations,town_ID_list,town_line,L,{
 setInterval(async () => {
 	RFPLUSmanager.tick(await window.time.now())
 },100)
+
+// PGA manager
 let PGAmanager = new pgaManager(map, L, {
 	onStationSelect: (name) => {
         window.config.set("selected_station", name);
         // 或之後改成：
         // window.api.stationSelected(name)
     },
-	onShindoReport: (values) => {
-		let url = window.config.get("webhook_url_shindo_sokuho");
-		let header =  window.config.get("webhook_header_shindo_sokuho");
+	onShindoReport: async (values) => {
+		let url = await window.config.get("webhook_url_shindo_sokuho");
+		let header =  await window.config.get("webhook_header_shindo_sokuho");
 		let text = `>>> # ${header}\n`;
 		const shindoGroups = new Map();
 		for (const station of values) {
@@ -241,14 +245,28 @@ let PGAmanager = new pgaManager(map, L, {
 		window.webhook.send(url, text);
 	}
 });
-/*
-*/
+if(await window.config.get("enable_warningArea")){
+	Flasher.start();
+}else{
+	Flasher.stop();
+}
+onConfigChange("enable_warningArea", async (value) => {
+	if(value){
+		Flasher.start();
+	}else{
+		Flasher.stop();
+	}
+})
+
+// report renderer
 mapRendererInitialize(map2, L);
 
+// tsunami manager
 let tsunamiManager = new TsunamiManager({
 	openExternal: (url) => shell.openExternal(url)
 });
 
+// weather manager
 let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
 
 // common map
