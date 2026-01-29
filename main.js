@@ -322,6 +322,9 @@ ipcMain.handle('config:get', (_, key) => {
 ipcMain.handle('config:set', (_, key, value) => {
   console.log("[main] setting config",key ,value)
   config.set(key, value);
+  // 僅轉換明確的字串布林值
+  if (value === 'true') value = true;
+  else if (value === 'false') value = false;
   broadcastEvent?.('event:config:update', {
     key,
     value
