@@ -2,6 +2,11 @@
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    overflow: hidden;
 }
 
 .eew_jp_title_box {
