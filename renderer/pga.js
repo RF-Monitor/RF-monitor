@@ -15,9 +15,11 @@ export const Flasher = {
 	},
     start(){
         this.flashControl = true;
+        console.log("[PGA]Flasher start");
     },
     stop(){
-        this.flashControl = false
+        this.flashControl = false;
+        console.log("[PGA]Flasher stop");
     },
     subscribe(fn){
         this.listeners.add(fn);
