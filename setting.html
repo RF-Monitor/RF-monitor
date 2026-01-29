@@ -340,7 +340,7 @@
 		</div>
 		<div class="container tab-pane" id="sync">
 			<div style="margin-left: 50px;">
-				<h3>Webhook</h3>
+				<h3>Discord Webhook</h3>
 				<label for="webhook_url_shindo_sokuho">
 					<p style='font-size: 22px;margin-bottom: 0;'>震度速報webhook連結</p>
 				</label>
@@ -348,26 +348,8 @@
 				<br>
 				<p style='font-size: 22px;'>震度速報標頭(顯示於震度速報內文前面)</p>
 				<textarea id="webhook_header_shindo_sokuho" style="width: 300px;height: 100px;"></textarea>
-				<h6 style='margin-bottom: 10px;'>震度速報會於RF區域警報震度顯示結束後發送</h6>
+				<h6 style='margin-bottom: 10px;'>震度速報會於地震結束後發送</h6>
 				<hr>
-				<label for="webhook_url_TW_EEW">
-					<p style='font-size: 22px;'>臺灣EEW webhook連結</p>
-				</label>
-				<input type="text" id="webhook_url_TW_EEW" style="width: 300px;">
-				<p style='font-size: 22px;'>臺灣EEW webhook內容</p>
-				<div style="display: flex;flex-wrap: nowrap;">
-					<textarea id="webhook_text_TW_EEW" style="width: 300px;height: 200px;"></textarea>
-					<div>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%N = 第N報</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%T = 時間</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%L = 震央</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%M = 規模</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%D = 深度</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%I = 最大震度</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%LAT = 緯度</p>
-						<p style='font-size: 12px;margin-bottom: 3px;'>%LON = 經度</p>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="container tab-pane" id="others">
