@@ -13,13 +13,13 @@ class EEWTWManager {
         this.onAlertEnd = onAlertEnd;
     }
 
-    handleAlert(userlat, userlon, alert) {
+    handleAlert(userlat, userlon, alert, {enableAudio} = {}) {
         if (!this.instances.has(alert.id)) {
             this.instances.set(alert.id, new EEWTW(alert, new EEWTWMapRenderer(this.map,this.locations,this.town_ID_list,this.town_line,this.leaflet), new EEWTWUI));
-            alert = this.instances.get(alert.id).handleNew(userlat, userlon, alert);
+            alert = this.instances.get(alert.id).handleNew(userlat, userlon, alert, {enableAudio});
             this.onNewAlert?.(alert);
         }else{
-            alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert);
+            alert = this.instances.get(alert.id).handleUpdate(userlat, userlon, alert, {enableAudio});
             this.onAlertUpdate?.(alert);
         }
         
@@ -56,7 +56,7 @@ class EEWTW {
         this.report_num = 0;
     }
 
-    handleNew(userlat, userlon, alert) {
+    handleNew(userlat, userlon, alert, {enableAudio} = {}) {
         this.alert = alert;
         //添加假想震央icon //初始化震波圓
         this.renderer.initAlert(this.alert);
@@ -72,12 +72,14 @@ class EEWTW {
         this.ui.init(this.alert);
 
         //播放音效
-        this.audio.init(this.alert);
-
+        if(enableAudio){
+            this.audio.init(this.alert);
+        }
+        
         return this.alert;
     }
 
-    handleUpdate(userlat, userlon, alert) {
+    handleUpdate(userlat, userlon, alert, {enableAudio} = {}) {
         this.alert = alert
         //更新假想震央icon//更新震波圓位置
         this.renderer.updateCenter(this.alert);
@@ -93,7 +95,9 @@ class EEWTW {
         this.ui.update(this.alert);
 
         //播放音效
-        this.audio.update(this.alert);
+        if(enableAudio){
+            this.audio.init(this.alert);
+        }
 
         return this.alert;
     }
