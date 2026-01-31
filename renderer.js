@@ -313,12 +313,13 @@ if (!window.ws) {
     console.error('window.ws not available');
 }
 window.ws.onEEWTW(async (data) => {
-	const [enable, now] = await Promise.all([
+	const [enable, enableAudio, now] = await Promise.all([
 		window.config.get("enable_eew_tw"),
+		window.config.get("enable_tw_eew_sound"),
 		window.time.now()
 	])
 	if(enable && (now - data.time) < 180000){
-		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data, {enableAudio});
 	}
 });
 window.ws.onEEWJP(async (data) => {
@@ -331,12 +332,13 @@ window.ws.onEEWJP(async (data) => {
 	}
 });
 window.eq.onEEWsim(async (data) => {
-	const [enable, now] = await Promise.all([
+	const [enable, enableAudio, now] = await Promise.all([
 		window.config.get("enable_eew_tw"),
+		window.config.get("enable_tw_eew_sound"),
 		window.time.now()
 	])
-	if((now - data.time) < 180000){
-		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
+	if(enable && (now - data.time) < 180000){
+		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data, {enableAudio});
 	}
 })
 window.ws.onRFPLUS3(async (data) => {
