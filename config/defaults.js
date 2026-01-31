@@ -37,8 +37,8 @@ function applyDefaults(){
     if(storage.getItem('enable_tsunami')  === ""){
     storage.setItem('enable_tsunami',"true")
     }
-    if(storage.getItem('enable_shindo')   === ""){
-    storage.setItem('enable_shindo',"true")
+    if(storage.getItem('enable_PGA')   === ""){
+    storage.setItem('enable_PGA',"true")
     }
     if(storage.getItem('PGA_warn_only')   === ""){
     storage.setItem('PGA_warn_only',"true")
