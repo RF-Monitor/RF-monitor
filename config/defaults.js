@@ -66,32 +66,8 @@ function applyDefaults(){
     if(storage.getItem('enable_eew_tw_read')  === ""){
     storage.setItem('enable_eew_tw_read',"true")
     }
-    if(storage.getItem('enable_shindo_sounds_1')  === ""){
-    storage.setItem('enable_shindo_sounds_1',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_2')  === ""){
-    storage.setItem('enable_shindo_sounds_2',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_3')  === ""){
-    storage.setItem('enable_shindo_sounds_3',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_4')  === ""){
-    storage.setItem('enable_shindo_sounds_4',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_5-')  === ""){
-    storage.setItem('enable_shindo_sounds_5-',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_5+') === ""){
-    storage.setItem('enable_shindo_sounds_5+',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_6-') === ""){
-    storage.setItem('enable_shindo_sounds_6-',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_6+') === ""){
-    storage.setItem('enable_shindo_sounds_6+',"true")
-    }
-    if(storage.getItem('enable_shindo_sounds_7') === ""){
-    storage.setItem('enable_shindo_sounds_7',"true")
+    if(storage.getItem('shindo_threshold')  === ""){
+    storage.setItem('shindo_threshold',"0")
     }
     /////////
 

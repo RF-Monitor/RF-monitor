@@ -289,51 +289,20 @@
 				<h6>音效設定完成後，可利用即時資訊->地震速報模擬進行音效測試</h6>
 				<hr/>
 				<h4>即時測站震度音效</h4>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_1" name="enable_shindo_sounds_1">
-				<label for="enable_shindo_sounds_1" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度1</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_2" name="enable_shindo_sounds_2">
-				<label for="enable_shindo_sounds_2" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度2</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_3" name="enable_shindo_sounds_3">
-				<label for="enable_shindo_sounds_3" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度3</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_4" name="enable_shindo_sounds_4">
-				<label for="enable_shindo_sounds_4" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度4</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_5-" name="enable_shindo_sounds_5-">
-				<label for="enable_shindo_sounds_5-" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度5弱</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_5+" name="enable_shindo_sounds_5+">
-				<label for="enable_shindo_sounds_5+" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度5強</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_6-" name="enable_shindo_sounds_6-">
-				<label for="enable_shindo_sounds_6-" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度6弱</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_6+" name="enable_shindo_sounds_6+">
-				<label for="enable_shindo_sounds_6+" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度6強</p>
-				</label>
-				<br>
-				<input class="smallcheckbox" type="checkbox" value="" id="enable_shindo_sounds_7" name="enable_shindo_sounds_7">
-				<label for="enable_shindo_sounds_7" style="margin-bottom:1px">
-					<p style='font-size: 20px;margin-bottom:1px'>震度7</p>
-				</label>
-				<br>
+				
+				<p style='font-size: 22px;'>震度音效播放最小震度</p>
+				<select id="shindo_threshold">
+					<option value="0">全部</option>
+					<option value="1">1級</option>
+					<option value="2">2級</option>
+					<option value="3">3級</option>
+					<option value="4">4級</option>
+					<option value="5-">5弱</option>
+					<option value="5+">5強</option>
+					<option value="6-">6弱</option>
+					<option value="6+">6強</option>
+					<option value="7">7級</option>
+				</select>
 				<hr/>
 				
 			</div>

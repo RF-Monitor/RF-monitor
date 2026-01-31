@@ -83,17 +83,7 @@ function getConfig(){
       twEEW: getBool('enable_tw_eew_sound', true),
       jpEEW: getBool('enable_jp_eew_sound', false),
       twRead: getBool('enable_eew_tw_read', true),
-      shindo: {
-        1: getBool('enable_shindo_sounds_1', true),
-        2: getBool('enable_shindo_sounds_2', true),
-        3: getBool('enable_shindo_sounds_3', true),
-        4: getBool('enable_shindo_sounds_4', true),
-        '5-': getBool('enable_shindo_sounds_5-', true),
-        '5+': getBool('enable_shindo_sounds_5+', true),
-        '6-': getBool('enable_shindo_sounds_6-', true),
-        '6+': getBool('enable_shindo_sounds_6+', true),
-        7: getBool('enable_shindo_sounds_7', true)
-      }
+      shindoThreshold: getString('shindo_threshold', "0")
     },
 
     webhook: {

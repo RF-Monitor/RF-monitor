@@ -126,33 +126,7 @@ if(config.sound.twEEW){
 if(config.sound.jpEEW){
     document.getElementById("enable_jp_eew_sound").checked = true;
 }
-if(config.sound.shindo["1"]){
-    document.getElementById("enable_shindo_sounds_1").checked = true;
-}
-if(config.sound.shindo["2"]){
-    document.getElementById("enable_shindo_sounds_2").checked = true;
-}
-if(config.sound.shindo["3"]){
-    document.getElementById("enable_shindo_sounds_3").checked = true;
-}
-if(config.sound.shindo["4"]){
-    document.getElementById("enable_shindo_sounds_4").checked = true;
-}
-if(config.sound.shindo["5-"]){
-    document.getElementById("enable_shindo_sounds_5-").checked = true;
-}
-if(config.sound.shindo["5+"]){
-    document.getElementById("enable_shindo_sounds_5+").checked = true;
-}
-if(config.sound.shindo["6-"]){
-    document.getElementById("enable_shindo_sounds_6-").checked = true;
-}
-if(config.sound.shindo["6+"]){
-    document.getElementById("enable_shindo_sounds_6+").checked = true;
-}
-if(config.sound.shindo["7"]){
-    document.getElementById("enable_shindo_sounds_7").checked = true;
-}
+document.getElementById("shindo_threshold").value = config.sound.shindoThreshold;
 ///////////////////////////////
 /*
 if(enable_shindo_TREM != "false"){
