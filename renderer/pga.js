@@ -139,6 +139,13 @@ export class pgaManager{
             }
         }
     }
+
+    setShindoThreshold(shindo){
+        if(shindo){
+            this.ui.shindoAudioThreshold = shindo;
+            console.log("[PGA]shindo threshold set ",shindo)
+        }
+    }
 }
 
 class Station{
@@ -298,6 +305,7 @@ class pgaUI{
             "6+": new Audio("./audio/tw/shindo/6+.mp3"),
             "7": new Audio("./audio/tw/shindo/7.mp3")
         }
+        this.shindoAudioThreshold = "0";
     }
 
     update(pga, selected, now){
@@ -355,7 +363,9 @@ class pgaUI{
 
         //最大震度音效(當最大震度上升時)
         if(this.shindo2float(maxShindo) > this.shindo2float(this.maxShindo) && shakealert){
-            this.shindoAudio[maxShindo].play();
+            if(this.shindo2float(maxShindo) >= this.shindo2float(this.shindoAudioThreshold)){
+                this.shindoAudio[maxShindo].play();
+            }
         }
         this.maxShindo = maxShindo;
 

@@ -245,6 +245,10 @@ let PGAmanager = new pgaManager(map, L, {
 		window.webhook.send(url, text);
 	}
 });
+PGAmanager.setShindoThreshold(await window.config.get("shindo_threshold"));
+onConfigChange("shindo_threshold", async (value) => {
+	PGAmanager.setShindoThreshold(value);
+})
 if(await window.config.get("enable_warningArea")){
 	Flasher.start();
 }else{
