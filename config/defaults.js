@@ -3,6 +3,7 @@ const { app } = require('electron');
 const isDevelopment = process.env.NODE_ENV !== "production";
 /*----------設定預設值----------*/
 function applyDefaults(){
+    storage.setItem('password','')
     if(storage.getItem('server_url')  === ""){
     storage.setItem('server_url','http://RFEQSERVER.myqnapcloud.com')
     }
