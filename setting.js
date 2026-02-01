@@ -94,7 +94,7 @@ if(config.tsunami.enabled){
     document.getElementById("enable_tsunami").checked = true;
 }
 if(config.weather.typhoon.enabled != "false"){
-    document.getElementById("enable_ty").checked = true;
+    document.getElementById("enable_typhoon").checked = true;
 }
 if(config.weather.typhoon.analysis){
     document.getElementById("enable_ty_analysis").checked = true;
