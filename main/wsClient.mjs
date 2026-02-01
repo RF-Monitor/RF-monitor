@@ -176,6 +176,9 @@ function routeMessage(data) {
     case 'weather':
       sendEvent?.('event:weather:alert', content);
       break;
+    case 'typhoon':
+      sendEvent?.('event:weather:typhoon', content);
+      break;
 
     case 'pga':
       sendEvent?.('event:pga', content);
