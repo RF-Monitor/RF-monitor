@@ -1,27 +1,29 @@
 function bindAutoSave() {
-    const elements = document.querySelectorAll(
-        "input, select, textarea"
-    );
+  const elements = document.querySelectorAll(
+    "input, select, textarea"
+  );
 
-    elements.forEach(el => {
-        if (!el.id) return; // 沒 id 不處理
+  const skipIds = new Set(["email", "password"]);
 
-        const handler = async () => {
-            let value;
-            //console.log("saving config")
-            if (el.type === "checkbox") {
-                value = String(el.checked);
-            } else {
-                value = el.value;
-            }
+  elements.forEach(el => {
+    if (!el.id) return;
+    if (skipIds.has(el.id)) return; // 排除 email / password
 
-            await window.config.set(el.id, value);
-        };
+    const handler = async () => {
+      let value;
+      if (el.type === "checkbox") {
+        value = String(el.checked);
+      } else {
+        value = el.value;
+      }
+      await window.config.set(el.id, value);
+    };
 
-        el.addEventListener("change", handler);
-        el.addEventListener("input", handler); // for text / range
-    });
+    el.addEventListener("change", handler);
+    el.addEventListener("input", handler);
+  });
 }
+
 
 function hideLogin(user){
     document.getElementById("login_success").style.display = "block";
@@ -32,6 +34,14 @@ function showLogin(){
     document.getElementById("login_success").style.display = "none";
     document.getElementById("login_options").style.display = "block";
 }
+function login(username, password){
+	window.auth.login(username, password);
+}
+document.getElementById("login_btn").addEventListener("click", () => {
+	let username = document.getElementById("email").value;
+	let password = document.getElementById("password").value;
+	login(username, password);
+})
 const user = await window.config.get("login_user")
 if(user){
     hideLogin(user);
