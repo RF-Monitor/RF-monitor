@@ -182,6 +182,7 @@ let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
 let EEWJPmanager = new EEWJPManager(map,locations,town_ID_list,town_line,L,{});
 setInterval(async () => {
 	EEWTWmanager.tick(await window.time.now())
+	EEWJPmanager.tick(await window.time.now())
 },100)
 
 // RFPLUS manager
