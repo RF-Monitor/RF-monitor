@@ -272,6 +272,9 @@ let tsunamiManager = new TsunamiManager({
 
 // weather manager
 let weatherManager = new WeatherManager(geojson_list, locations, map3, L);
+onConfigChange("enable_ty_analysis", async (value) => {
+	weatherManager.setEnableTyAnalysis(value)
+})
 
 // common map
 class CommonMapRenderer{
@@ -414,11 +417,10 @@ window.ws.onTsunami(async (data) => {
 });
 
 window.ws.onWeather(async (data) => {
-	weatherManager.updateWeather(data);
+	if(await window.config.get("enable_weather")) weatherManager.updateWeather(data);
 });
 window.ws.onTyphoon(async (data) => {
-	const enableAnalysis = await window.config.get("enable_ty_analysis");
-	weatherManager.updateTyphoon(data, enableAnalysis);
+	if(await window.config.get("enable_typhoon")) weatherManager.updateTyphoon(data);
 });
 
 window.ws.onReport((data) => {
