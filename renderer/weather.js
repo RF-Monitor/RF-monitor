@@ -5,13 +5,19 @@ export class WeatherManager{
         this.map = map;
         this.L = L;
         this.mapRenderer = new WeatherMapRenderer(this.geojson_list, this.locations, this.map, this.L)
+
+		this.enableTyAnalysis = true;
+    	this.lastTyphoonInfo = null;
     }
     updateWeather(data){
         this.mapRenderer.updateWeather(data)
     }
-    updateTyphoon(data){
-
+    updateTyphoon(data,enable_ty_analysis){
+		this.mapRenderer.updateTyphoon(data, enable_ty_analysis);
     }
+	setEnableTyAnalysis(enable) {
+		this.mapRenderer.setEnableTyAnalysis(enable);
+	}
 }
 
 class WeatherMapRenderer{
@@ -60,7 +66,9 @@ class WeatherMapRenderer{
 			}
 		}
     }
-    updateTyphoon(typhooninfo,enable_ty_analysis){
+    updateTyphoon(typhooninfo, enable_ty_analysis = this.enableTyAnalysis){
+		this.lastTyphoonInfo = typhooninfo;
+  		this.enableTyAnalysis = !!enable_ty_analysis;
 		try {
 			this.typhoon_layer.clearLayers();
 
@@ -128,7 +136,7 @@ class WeatherMapRenderer{
 				// ---- 歷史路徑 ----
 				else {
 				popupContent += `<p>${time}</p><p>風速${windspeed}m/s</p><p>陣風${gustspeed}m/s</p>`;
-				if (enable_ty_analysis === "false") radius = 0;
+				if (!this.enableTyAnalysis) radius = 0;
 				}
 
 				const typhoon_circle = this.L.circle([lat, lon], {
@@ -149,4 +157,12 @@ class WeatherMapRenderer{
 			console.error("[typhoon_update] fetch failed:", err);
 		}
     }
+	setEnableTyAnalysis(enable) {
+		this.enableTyAnalysis = !!enable;
+
+		// 若目前有颱風資料，直接重畫
+		if (this.lastTyphoonInfo) {
+			this.updateTyphoon(this.lastTyphoonInfo);
+		}
+	}
 }
