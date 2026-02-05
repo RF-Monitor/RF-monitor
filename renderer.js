@@ -359,10 +359,11 @@ window.ws.onRFPLUS3(async (data) => {
 	}
     
 });
+
 let data = {
                         "id":"1749301625",
                         "type":"RFPLUS3",
-                        "time": 1767460264000,
+                        "time": Date.now(),
                         "center":{
                             "lat":24.818,//float
                             "lon":121.02,///float
@@ -375,17 +376,18 @@ let data = {
                         "final":false
                     }
 					let data2 = {
-                        "id":"888",
-                        "type":"RFPLUS2",
-                        "time": 1767460264000,
+                        "id":"1749301625",
+                        "type":"RFPLUS3",
+                        "time": Date.now(),
                         "center":{
-                            "lat":25.818,//float
-                            "lon":120.02,///float
+                            "lat":24.918,//float
+                            "lon":121.011,///float
                             "cname":"新竹縣竹北市",//float
                             "depth":10
                         },
-                        "rate":5000,
-                        "report_num":1,
+                        "scale":5.123456789,
+                        "rate":0,
+                        "report_num":2,
                         "final":false
                     }
 /*
