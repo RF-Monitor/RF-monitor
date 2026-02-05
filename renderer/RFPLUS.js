@@ -60,7 +60,7 @@ class RFPLUS {
     handleNew(userlat, userlon, alert) {
         this.alert = alert
         //添加假想震央icon //初始化震波圓
-        this.renderer.initAlert(this.alert);
+        //this.renderer.initAlert(this.alert);
 
         //計算本地震度
         const localPGA = this.RFPLUS_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, {
@@ -84,7 +84,7 @@ class RFPLUS {
     handleUpdate(userlat, userlon, alert) {
         this.alert = alert
         //更新假想震央icon//更新震波圓位置
-        this.renderer.updateCenter(this.alert);
+        //this.renderer.updateCenter(this.alert);
         
         //計算本地震度
         const localPGA = this.RFPLUS_localPGA(userlat, userlon, this.alert.center.lat, this.alert.center.lon, {
@@ -206,9 +206,9 @@ class RFPLUSMapRenderer {
     }
 
     updateCenter(alert) {
-        this.center.icon.setLatLng([alert.center.lat, alert.center.lon]);
-        this.center.Pwave.setLatLng([alert.center.lat, alert.center.lon]);
-        this.center.Swave.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.icon?.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.Pwave?.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.Swave?.setLatLng([alert.center.lat, alert.center.lon]);
     }
 
     renderShindo(alert) {
@@ -230,6 +230,7 @@ class RFPLUSMapRenderer {
         for(let i = 0; i < this.country_list.length;i++){
             //----------各鄉鎮市區----------//
             for(var key of Object.keys(this.locations["towns"][this.country_list[i]])){
+                
                 let town_ID = null;
                 let townlat = this.locations["towns"][this.country_list[i]][key][1];
                 let townlon = this.locations["towns"][this.country_list[i]][key][2];
@@ -240,9 +241,10 @@ class RFPLUSMapRenderer {
                         town_ID = this.town_ID_list[j]["TOWNCODE"].toString();
                     }
                 }
+                
                 //計算pga
                 let PGA = 0;
-                if(alert.type == "RFPLUS3"){
+                if(alert.type == "RFPLUS3" || alert.type == "eew-test"){
                     PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],{scale, depth});
                 }else{
                     PGA = this.localPGA(townlat,townlon,center["lat"],center["lon"],{rate});
@@ -251,10 +253,11 @@ class RFPLUSMapRenderer {
                 //確認震度顏色
                 let localshindo = this.PGA2shindo(PGA);
                 let localcolor = this.shindo_color[localshindo];
+                //console.log(localshindo);
                 //加入震度色塊
                 if(localshindo != "0"){
                     let line = this.town_line[town_ID];
-                    //console.log(town_line[[town_ID]])
+                    
                     this.shindoLayer.addLayer(this.L.geoJSON(line, { color:"#5B5B5B",fillColor: localcolor,weight:1,fillOpacity:1,pane:"RFPLUS_shindo_list_layer" }))
                 }
                 //判斷是否是最大震度
@@ -271,8 +274,8 @@ class RFPLUSMapRenderer {
         const P_radius = elapsed * 6;
         const S_radius = elapsed * 3.5;
 
-        this.center.Pwave.setRadius(P_radius);
-        this.center.Swave.setRadius(S_radius);  
+        this.center.Pwave?.setRadius(P_radius);
+        this.center.Swave?.setRadius(S_radius);  
     }
     end(){
         if (this.shindoLayer) {
@@ -361,7 +364,8 @@ class RFPLUSUI {
         const div = document.createElement("div");
         div.className = "RFPLUS";
         div.id = `eew-${alert.id}`;
-        if(alert.type == "RFPLUS3"){
+        if(alert.type == "RFPLUS3" || alert.type == "eew-test"){
+            /*
             div.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
 						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
@@ -389,8 +393,64 @@ class RFPLUSUI {
 							</div>
 						</div>
 					</div>
+            `*/
+            div.innerHTML = `
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+					</div>
+					<div class="RFPLUS_main_box">
+						<div style="width:70px">
+							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
+							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
+						</div>
+						<div style="width:160px;margin-left: 10px">
+							<div>
+								<h4 style='color:white'>
+									${alert.center.cname}
+								</h4>
+								<h6 style='color:white'>
+									${formatTimestamp(alert.time)}
+								</h6>
+							</div>
+
+							<div class="RFPLUS3_maindown">
+								<div class="RFPLUS3_scale"><h4>M-</h4></div>
+								<div class="RFPLUS3_depth"><h4>-KM</span></h4></div>
+							</div>
+						</div>
+					</div>
             `
         }else{
+            div.innerHTML = `
+					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
+						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
+					</div>
+					<div class="RFPLUS_main_box">
+						<div style="width:70px">
+							<h6 class='lang_CNT' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_ENG' align="center" style="margin-bottom: 2px;">max int.</h6>
+							<h6 class='lang_JP' align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<h6 class='lang_CNS'  align="center" style="margin-bottom: 2px;">最大震度</h6>
+							<img id="RFPLUS3_maxshindo" style="width:70px" src="shindo_icon/selected/${alert.max_shindo}.png">
+						</div>
+						<div style="width:160px;margin-left: 10px">
+							<div>
+								<h4 style='color:white'>
+									${alert.center.cname}
+								</h4>
+								<h6 style='color:white'>
+									${formatTimestamp(alert.time)}
+								</h6>
+							</div>
+							<div class="RFPLUS3_maindown">
+								<h4>無震央參數</h4>
+							</div>
+						</div>
+					</div>
+            `
             div.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
 						<h4 style='color:white;background-color: orange;'>RFPLUS警報(第${alert.report_num}報)</h4>
@@ -426,8 +486,8 @@ class RFPLUSUI {
     }
     update(alert) {
         if (!this.dom) this.init(alert);
-        if(alert.type == "RFPLUS3"){
-            div.innerHTML = `
+        if(alert.type == "RFPLUS3" || alert.type == "eew-test"){
+            this.dom.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
 						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
@@ -456,7 +516,7 @@ class RFPLUSUI {
 					</div>
             `
         }else{
-            div.innerHTML = `
+            this.dom.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
 						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
