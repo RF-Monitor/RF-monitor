@@ -188,6 +188,7 @@ export function InfoUpdate_full_ws(earthquakeInfo, getDistributionFn, {onInitial
     } else if (lastReports[0].id !== earthquakeInfo[0].id) {
         onUpdate?.(earthquakeInfo[0]);
     }
+    lastReports = earthquakeInfo;
     if (htmlText !== '') {
         document.getElementById("earthquakeInfo").innerHTML = htmlText;
     }
