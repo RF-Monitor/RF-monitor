@@ -1,4 +1,45 @@
 import { AudioQueue } from "./utils/audioQueue.js";
+const Flasher = {
+    state: false,
+    flashControl: true,
+    listeners: new Set(),
+    update(){
+        if(this.flashControl){
+            this.state = !this.state
+        }else{
+            this.state = false;
+        }
+        this.notify();
+		return this.state;
+	},
+    setState(state){
+        this.state = state;
+    },
+    start(){
+        this.flashControl = true;
+        console.log("[RFPLUS]Flasher start");
+    },
+    stop(){
+        this.flashControl = false;
+        console.log("[RFPLUS]Flasher stop");
+    },
+    subscribe(fn){
+        this.listeners.add(fn);
+        // 回傳 unsubscribe，方便解除
+        return () => this.listeners.delete(fn);
+    },
+    notify(){
+        for(const fn of this.listeners){
+            fn(this.state);
+        }
+    }
+};
+setInterval(
+    () => {
+        Flasher.update();
+    },
+    500
+)
 class RFPLUSManager {
     constructor(map,locations,town_ID_list,town_line,leaflet,{onNewAlert, onAlertUpdate, onAlertEnd} = {}) {
         this.instances = new Map(); // id → EEW
@@ -178,6 +219,9 @@ class RFPLUSMapRenderer {
         this.town_ID_list = town_ID_list
         this.country_list = ["基隆市", "臺北市", "新北市", "桃園市", "新竹縣", "新竹市", "苗栗縣", "臺中市", "彰化縣", "雲林縣", "嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣", "臺東縣", "花蓮縣", "宜蘭縣", "澎湖縣", "金門縣", "連江縣", "南投縣"];
         this.town_line = town_line
+        this.unsubscribeFlasher = Flasher.subscribe(
+            (state) => this.onFlashUpdate(state)
+        );
         this.shindo_color = {
             "0":"white",
             "1":"white",
@@ -287,6 +331,18 @@ class RFPLUSMapRenderer {
         if (this.center.icon) this.map.removeLayer(this.center.icon);
         if (this.center.Pwave) this.map.removeLayer(this.center.Pwave);
         if (this.center.Swave) this.map.removeLayer(this.center.Swave);
+    }
+
+    onFlashUpdate(state){
+        let opacity = 0;
+        if(state) opacity = 1;
+        if(this.hasOwnProperty("shindoLayer")){
+            this.shindoLayer.eachLayer(layer => {
+                if (layer.setStyle) {
+                    layer.setStyle({ fillOpacity: opacity });
+                }
+            });
+        }
     }
 
     localPGA(townlat,townlon,centerlat,centerlon,{scale = null, rate = null, depth = 10}){
@@ -489,7 +545,7 @@ class RFPLUSUI {
         if(alert.type == "RFPLUS3" || alert.type == "eew-test"){
             this.dom.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
+						<h5 style='color:white;background-color: orange; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">
@@ -509,8 +565,8 @@ class RFPLUSUI {
 								</h6>
 							</div>
 							<div class="RFPLUS3_maindown">
-								<div class="RFPLUS3_scale"><h4>M${alert.scale.toFixed(1)}</h4></div>
-								<div class="RFPLUS3_depth"><h4>${alert.center.depth}KM</span></h4></div>
+								<div class="RFPLUS3_scale"><h4>M-</h4></div>
+								<div class="RFPLUS3_depth"><h4>-KM</span></h4></div>
 							</div>
 						</div>
 					</div>
@@ -518,7 +574,7 @@ class RFPLUSUI {
         }else{
             this.dom.innerHTML = `
 					<div id="RFPLUS3_status_box" class="RFPLUS_status_box">
-						<h5 style='color:white; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
+						<h5 style='color:white;background-color: orange; margin: 0;'><strong>RFPLUS警報(第${alert.report_num}報)</strong></h5>
 					</div>
 					<div class="RFPLUS_main_box">
 						<div style="width:70px">
@@ -584,4 +640,4 @@ function formatTimestamp(timestamp) {
   return `${YYYY}-${MM}-${dd} ${hh}:${mm}:${ss}`;
 }
 
-export { RFPLUSManager };
+export { RFPLUSManager, Flasher};

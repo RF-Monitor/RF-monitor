@@ -1,7 +1,7 @@
 import { InfoUpdate_full_ws, mapRendererInitialize } from './renderer/report.js';
 import { EEWTWManager } from './renderer/EEWTW.js';
 import { EEWJPManager } from './renderer/EEWJP.js';
-import { RFPLUSManager } from './renderer/RFPLUS.js';
+import { RFPLUSManager, Flasher as RFPLUSflasher } from './renderer/RFPLUS.js';
 import { pgaManager, Flasher } from './renderer/pga.js';
 import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
@@ -161,6 +161,7 @@ for (let i = 0; i < country_list.length; i++) {
 let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
 	onNewAlert:async (alert) => {
 		Flasher.stop();
+		RFPLUSflasher.stop();
 		window.notify.send(
 			"中央氣象署地震速報",
 			`預計震度${formatShindoTitle(alert.localshindo)}，規模${alert.scale}`,
@@ -176,6 +177,13 @@ let EEWTWmanager = new EEWTWManager(map,locations,town_ID_list,town_line,L,{
 			Flasher.stop();
 		}else{
 			Flasher.start();
+		}
+
+		if(EEWTWmanager.hasAlert()){
+			RFPLUSflasher.stop();
+			RFPLUSflasher.setState(false);
+		}else{
+			RFPLUSflasher.start();
 		}
 	}
 });
@@ -357,7 +365,6 @@ window.ws.onRFPLUS3(async (data) => {
 	if(enable && (now - data.time) < 180000){
 		RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data);
 	}
-    
 });
 
 let data = {
@@ -390,10 +397,10 @@ let data = {
                         "report_num":2,
                         "final":false
                     }
-/*
-setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data),5000)
-setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data2),10000)
-*/
+
+//setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data),5000)
+//setTimeout(() => RFPLUSmanager.handleAlert(cfg.user.lat,cfg.user.lon,data2),10000)
+
 
 window.ws.onPGA(async (data) => {
 	const [enable, now, selected] = await Promise.all([
