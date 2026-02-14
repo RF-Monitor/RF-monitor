@@ -160,7 +160,7 @@ const createWindow = async () => {
       minWidth: 1000,
       webPreferences:{
         preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: true,
+        nodeIntegration: false,
         contextIsolation: true,
         enableRemoteModule: true,
         backgroundThrottling: false,
@@ -183,7 +183,7 @@ const createWindow = async () => {
       minWidth: 800,
       webPreferences:{
         preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: true,
+        nodeIntegration: false,
         contextIsolation: true,
         enableRemoteModule: true,
         backgroundThrottling: false,
