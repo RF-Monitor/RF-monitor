@@ -175,6 +175,7 @@ class pgaMapRenderer{
         this.circle = null;
         this.onSelect = onSelect;
         this.alert = false;
+        this.shakealert = false;
 
         this.unsubscribeFlasher = Flasher.subscribe(
             (state) => this.onFlashUpdate(state)
@@ -196,6 +197,7 @@ class pgaMapRenderer{
     create(stationData, shakealert){
         const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline } = stationData;
         this.alert = shindo != "0";
+        this.shakealert = shakealert;
         let cusicon = this.getStationIcon(pga, shindo, shakealert, isOnline)
         let opacity = 1;
 		let toolTip = `<div>${name}</div>
@@ -231,6 +233,7 @@ class pgaMapRenderer{
     update(stationData, shakealert){
         const { id, name, lat, lon, pga, shindo, pga_origin, cname, isOnline } = stationData;
         this.alert = shindo != "0";
+        this.shakealert = shakealert;
         let cusicon = this.getStationIcon(pga, shindo, shakealert, isOnline)
         let opacity = 1;
 		let toolTip = `<div>${name}</div>
@@ -265,7 +268,11 @@ class pgaMapRenderer{
     }
 
     onFlashUpdate(state){
-        if(!this.circle || !this.alert) return;
+
+        if(!this.circle || !this.alert || !this.shakealert){
+            this.circle.setRadius(0);
+            return;
+        } 
         this.circle.setRadius(state ? 20000 : 0);
     }
 

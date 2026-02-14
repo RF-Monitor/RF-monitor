@@ -408,9 +408,18 @@ window.ws.onPGA(async (data) => {
 		window.time.now(),
 		window.config.get("selected_station")
 	]);
-
+	/*
+	for(let i = 0; i < data.data.length; i++){
+		if(data.data[i].id == "6050_0026"){
+			data.data[i].shindo_15 = "1"
+		}
+		if(data.data[i].id == "6050_0022"){
+			data.data[i].shindo_15 = "1"
+		}
+		data.shake_alert = 1
+	}
 	if (!enable) return;
-
+	*/
 	PGAmanager.handle(data, now);
 	PGAmanager.ui.update(data, selected, now);
 });
