@@ -31,7 +31,7 @@ class EEWTWManager {
             if (EEW.checkExpired(now)) {
                 EEW.destroy();          // 清理地圖/UI
                 this.instances.delete(key);
-                onAlertEnd?.();
+                this.onAlertEnd?.();
             }
         }
     }
@@ -202,9 +202,9 @@ class EEWTWMapRenderer {
     }
 
     updateCenter(alert) {
-        this.center.icon.setLatLng([alert.center.lat, alert.center.lon]);
-        this.center.Pwave.setLatLng([alert.center.lat, alert.center.lon]);
-        this.center.Swave.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.icon?.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.Pwave?.setLatLng([alert.center.lat, alert.center.lon]);
+        this.center.Swave?.setLatLng([alert.center.lat, alert.center.lon]);
     }
 
     renderShindo(alert) {
