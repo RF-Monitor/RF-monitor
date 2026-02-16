@@ -331,18 +331,20 @@ class RFPLUSMapRenderer {
         if (this.center.icon) this.map.removeLayer(this.center.icon);
         if (this.center.Pwave) this.map.removeLayer(this.center.Pwave);
         if (this.center.Swave) this.map.removeLayer(this.center.Swave);
+
+        this.unsubscribeFlasher?.();
     }
 
     onFlashUpdate(state){
-        let opacity = 0;
-        if(state) opacity = 1;
-        if(this.hasOwnProperty("shindoLayer")){
-            this.shindoLayer.eachLayer(layer => {
-                if (layer.setStyle) {
-                    layer.setStyle({ fillOpacity: opacity });
-                }
-            });
-        }
+        if (!this.shindoLayer) return;
+
+        const opacity = state ? 1 : 0;
+
+        this.shindoLayer.eachLayer(layer => {
+            if (layer.setStyle) {
+                layer.setStyle({ fillOpacity: opacity });
+            }
+        });
     }
 
     localPGA(townlat,townlon,centerlat,centerlon,{scale = null, rate = null, depth = 10}){
