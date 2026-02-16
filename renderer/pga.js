@@ -134,8 +134,8 @@ export class pgaManager{
         for (let id of this.stationList.keys()) {
             if (!seenIds.has(id)) {
                 const station = this.stationList.get(id);
-                station.remove();
-                stationList.delete(id);
+                station.station.remove();
+                this.stationList.delete(id);
             }
         }
     }
@@ -268,11 +268,13 @@ class pgaMapRenderer{
     }
 
     onFlashUpdate(state){
+        if (!this.circle) return;
 
-        if(!this.circle || !this.alert || !this.shakealert){
+        if (!this.alert || !this.shakealert) {
             this.circle.setRadius(0);
             return;
-        } 
+        }
+
         this.circle.setRadius(state ? 20000 : 0);
     }
 
