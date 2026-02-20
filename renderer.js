@@ -15,8 +15,8 @@ function showLogin(){
 function hideLogin(){
   document.getElementById("login").style.display = "none"
 }
-function login(username, password){
-	window.auth.login(username, password);
+async function login(username, password){
+	return await window.auth.login(username, password);
 }
 
 /*----------初始化設定值以及變化監聽器----------*/
@@ -468,10 +468,17 @@ document.getElementById('page2').style.display = "none";
 document.getElementById('page3').style.display = "none";
 document.getElementById("nav_eew").style.borderBottomColor = "#00FFFF";
 
-document.getElementById("login_btn").addEventListener("click", () => {
+document.getElementById("login_btn").addEventListener("click",async () => {
+	document.getElementById("login_btn").innerText = "登入中"
 	let username = document.getElementById("email").value;
 	let password = document.getElementById("password").value;
-	login(username, password);
+	let result = await login(username, password);
+	if(!result){
+		document.getElementById("login_failed").style.display = "block";
+	}else{
+		document.getElementById("login_failed").style.display = "none";
+	}
+	document.getElementById("login_btn").innerText = "登入";
 })
 
 setUIopacity(cfg.system.opacity)
@@ -509,7 +516,7 @@ joinBtn.addEventListener('click', () => {
 
 window.auth.onStatus(({ status }) => {
 	if(status == "logged_out"){
-		showLogin();
+		//showLogin();
 	}else if(status == "logged_in"){
 		hideLogin()
 	}
@@ -520,7 +527,7 @@ window.auth.onResult(({ status }) => {
 	if(status == "success"){
 		hideLogin();
 	}else{
-		showLogin()
+		//showLogin()
 	}
 })
 

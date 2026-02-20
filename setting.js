@@ -34,13 +34,20 @@ function showLogin(){
     document.getElementById("login_success").style.display = "none";
     document.getElementById("login_options").style.display = "block";
 }
-function login(username, password){
-	window.auth.login(username, password);
+async function login(username, password){
+	return await window.auth.login(username, password);
 }
-document.getElementById("login_btn").addEventListener("click", () => {
+document.getElementById("login_btn").addEventListener("click",async () => {
+	document.getElementById("login_btn").innerText = "登入中"
 	let username = document.getElementById("email").value;
 	let password = document.getElementById("password").value;
-	login(username, password);
+	let result = await login(username, password);
+	if(!result){
+		document.getElementById("login_failed").style.display = "block";
+	}else{
+		document.getElementById("login_failed").style.display = "none";
+	}
+	document.getElementById("login_btn").innerText = "登入";
 })
 const user = await window.config.get("login_user")
 if(user){

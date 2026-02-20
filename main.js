@@ -112,6 +112,9 @@ async function bootServices() {
         config.set("verifyKey", verifyKey);
         setVerifyKey(verifyKey);
         wsVerify();
+        return true;
+      }else{
+        return false;
       }
   })
 
