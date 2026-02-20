@@ -307,15 +307,15 @@ class pgaUI{
         this.selected = null;
         this.maxShindo = "0";
         this.shindoAudio = {
-            "1": new Audio("./audio/tw/shindo/1.mp3"),
-            "2": new Audio("./audio/tw/shindo/2.mp3"),
-            "3": new Audio("./audio/tw/shindo/3.mp3"),
-            "4": new Audio("./audio/tw/shindo/4.mp3"),
-            "5-": new Audio("./audio/tw/shindo/5-.mp3"),
-            "5+": new Audio("./audio/tw/shindo/5+.mp3"),
-            "6-": new Audio("./audio/tw/shindo/6-.mp3"),
-            "6+": new Audio("./audio/tw/shindo/6+.mp3"),
-            "7": new Audio("./audio/tw/shindo/7.mp3")
+            "1": "./audio/tw/shindo/1.mp3",
+            "2": "./audio/tw/shindo/2.mp3",
+            "3": "./audio/tw/shindo/3.mp3",
+            "4": "./audio/tw/shindo/4.mp3",
+            "5-": "./audio/tw/shindo/5-.mp3",
+            "5+": "./audio/tw/shindo/5+.mp3",
+            "6-": "./audio/tw/shindo/6-.mp3",
+            "6+": "./audio/tw/shindo/6+.mp3",
+            "7": "./audio/tw/shindo/7.mp3"
         }
         this.shindoAudioThreshold = "0";
     }
@@ -376,7 +376,7 @@ class pgaUI{
         //最大震度音效(當最大震度上升時)
         if(this.shindo2float(maxShindo) > this.shindo2float(this.maxShindo) && shakealert){
             if(this.shindo2float(maxShindo) >= this.shindo2float(this.shindoAudioThreshold)){
-                this.shindoAudio[maxShindo].play();
+                new Audio(this.shindoAudio[maxShindo]).play();
             }
         }
         this.maxShindo = maxShindo;

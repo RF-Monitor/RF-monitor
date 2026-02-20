@@ -6,6 +6,7 @@ export class AudioQueue {
     }
 
     async _playSingle(src, queueId) {
+        console.log("[Audio]playing", src);
         return new Promise((resolve, reject) => {
             const audio = new Audio(src);
             this._currentAudio = audio;
