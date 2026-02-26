@@ -76,6 +76,20 @@
 .register{
     display: none;
 }
+.policy{
+    border-radius: 5px;
+    position: absolute;
+    height: fit-content;
+    width: 400px;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: #3c3c3cd8;
+    color: white;
+    display: none;
+    padding: 10px;
+    z-index: 15;
+}
 
 /*.navitem:hover {
     border-bottom: solid;
@@ -275,7 +289,7 @@
 }
 .time_now{
     height: fit-content;
-    width: 165px;
+    width: fit-content;
     padding: 5px;
     overflow-x: hidden;
     overflow-y: auto;
