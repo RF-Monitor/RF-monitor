@@ -16,6 +16,7 @@ export function registerTimeIPC() {
   ipcMain.handle('time:now', () => {
     return now();
   });
+  console.log("[NTP][IPC] registered")
 }
 
 function broadcastOffset(offset) {
