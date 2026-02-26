@@ -1,4 +1,4 @@
-export function switchPage(pageid, map, map2, map3){
+function switchPage(pageid, map, map2, map3){
     let page2nav = {"page1":"nav_eew","page2":"nav_report","page3":"nav_weather"}
     document.getElementById('page1').style.display = "none";
     document.getElementById(page2nav['page1']).style.borderBottomColor = "#3C3C3C";
@@ -16,7 +16,7 @@ export function switchPage(pageid, map, map2, map3){
     map3.invalidateSize(true);   
 }
 
-export function setUIopacity(opacity){
+function setUIopacity(opacity){
     document.getElementById("navbar").style.opacity = opacity;
     document.getElementById("left").style.opacity = opacity;
     document.getElementById("max_shindo").style.opacity = opacity;
@@ -24,4 +24,24 @@ export function setUIopacity(opacity){
     document.getElementById("sta_count").style.opacity = opacity;
     document.getElementById("time_now").style.opacity = opacity;
 
+}
+function showLogin(){
+  document.getElementById("login").style.display = "block"
+}
+function hideLogin(){
+  document.getElementById("login").style.display = "none"
+}
+function showPolicy(){
+  document.getElementById("policy").style.display = "block"
+}
+function hidePolicy(){
+  document.getElementById("policy").style.display = "none"
+}
+export default {
+  switchPage,
+  setUIopacity,
+  showLogin,
+  hideLogin,
+  showPolicy,
+  hidePolicy
 }
