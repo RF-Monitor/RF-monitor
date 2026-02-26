@@ -326,43 +326,19 @@
 				</form>
 				<p style='color:white;position:absolute;right:10px;bottom: 10px;margin-bottom: 0;' onclick='register_google()'>點擊此處以註冊帳號</p>
 			</div>
-			<div id="register" class="register">
-				<h2 style="color:white" align="center">註冊</h2> 
-				<hr style="border-color: white;"/>
-				<form>
-					<label for="email">
-						<p style='font-size: 22px;color: white;'>電子郵件信箱</p>
-					</label>
-					<input type="text" value="" id="email_register" name="email" style="width:200px">
-					<br>
-					<label for="password">
-						<p style='font-size: 22px;color: white;'>密碼</p>
-					</label>
-					<input type="password" value="" id="password_register" name="password" style="width:200px">
-					<br>
-					<label for="password_again">
-						<p style='font-size: 22px;color: white;'>再次輸入密碼</p>
-					</label>
-					<input type="password" value="" id="password_again" name="password_again" style="width:200px">
-					<!--
-					<p style='color: white;'>1.RF區域警報是使用RF-senssor地震儀,當相鄰兩個地震儀偵測到搖晃時,即判定為地震,並根據震度對周遭地區發布警報</p>
-					<p style='color: white;'>2.因RF-sensor地震儀並非裝設於專用場所,被干擾的可能性也較大,誤報發生率可能較大</p>
-					<p style='color: white;'>3.請勿將RF區域警報與即時測站資訊二次轉發</p>
-					<input class="maincheckbox" type="checkbox" value="" id="agree" name="agree">
-					<label for="agree">
-						<p style='font-size: 22px;'>我了解使用RF區域警報的注意事項</p>
-					</label>
-					-->
-					<br>
-					<button type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="getCaptcha()">獲得驗證碼</button>
-					<svg id="captcha_img" style="background-color: white;"></svg>
-					<label for="captcha">
-						<p style='font-size: 22px;color: white;'>請輸入驗證碼</p>
-					</label>
-					<input type="text" value="" id="captcha" name="captcha" style="width:200px">
-					<button type="button" class="btn btn-primary" style="margin-right: 20px; " onclick="register()">註冊</button>
-					<button type="button" class="btn btn-secondary" style="margin-right: 30px;" onclick="hideLogin()">取消</button>
-				</form>
+		</div>
+		<!--使用規約 -->
+		<div id="policy" class="policy" style="display: none;">
+			<h2 style="text-align: center;">使用規約</h2>
+			<div style="background-color: #2b2b2bd8; padding: 10px; border-radius: 10px; height: 200px; overflow-y: scroll;">
+				<p>1.請勿將中央氣象署地震速報、RFPLUS參與式地震預警做二次轉發</p>
+				<p>2.請勿將本軟體提供資訊用於非法活動(以中華民國法律以及事發當地法律為準)</p>
+				<p>3.若要將此軟體畫面進行公開直播，請關閉RFPLUS參與式地震預警功能</p>
+				<p>RPTeS擁有對此規約最終解釋權</p>
+			</div>
+			<div style="display: flex; justify-content: space-evenly; width: 100%; margin: 10px;">
+				<button id="policyAgree" type="button" class="btn btn-primary">同意</button>
+				<button id="policyDisagree" type="button" class="btn btn-secondary">不同意</button>
 			</div>
 		</div>
 	</div>
