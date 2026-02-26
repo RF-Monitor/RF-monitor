@@ -55,11 +55,16 @@ function get(key) {
 
     return value;
 }
+function set(key, value) {
+    if (value === true) value = "true";
+    if (value === false) value =  "false";
+    storage.setItem(key, value)
+}
 module.exports = {
     applyDefaults,
     repairIfBroken,
     backupConfig,
     get: get,
-    set: storage.setItem,
+    set: set,
     config: config.getConfig
 };
