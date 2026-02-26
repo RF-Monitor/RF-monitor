@@ -69,14 +69,27 @@ async function bootServices() {
   broadcastEvent = ipcRouter.broadcastEvent;
   broadcastState = ipcRouter.broadcastState;
 
-
-  const { login } = await import('./main/auth.mjs');
+  const { syncNTP } = await import('./main/ntp/ntp.mjs');
+  await syncNTP(); // App 啟動時先同步一次
 
   const { registerTimeIPC } = await import('./main/ntp/ipcRouter.mjs');
   registerTimeIPC();
 
-  const { syncNTP } = await import('./main/ntp/ntp.mjs');
-  await syncNTP(); // App 啟動時先同步一次
+  if(!config.get("agreePolicy")){
+    broadcastState("system:agreePolicy", false)
+  }
+
+  // 等待同意規約
+  await new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (config.get("agreePolicy")) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 1000);
+  });
+
+  const { login } = await import('./main/auth.mjs');
   /*
   const { 
     syncNTP, 
@@ -344,6 +357,11 @@ ipcMain.handle('notify:send', (_, title, content, iconpath) => {
     }).show();
   }
 })
+ipcMain.on('system:policyAgree', () => {
+  console.log("[main] Policy agree")
+    config.set('agreePolicy', true);
+})
+
 
 ipcMain.on('showMain',() => {//顯示主視窗
     win.show()
