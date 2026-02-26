@@ -143,6 +143,12 @@ contextBridge.exposeInMainWorld('renderer', {
   }
 })
 contextBridge.exposeInMainWorld('system', {
+  onAgreePolicy: (cb) => {
+    ipcRenderer.on('state:system:agreePolicy', (_, d) => cb(d))
+  },
+  agreePolicy: () => {
+    ipcRenderer.send('system:policyAgree');
+  },
   restart: () => {
     ipcRenderer.send('restart');
   }
