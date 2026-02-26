@@ -6,15 +6,10 @@ import { pgaManager, Flasher } from './renderer/pga.js';
 import { TsunamiManager } from './renderer/tsunami.js';
 import { WeatherManager } from './renderer/weather.js';
 import { locations } from "./data/location.js";
-import { switchPage, setUIopacity } from './renderer/ui.js';
+import ui from './renderer/ui.js';
 import { formatShindoTitle, shindo2float } from './renderer/utils/shindo.js';
 import { emitConfigChange, onConfigChange } from './renderer/utils/configWatcher.js';
-function showLogin(){
-  document.getElementById("login").style.display = "block"
-}
-function hideLogin(){
-  document.getElementById("login").style.display = "none"
-}
+
 async function login(username, password){
 	return await window.auth.login(username, password);
 }
@@ -461,9 +456,9 @@ window.ws.onReport((data) => {
 
 
 //UI events
-document.getElementById("nav_eew").addEventListener("click",() => {switchPage("page1", map, map2, map3)})
-document.getElementById("nav_report").addEventListener("click",() => {switchPage("page2", map, map2, map3)})
-document.getElementById("nav_weather").addEventListener("click",() => {switchPage("page3", map, map2, map3)})
+document.getElementById("nav_eew").addEventListener("click",() => {ui.switchPage("page1", map, map2, map3)})
+document.getElementById("nav_report").addEventListener("click",() => {ui.switchPage("page2", map, map2, map3)})
+document.getElementById("nav_weather").addEventListener("click",() => {ui.switchPage("page3", map, map2, map3)})
 document.getElementById('page2').style.display = "none";
 document.getElementById('page3').style.display = "none";
 document.getElementById("nav_eew").style.borderBottomColor = "#00FFFF";
@@ -481,9 +476,21 @@ document.getElementById("login_btn").addEventListener("click",async () => {
 	document.getElementById("login_btn").innerText = "登入";
 })
 
-setUIopacity(cfg.system.opacity)
+window.system.onAgreePolicy((data) => {
+	if(!data) ui.showPolicy();
+})
+
+document.getElementById("policyAgree").addEventListener("click",async () => {
+	window.system.agreePolicy();
+	ui.hidePolicy();
+})
+document.getElementById("policyDisagree").addEventListener("click",async () => {
+	
+})
+
+ui.setUIopacity(cfg.system.opacity)
 onConfigChange("opacity", async (value) => {
-	setUIopacity(value);
+	ui.setUIopacity(value);
 })
 
 //時間
@@ -518,14 +525,14 @@ window.auth.onStatus(({ status }) => {
 	if(status == "logged_out"){
 		//showLogin();
 	}else if(status == "logged_in"){
-		hideLogin()
+		ui.hideLogin()
 	}
 })
 
 window.auth.onResult(({ status }) => {
 	console.log(status)
 	if(status == "success"){
-		hideLogin();
+		ui.hideLogin();
 	}else{
 		//showLogin()
 	}
