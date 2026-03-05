@@ -420,6 +420,8 @@ class pgaUI{
             }
             document.getElementById("RF_list_1").innerHTML = htmlText;
         }else{
+            this.maxShindo = "0";
+
             document.getElementById("RF_status").innerHTML = "";
             document.getElementById("RF_status").style.backgroundColor = "#3c3c3c";
             document.getElementById("RF_list_1").innerHTML = "";
