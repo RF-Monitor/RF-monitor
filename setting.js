@@ -37,6 +37,9 @@ function showLogin(){
 async function login(username, password){
 	return await window.auth.login(username, password);
 }
+function register(){
+	window.system.openExternal("https://rptes.com/RFEQservice/register.html");
+}
 document.getElementById("login_btn").addEventListener("click",async () => {
 	document.getElementById("login_btn").innerText = "登入中"
 	let username = document.getElementById("email").value;
@@ -48,6 +51,9 @@ document.getElementById("login_btn").addEventListener("click",async () => {
 		document.getElementById("login_failed").style.display = "none";
 	}
 	document.getElementById("login_btn").innerText = "登入";
+})
+document.getElementById("register_btn").addEventListener("click", () => {
+    register();
 })
 const user = await window.config.get("login_user")
 if(user){
