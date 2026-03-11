@@ -149,6 +149,7 @@ contextBridge.exposeInMainWorld('system', {
   agreePolicy: () => {
     ipcRenderer.send('system:policyAgree');
   },
+  openExternal: (url) => ipcRenderer.send('system:openExternal', url),
   restart: () => {
     ipcRenderer.send('restart');
   }

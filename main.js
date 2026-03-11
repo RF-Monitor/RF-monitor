@@ -362,6 +362,9 @@ ipcMain.on('system:policyAgree', () => {
     config.set('agreePolicy', true);
 })
 
+ipcMain.on('system:openExternal', (_, url) => {
+  shell.openExternal(url);
+});
 
 ipcMain.on('showMain',() => {//顯示主視窗
     win.show()
