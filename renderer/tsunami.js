@@ -5,7 +5,7 @@ export class TsunamiManager {
         this.openExternal = openExternal;
         this.timer = null;
         this.audioQueue = new AudioQueue();
-
+        this.currentAlert = {}
         this.coastlineMap = {
             "北部沿海地區": "tsunami_N",
             "東北沿海地區": "tsunami_EN",
@@ -36,13 +36,20 @@ export class TsunamiManager {
             return;
         }
 
-        this.show();
-        this.renderBaseInfo(data);
-        this.renderColor(data);
-        this.renderForecast(data);
-        this.bindMoreInfo(data.web_url);
-        this.playSound(data);
-        this.resetTimer(createdAt, now);
+        if(createdAt != this.currentAlert.created_at || !this.currentAlert.created_at){
+            this.show();
+            this.renderBaseInfo(data);
+            this.renderColor(data);
+            this.renderForecast(data);
+            this.bindMoreInfo(data.web_url);
+            if(data.report_type != "海嘯消息"){
+                this.playSound(data);
+            }
+            this.resetTimer(createdAt, now);
+            this.currentAlert = data;
+        }
+
+        
     }
 
     show() {
