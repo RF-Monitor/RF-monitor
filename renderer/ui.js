@@ -17,12 +17,13 @@ function switchPage(pageid, map, map2, map3){
 }
 
 function setUIopacity(opacity){
-    document.getElementById("navbar").style.opacity = opacity;
+    //document.getElementById("navbar").style.opacity = opacity;
     document.getElementById("left").style.opacity = opacity;
     document.getElementById("max_shindo").style.opacity = opacity;
     document.getElementById("selected").style.opacity = opacity;
     document.getElementById("sta_count").style.opacity = opacity;
     document.getElementById("time_now").style.opacity = opacity;
+    document.getElementById("weather_example").style.opacity = opacity;
 
 }
 function showLogin(){
