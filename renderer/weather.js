@@ -31,7 +31,7 @@ class WeatherMapRenderer{
     }
     updateWeather(data){
         this.layer.clearLayers();
-		let warnings = data
+		let warnings = data;
 		for(let i = 0;i < warnings.length;i++){
 			let name = warnings[i]["name"];
 			let lat = this.locations["country"][name]["lat"];
@@ -42,27 +42,72 @@ class WeatherMapRenderer{
 			let extreme_heavy_rain = warnings[i]["extreme_heavy_rain"];
 			let foggy = warnings[i]["foggy"];
 			let wind = warnings[i]["wind"];
+			let color = "";
+			let fillColor = "";
+			let fillOpacity = 0;
 			if(!(rain == 0 && heavy_rain == 0 && super_heavy_rain == 0 && extreme_heavy_rain == 0 && foggy == 0 && wind == 0)){
 				let popupContent = "<p>"+name + "</p>";
+				if(wind != 0){
+					popupContent = popupContent + "<p>陸上強風特報</p>";
+				}	
+				if(foggy != 0){
+					popupContent = popupContent + "<p>濃霧特報</p>";
+					color = "white";
+					fillColor = "white";
+					fillOpacity = 0.5;
+				}
 				if(rain != 0){
 					popupContent = popupContent + "<p>大雨特報</p>";
+					color = "yellow";
+					fillColor = "yellow";
+					fillOpacity = 0.5;
 				}
 				if(heavy_rain != 0){
 					popupContent = popupContent + "<p>豪雨特報</p>";
+					color = "orange";
+					fillColor = "orange";
+					fillOpacity = 0.5;
 				}
 				if(super_heavy_rain != 0){
 					popupContent = popupContent + "<p>大豪雨特報</p>";
+					color = "red";
+					fillColor = "red";
+					fillOpacity = 0.5;
 				}
 				if(extreme_heavy_rain != 0){
 					popupContent = popupContent + "<p>超大豪雨特報</p>";
+					color = "purple";
+					fillColor = "purple";
+					fillOpacity = 0.5;
 				}
-				if(foggy != 0){
-					popupContent = popupContent + "<p>濃霧特報</p>";
-				}
-				if(wind != 0){
-					popupContent = popupContent + "<p>陸上強風特報</p>";
-				}								
-  				this.layer.addLayer(this.L.geoJSON(this.geojson_list[name], { color: "yellow",width:2,fillOpacity: 0.5 ,pane:"weather_warning_layers"}).bindPopup(popupContent));
+											
+  				this.layer.addLayer(
+					this.L.geoJSON(
+						this.geojson_list[name], 
+						{ 
+							color: color,
+							fillColor: fillColor,
+							weight:2,
+							fillOpacity: fillOpacity,
+							pane:"weather_warning_layers"
+						}
+					).bindPopup(popupContent)
+				);
+			}
+			if(wind != 0){
+				this.layer.addLayer(
+					this.L.geoJSON(
+						this.geojson_list[name], 
+						{ 
+							color: "blue",
+							fillColor: "white",
+							weight:3,
+							fill: false,
+							pane:"weather_warning_layers2",
+							interactive: false
+						}
+					)
+				);
 			}
 		}
     }
