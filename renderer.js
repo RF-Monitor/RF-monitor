@@ -103,6 +103,7 @@ for (let i = 0; i < country_list.length; i++) {
 	map2.createPane('shindo_icon_6+');
 	map2.createPane('shindo_icon_7');
 	map3.createPane('weather_warning_layers');
+	map3.createPane('weather_warning_layers2');
 	map3.createPane('typhoon_layer');
 	map.getPane("eew_RF_shindo_list_layer").style.zIndex = 300;
 	map.getPane("RFPLUS_shindo_list_layer").style.zIndex = 310;
@@ -136,6 +137,7 @@ for (let i = 0; i < country_list.length; i++) {
 	map2.getPane('shindo_icon_6+').style.zIndex = 640;
 	map2.getPane('shindo_icon_7').style.zIndex = 645;
 	map3.getPane('weather_warning_layers').style.zIndex = 430;
+	map3.getPane('weather_warning_layers2').style.zIndex = 435;
 	map3.getPane('typhoon_layer').style.zIndex = 440;
 
   $.ajaxSettings.async = true;
