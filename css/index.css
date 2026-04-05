@@ -336,36 +336,42 @@
         0 0 8px rgba(0, 255, 128, 0.05); /* 帶一點微亮綠色暈光（可去掉） */
 }
 .max_shindo{
-    height: 120px;
-    width: 90px;
+    height: 130px;
+    width: 100px;
+    padding: 5px;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     position: absolute;
     top: 35px;
     right: 10px;
     z-index: 10;
     opacity: 0.7;
     background-color:#3c3c3c;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
+}
+.max_shindo_img{
+    width: 90px;
+    height: 90px;
+    border-radius: 5px;
 }
 .max_pga{
     height: fit-content;
-    width: 90px;
+    width: 100px;
+    padding: 5px;
     overflow-x: hidden;
     overflow-y: auto;
     position: absolute;
-    top: 160px;
+    top: 170px;
     right: 10px;
     z-index: 10;
     opacity: 0.7;
     background-color:#3c3c3c;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
+}
+.max_pga_bg{
+    background-color: #2c2c2c; 
+    color: white;
+    border-radius: 5px;
 }
 .connection_status{
     height:fit-content;
