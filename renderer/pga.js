@@ -369,13 +369,13 @@ class pgaUI{
                 document.getElementById("selected_name").innerHTML = stationData.name;
 				document.getElementById("selected_pgao").innerHTML = stationData.pga_origin;
 				document.getElementById("selected_pga").innerHTML = stationData.pga;
-				document.getElementById("selected_shindo").innerHTML = "<img src='shindo_icon/selected/"+stationData.shindo.toString()+".png' style='width:50px'>"
+				document.getElementById("selected_shindo").innerHTML = "<img src='shindo_icon/selected/"+stationData.shindo.toString()+".png' style='width:50px; border-radius:3px'>"
 			}
         }
 
         // 顯示最大震度
         document.getElementById("max_shindo_img").innerHTML = `
-        <img src='shindo_icon/selected/${maxShindo}.png' style='width: 90px;height: 90px;'>
+        <img src='shindo_icon/selected/${maxShindo}.png' class='max_shindo_img'>
         `
         // 顯示最大PGA
         document.getElementById("max_pga").innerHTML = `
