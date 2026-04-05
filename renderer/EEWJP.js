@@ -93,7 +93,7 @@ class EEWJP {
         this.ui.update(this.alert);
 
         //播放音效
-        this.audio.update(this.alert);
+        //this.audio.update(this.alert);
 
         return this.alert;
     }
