@@ -323,6 +323,7 @@ class pgaUI{
     update(pga, selected, now){
         // 找最大震度
         let maxShindo = "0";
+        let maxPGA = 0;
         let station_count = 0;
         let topStations = [];
         let shakealert = pga.shake_alert;
@@ -351,6 +352,10 @@ class pgaUI{
             if(this.shindo2float(maxShindo) < this.shindo2float(stationData.shindo)){
                 maxShindo = stationData.shindo;
             }
+            // 本站PGA大於當前最大PGA
+            if(maxPGA < stationData.pga){
+                maxPGA = stationData.pga;
+            }
 
             // 收集在線且震度 > 0 的測站
             if (stationData.isOnline && this.shindo2float(stationData.shindo) > 0) {
@@ -371,6 +376,10 @@ class pgaUI{
         // 顯示最大震度
         document.getElementById("max_shindo_img").innerHTML = `
         <img src='shindo_icon/selected/${maxShindo}.png' style='width: 90px;height: 90px;'>
+        `
+        // 顯示最大PGA
+        document.getElementById("max_pga").innerHTML = `
+        ${maxPGA} gal
         `
 
         //最大震度音效(當最大震度上升時)
