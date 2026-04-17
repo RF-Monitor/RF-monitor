@@ -317,8 +317,16 @@ window.ws.onStatus((data) => {
 })
 window.ws.onPing((data) => {
 	let ping = data.ping;
+	let color = "green";
+	if(ping > 1000){
+		color = "red";
+	}else if(ping > 750){
+		color = "orange";
+	}else if(ping > 500){
+		color = "yellow";
+	}
 	document.getElementById("websocket_status").innerHTML = ping.toString() + "ms";
-	document.getElementById("websocket_status").style.color = "green";
+	document.getElementById("websocket_status").style.color = color;
 })
 
 //ws events
