@@ -325,6 +325,7 @@ class pgaUI{
         let maxShindo = "0";
         let maxPGA = 0;
         let station_count = 0;
+        let station_count_online = 0;
         let topStations = [];
         let shakealert = pga.shake_alert;
         for (let s of pga.data) {
@@ -345,8 +346,9 @@ class pgaUI{
                 stationData.shindo = "0";
                 stationData.isOnline = false;
             } else {
-                station_count++;
+                station_count_online++;
             }
+            station_count ++;
 
             // 本站震度大於當前最大震度
             if(this.shindo2float(maxShindo) < this.shindo2float(stationData.shindo)){
@@ -391,7 +393,7 @@ class pgaUI{
         this.maxShindo = maxShindo;
 
         // 顯示測站數
-        document.getElementById('stations_count_online').innerHTML = station_count.toString();
+        document.getElementById('stations_count_online').innerHTML = `${station_count_online}/${station_count}`;
 
         //若shakealert 顯示前六名測站
         if(shakealert){

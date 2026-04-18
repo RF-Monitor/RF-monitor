@@ -313,7 +313,7 @@
 }
 .sta_count{
     height: fit-content;
-    width: 90px;
+    width: fit-content;
     padding: 5px;
     overflow-x: hidden;
     overflow-y: auto;
