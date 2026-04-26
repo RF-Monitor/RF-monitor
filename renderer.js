@@ -273,7 +273,7 @@ mapRendererInitialize(map2, L);
 
 // tsunami manager
 let tsunamiManager = new TsunamiManager({
-	openExternal: (url) => shell.openExternal(url)
+	openExternal: (url) => window.system.openExternal(url)
 });
 
 // weather manager
