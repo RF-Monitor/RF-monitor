@@ -5,7 +5,7 @@ let syncing = false;
  * 同步 NTP
  */
 export async function syncNTP({
-  url = 'https://rfeqserver.myqnapcloud.com/ntp',
+  url = 'https://rptes.com/ntp',
   retryDelay = 1000
 } = {}) {
   if (syncing) return ntpOffset;
