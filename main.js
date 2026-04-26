@@ -52,9 +52,18 @@ function showUpdatePrompt(mainWindow, latestVersion) {
     noLink: true
   }).then(result => {
     if (result.response === 0) {
-      shell.openExternal("https://rfeqserver.myqnapcloud.com/RFEQservice");
+      shell.openExternal("https://rptes.com/RFEQservice");
     }
   });
+}
+async function bootIPCRouter() {
+  const ipcRouter = await import('./main/ipcRouter.mjs');
+
+  broadcastEvent = ipcRouter.broadcastEvent;
+  broadcastState = ipcRouter.broadcastState;
+
+  const { registerTimeIPC } = await import('./main/ntp/ipcRouter.mjs');
+  registerTimeIPC();
 }
 
 async function bootServices() {
@@ -64,16 +73,10 @@ async function bootServices() {
     wsVerify
   } = await import('./main/wsClient.mjs');
 
-  const ipcRouter = await import('./main/ipcRouter.mjs');
-
-  broadcastEvent = ipcRouter.broadcastEvent;
-  broadcastState = ipcRouter.broadcastState;
+  
 
   const { syncNTP } = await import('./main/ntp/ntp.mjs');
   await syncNTP(); // App 啟動時先同步一次
-
-  const { registerTimeIPC } = await import('./main/ntp/ipcRouter.mjs');
-  registerTimeIPC();
 
   if(!config.get("agreePolicy")){
     broadcastState("system:agreePolicy", false)
@@ -259,8 +262,10 @@ const createWindow = async () => {
 }
 
 app.whenReady().then(async () => {
+    //開啟IPC
+    await bootIPCRouter();
     // 建立視窗
-    await createWindow()
+    await createWindow();
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()
