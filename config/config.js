@@ -69,7 +69,7 @@ function getConfig(){
     },
 
     shindo: {
-      enabled: getBool('enable_shindo', true),
+      enabled: getBool('enable_PGA', true),
       trem: getBool('enable_shindo_TREM', true),
       pgaWarnOnly: getBool('PGA_warn_only', true),
       warningArea: getBool('enable_warningArea', true),
