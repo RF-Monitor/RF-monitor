@@ -250,6 +250,14 @@
 					<div style="display: block;">
 					<h4>地震速報模擬</h4>
 					<label for="EEWsim_magnitude">
+						<p style='font-size: 22px;'>發布單位</p>
+					</label>
+					<select name="EEWsim_unit" id="EEWsim_unit">
+						<option value="TWEEW">中央氣象署地震預警</option>
+						<option value="RFPLUS3">RPTeS自研參與式地震預警</option>
+					</select>
+					<br>
+					<label for="EEWsim_magnitude">
 						<p style='font-size: 22px;'>規模</p>
 					</label>
 					<input type="number" value="" id="EEWsim_magnitude" name="EEWsim_magnitude" style="width:50px" min="0.1" max="10" step="0.1">
