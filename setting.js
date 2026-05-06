@@ -195,6 +195,7 @@ document.getElementById("RFPLUS_type_3").addEventListener("change", async (e) =>
 });
 */
 function EEWsim(){
+    const EEWsim_unit = document.getElementById("EEWsim_unit").value;
     let EEWsim_magnitude = document.getElementById("EEWsim_magnitude").value;
     let EEWsim_depth = document.getElementById("EEWsim_depth").value;
     let EEWsim_lat = document.getElementById("EEWsim_lat").value;
@@ -216,7 +217,7 @@ function EEWsim(){
         
         let eew = {
             "id": id,
-            "type": "eew-test",
+            "type": EEWsim_unit,
             "time": time,
             "center": {
                 "lon": EEWsim_lon,
