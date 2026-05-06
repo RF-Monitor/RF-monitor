@@ -358,9 +358,14 @@ window.eq.onEEWsim(async (data) => {
 		window.config.get("enable_tw_eew_sound"),
 		window.time.now()
 	])
-	if(enable && (now - data.time) < 180000){
-		EEWTWmanager.handleAlert(cfg.user.lat,cfg.user.lon,data, {enableAudio});
+	const unit = data.type;
+	if(unit == "TWEEW" && (now - data.time) < 180000){
+		EEWTWmanager.handleAlert(cfg.user.lat, cfg.user.lon, data, {enableAudio});
 	}
+	if(unit == "RFPLUS3" && (now - data.time) < 180000){
+		RFPLUSmanager.handleAlert(cfg.user.lat, cfg.user.lon, data);
+	}
+
 })
 window.ws.onRFPLUS3(async (data) => {
 	const [enable, now] = await Promise.all([
@@ -413,6 +418,8 @@ window.ws.onPGA(async (data) => {
 		window.time.now(),
 		window.config.get("selected_station")
 	]);
+
+	if(!enable) return;
 	/*
 	for(let i = 0; i < data.data.length; i++){
 		if(data.data[i].id == "6050_0026"){
