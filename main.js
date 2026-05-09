@@ -181,7 +181,7 @@ const createWindow = async () => {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: false,
         contextIsolation: true,
-        enableRemoteModule: true,
+        enableRemoteModule: false,
         backgroundThrottling: false,
         nativeWindowOpen: true,
       }
