@@ -96,7 +96,7 @@ class EEWTW {
 
         //播放音效
         if(enableAudio){
-            this.audio.init(this.alert);
+            this.audio.update(this.alert);
         }
 
         return this.alert;
@@ -380,6 +380,10 @@ class EEWTWUI {
     }
     update(alert) {
         if (!this.dom) this.init(alert);
+        let reportNumText = `第${alert.report_num}報`;
+        if(alert.type == "eew-test"){
+            reportNumText = "測試"
+        }
 
         this.dom.innerHTML = `
             
