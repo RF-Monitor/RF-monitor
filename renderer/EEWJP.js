@@ -376,7 +376,10 @@ class EEWJPUI {
     }
     update(alert) {
         if (!this.dom) this.init(alert);
-
+        let reportNumText = `第${alert.report_num}報`;
+        if(alert.type == "eew-test"){
+            reportNumText = "測試"
+        }
         this.dom.innerHTML = `
             
 						<div id="eew_jp_status_box" class="eew_jp_status_box" style="background-color: orange;">
