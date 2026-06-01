@@ -15,7 +15,7 @@ const version = "3.0.0";
 
 async function checkUpdate(currentVer) {
   try {
-    const response = await fetch("http://rfeqserver.myqnapcloud.com:8787/monitorVersion", {
+    const response = await fetch(`https://${config.get("server_url")}/monitorVersion`, {
       timeout: 5000
     });
 
@@ -111,6 +111,7 @@ async function bootServices() {
     (ch, data) => broadcastEvent(ch, data),
     (ch, data) => broadcastState(ch, data),
     {
+      url: `wss://${config.get("server_url")}:443/ws/`,
       onLogin: (status, user) => {
         console.log("[main]On login")
         if(status == "success"){

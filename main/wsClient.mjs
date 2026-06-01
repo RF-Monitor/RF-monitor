@@ -16,19 +16,19 @@ let sendEvent = null;
 let sendState = null;
 let onLoginCb = null;
 
-const WS_URL = 'ws://RFEQSERVER.myqnapcloud.com:8788';
+const WS_URL = 'wss://rptes.com:443/ws/';
 const RECONNECT_DELAY = 3000;
 
 export function setVerifyKey(key) {
   verifyKey = key || '';
 }
 
-export function startWebSocket(Event, State, { onLogin } = {}) {
+export function startWebSocket(Event, State, { url, onLogin } = {}) {
   sendEvent = Event;
   sendState = State;
   onLoginCb = onLogin;
 
-  connect();
+  connect(url);
 }
 
 function startHeartbeat() {
@@ -75,7 +75,7 @@ function stopHeartbeat() {
   }
 }
 
-function connect() {
+function connect(url = WS_URL) {
   reconnectTimer && clearTimeout(reconnectTimer);
   reconnectTimer = null;
 
@@ -86,7 +86,7 @@ function connect() {
   }
   sendState?.('ws:status', { status: 'connecting' });
 
-  socket = new WebSocket(WS_URL);
+  socket = new WebSocket(url);
 
   socket.once('open', () => {
     sendState?.('ws:status', { status: 'online' });
