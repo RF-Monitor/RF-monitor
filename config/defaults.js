@@ -4,11 +4,15 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 /*----------設定預設值----------*/
 function applyDefaults(){
     storage.setItem('password','')
-    if(storage.getItem('server_url')  === ""){
-    storage.setItem('server_url','http://RFEQSERVER.myqnapcloud.com')
+    const serverUrl = storage.getItem('server_url');
+    if(
+        serverUrl !== 'rptes.com' &&
+        serverUrl !== 'server2.rptes.com'
+    ){
+        storage.setItem('server_url', 'rptes.com');
     }
     if(storage.getItem('ws_server_url')  === ""){
-    storage.setItem('ws_server_url','ws://RFEQSERVER.myqnapcloud.com')
+    storage.setItem('ws_server_url','wss://rptes.com:443/ws/')
     }
     console.log(storage.getItem('server_url'));
     if(storage.getItem('enable_gpu')  === ""){

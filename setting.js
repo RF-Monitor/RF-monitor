@@ -88,10 +88,10 @@ document.getElementById("restart").addEventListener("click", () => {
 // 載入設定值
 const config = await window.config.getAll();
 
-if(config.server.http == "http://RFEQSERVER.myqnapcloud.com"){
-    document.getElementById("server_select").value = "RFEQSERVER.myqnapcloud.com";
-}else if(config.server.http == "http://rexisstudio.tplinkdns.com"){
-    document.getElementById("server_select").value = "rexisstudio.tplinkdns.com";
+if(config.server.url == "rptes.com"){
+    document.getElementById("server_url").value = "rptes.com";
+}else if(config.server.url == "server2.rptes.com"){
+    document.getElementById("server_url").value = "server2.rptes.com";
 }
 document.getElementById("userlat").value = config.user.lat;
 document.getElementById("userlon").value = config.user.lon;

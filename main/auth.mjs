@@ -4,7 +4,7 @@ import crypto from 'crypto';
  * 向伺服器請求登入用公鑰
  */
 async function requestKey(server_url) {
-  const res = await fetch(`${server_url}:8787/getKey`, {
+  const res = await fetch(`https://${server_url}/getKey`, {
     method: 'GET'
   });
 
@@ -48,7 +48,7 @@ export async function login(username, password, server_url) {
   ).toString('base64');
 
   /* 5. 發送登入請求 */
-  const res = await fetch(`${server_url}:8787/login`, {
+  const res = await fetch(`https://${server_url}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

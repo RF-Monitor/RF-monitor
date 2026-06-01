@@ -30,8 +30,9 @@ function getString(key, def = "") {
 function getConfig(){
   const config = {
     server: {
-      http: getString('server_url', 'http://RFEQSERVER.myqnapcloud.com'),
-      ws: getString('ws_server_url', 'ws://RFEQSERVER.myqnapcloud.com')
+      url: getString('server_url', 'rptes.com'),
+      http: getString('http_server_url', 'https://rptes.com'),
+      ws: getString('ws_server_url', 'wss://rptes.com:443/ws/')
     },
 
     system: {
