@@ -310,8 +310,14 @@ onConfigChange('userlon', async (value) => {
 window.ws.onStatus((data) => {
 	console.log(data)
 	let status = data.status;
-	if(status != "online"){
-		document.getElementById("websocket_status").innerHTML = "離線";
+	if(status == "online"){
+		document.getElementById("websocket_status").innerHTML = "已連線";
+		document.getElementById("websocket_status").style.color = "green";
+	}else if(status == "connecting"){
+		document.getElementById("websocket_status").innerHTML = "連線中...";
+		document.getElementById("websocket_status").style.color = "yellow";
+	}else{
+		document.getElementById("websocket_status").innerHTML = "斷線";
 		document.getElementById("websocket_status").style.color = "red";
 	}
 })
