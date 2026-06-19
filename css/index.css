@@ -90,6 +90,15 @@
     padding: 10px;
     z-index: 15;
 }
+#policy_link {
+    color: #4da3ff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#policy_link:hover {
+    color: #82c4ff;
+}
 
 /*.navitem:hover {
     border-bottom: solid;

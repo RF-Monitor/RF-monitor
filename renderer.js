@@ -516,6 +516,10 @@ onConfigChange("opacity", async (value) => {
 	ui.setUIopacity(value);
 })
 
+document.getElementById("policy_link").addEventListener("click", () => {
+	window.system.openExternal("https://rptes.com/policy.html")
+})
+
 //時間
 setInterval(async () => {
 	function formatTimestamp(timestamp) {
