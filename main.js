@@ -1,5 +1,6 @@
 const { app, BrowserWindow ,ipcMain,Tray,Menu, Notification} = require('electron')
 const { dialog, shell } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const path = require('path');
 const storage = require('electron-localstorage');
 const fs = require('fs');
@@ -147,12 +148,14 @@ async function bootServices() {
   })
 
   /*----------檢查是否有更新----------*/
+  /*
   setInterval(
     async () => { 
       broadcastState("update:status", await checkUpdate(version)) 
     },
     30000
   )
+  */
   /*----------webhook----------*/
   const { send_webhook } = await import("./main/webhook.mjs")
   ipcMain.handle('webhook:send', async (event, url, sendContent) => {
@@ -191,11 +194,12 @@ const createWindow = async () => {
     win.loadFile('index.html')
 
     // 顯示更新視窗(如果有)
+    /*
     let update = await checkUpdate(version);
     if(update.status == "New update available"){
       showUpdatePrompt(win, update.ver);
     }
-
+    */
     setting_win = new BrowserWindow({
       height:600,
       width:800,
@@ -307,6 +311,11 @@ app.whenReady().then(async () => {
         tray.popUpContextMenu(menu);
       })
     }
+
+    //自動更新檢查
+    if(app.isPackaged){
+      autoUpdater.checkForUpdates();
+    }
 })
 
 
@@ -405,3 +414,35 @@ if (process.platform === 'win32')
 {
     app.setAppUserModelId(app.name);
 }
+
+// autoupdate events
+autoUpdater.on("update-available", () => {
+    console.log("[autoUpdater]有新版本可用");
+});
+
+autoUpdater.on("update-not-available", () => {
+    console.log("[autoUpdater]目前已是最新版");
+});
+
+autoUpdater.on("download-progress", (progress) => {
+    console.log(`[autoUpdater]下載進度：${progress.percent}%`);
+});
+
+autoUpdater.on("update-downloaded", async () => {
+    const result = await dialog.showMessageBox({
+        type: "info",
+        buttons: ["立即重啟", "稍後"],
+        defaultId: 0,
+        cancelId: 1,
+        message: "更新已下載完成",
+        detail: "是否立即重啟並套用更新？"
+    });
+
+    if(result.response === 0){
+        autoUpdater.quitAndInstall();
+    }
+});
+
+autoUpdater.on("error", (error) => {
+    console.error("[autoUpdater]更新失敗：", error);
+});
