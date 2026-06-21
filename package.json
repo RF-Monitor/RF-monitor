@@ -18,7 +18,7 @@
   },
   "build": {
     "asar": false,
-    "appId": "com.cilent.app.electronbuild",
+    "appId": "com.rptes.rfeq.desktop",
     "productName": "RF-monitor",
     "directories": {
       "output": "build"
@@ -28,10 +28,17 @@
     },
     "win": {
       "icon": "icon.png",
-      "publish": {
-        "provider": "generic",
-        "url": "http://RFEQSERVER.myqnapcloud.com:8787/downloads/RF-monitor.exe"
-      }
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "RF-Monitor",
+          "repo": "RF-monitor"
+        },
+        {
+          "provider": "generic",
+          "url": "https://rptes.com/RFEQservice/downloads/"
+        }
+      ]
     },
     "linux": {
       "icon": "icon.png"
