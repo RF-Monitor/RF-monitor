@@ -100,6 +100,9 @@ document.getElementById("userlon").value = config.user.lon;
 if(config.system.enableGPU){
     document.getElementById("enable_gpu").checked = true;
 }
+if(config.system.autoUpdate){
+    document.getElementById("enable_autoupdate").checked = true;
+}
 if(config.system.autoLaunch){
     document.getElementById("enable_autolaunch").checked = true;
 }

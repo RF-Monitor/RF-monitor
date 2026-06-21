@@ -37,6 +37,7 @@ function getConfig(){
 
     system: {
       enableGPU: getBool('enable_gpu', true),
+      autoUpdate: getBool('enable_autoupdate', true),
       autoLaunch: getBool('enable_autolaunch', true),
       minimizeToTray: getBool('minimize_to_tray', false),
       windowPopup: getBool('enable_window_popup', true),

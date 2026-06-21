@@ -102,6 +102,9 @@ function applyDefaults(){
     if(storage.getItem('minimize_to_tray') === ""){
     storage.setItem("minimize_to_tray",'false')
     }
+    if(storage.getItem('enable_autoupdate') === ""){
+    storage.setItem("enable_autoupdate",'true')
+    }
 
 
     if(!storage.getItem('enable_gpu')){
