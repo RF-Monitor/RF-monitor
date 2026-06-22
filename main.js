@@ -313,7 +313,7 @@ app.whenReady().then(async () => {
     }
 
     //自動更新檢查
-    if(app.isPackaged){
+    if(app.isPackaged && config.get("enable_autoupdate")){
       autoUpdater.checkForUpdates();
     }
 })
