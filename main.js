@@ -148,6 +148,11 @@ async function bootServices() {
   })
 
   /*----------檢查是否有更新----------*/
+  console.log(app.isPackaged, config.get("enable_autoupdate"))
+  if(app.isPackaged && config.get("enable_autoupdate")){
+    console.log("[autoUpdater]開始檢查更新")
+    autoUpdater.checkForUpdates();
+  }
   /*
   setInterval(
     async () => { 
@@ -311,14 +316,9 @@ app.whenReady().then(async () => {
         tray.popUpContextMenu(menu);
       })
     }
-
-    //自動更新檢查
-    if(app.isPackaged && config.get("enable_autoupdate")){
-      autoUpdater.checkForUpdates();
-    }
 })
 
-
+/*
 if (app.isPackaged) {
   const electron = require('electron')
 
@@ -327,7 +327,7 @@ if (app.isPackaged) {
   menu.setApplicationMenu(null)
 
 }
-
+*/
 
 app.on('before-quit', () => app.quitting = true)
 
