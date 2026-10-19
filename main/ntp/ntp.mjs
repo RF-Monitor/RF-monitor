@@ -6,29 +6,41 @@ let syncing = false;
  */
 export async function syncNTP({
   url = 'https://rptes.com/ntp',
-  retryDelay = 1000
+  retryDelay = 1000,
+  timeout = 5000,
+  maxAttempts = 3
 } = {}) {
   if (syncing) return ntpOffset;
   syncing = true;
 
   try {
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeout);
 
-    const data = await res.json();
-    if (!data?.unixtime) throw new Error('Invalid NTP response');
+      try {
+        const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const serverTime = data.unixtime * 1000;
-    ntpOffset = serverTime - Date.now();
+        const data = await res.json();
+        if (typeof data?.unixtime !== 'number' || !Number.isFinite(data.unixtime)) {
+          throw new Error('Invalid NTP response');
+        }
 
-    console.log('[NTP] offset =', ntpOffset);
-    return ntpOffset;
+        const serverTime = data.unixtime * 1000;
+        ntpOffset = serverTime - Date.now();
 
-  } catch (err) {
-    console.warn('[NTP] sync failed:', err.message);
-    await delay(retryDelay);
-    return syncNTP({ url, retryDelay });
+        console.log('[NTP] offset =', ntpOffset);
+        return ntpOffset;
+      } catch (err) {
+        console.warn(`[NTP] sync failed (${attempt}/${maxAttempts}):`, err.message);
+        if (attempt === maxAttempts) throw err;
+      } finally {
+        clearTimeout(timer);
+      }
 
+      await delay(retryDelay);
+    }
   } finally {
     syncing = false;
   }
