@@ -74,16 +74,22 @@ async function bootServices() {
     wsVerify
   } = await import('./main/wsClient.mjs');
 
-  
-
+  // 啟動 NTP 同步
   const { syncNTP } = await import('./main/ntp/ntp.mjs');
   await syncNTP(); // App 啟動時先同步一次
-
+  const ntpTimer = setInterval(async () => {
+    try{
+      await syncNTP();
+    }catch(err){
+      console.error('[NTP] 本輪同步失敗:', err.message);
+    }
+  }, 10 * 60 * 1000);
+  app.once('before-quit', () => clearInterval(ntpTimer));
+  
+  // 等待使用者同意政策
   if(!config.get("agreePolicy")){
     broadcastState("system:agreePolicy", false)
   }
-
-  // 等待同意規約
   await new Promise((resolve) => {
     const interval = setInterval(() => {
       if (config.get("agreePolicy")) {
@@ -94,12 +100,7 @@ async function bootServices() {
   });
 
   const { login } = await import('./main/auth.mjs');
-  /*
-  const { 
-    syncNTP, 
-    getNtpOffset 
-  } = await import ('./ntp.mjs');
-   */
+
   //如果有verifyKey， 則輸入websocket
   let verifyKey = config.get("verifyKey");
   if(verifyKey){
