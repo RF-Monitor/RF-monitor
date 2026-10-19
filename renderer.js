@@ -473,9 +473,8 @@ let data = {
 
 
 window.ws.onPGA(async (data) => {
-	const [enable, now, selected] = await Promise.all([
+	const [enable, selected] = await Promise.all([
 		window.config.get("enable_PGA"),
-		window.time.now(),
 		window.config.get("selected_station")
 	]);
 
@@ -490,10 +489,9 @@ window.ws.onPGA(async (data) => {
 		}
 		data.shake_alert = 1
 	}
-	if (!enable) return;
 	*/
-	PGAmanager.handle(data, now);
-	PGAmanager.ui.update(data, selected, now);
+	PGAmanager.handle(data);
+	PGAmanager.ui.update(data, selected);
 });
 
 

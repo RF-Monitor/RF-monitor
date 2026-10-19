@@ -53,9 +53,10 @@ export class pgaManager{
         this.onShindoReport = onShindoReport;
     }
 
-    handle(pga, now){
+    handle(pga){
         this.prevShakealert = this.shakealert;
         this.shakealert = !!pga.shake_alert;
+        const now = pga.time;
 
         //----------建立速報----------//
         if (!this.prevShakealert && this.shakealert) {
@@ -320,7 +321,8 @@ class pgaUI{
         this.shindoAudioThreshold = "0";
     }
 
-    update(pga, selected, now){
+    update(pga, selected){
+        const now = pga.time;
         // 找最大震度
         let maxShindo = "0";
         let maxPGA = 0;
