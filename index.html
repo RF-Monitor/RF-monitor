@@ -363,157 +363,13 @@
 			</div>
 		</div>
 	</div>
-	<!--<footer style="background-color:black;z-index: 15;position: absolute;bottom: 0;width: 100%;">
-		--only for app------------------------------------------------------------------------------------------------
-		<button id="setting" style="border-radius:5px">設定</button>
-		<button id="join" style="border-radius:5px">加入地震觀測計畫</button>
-		-------------------only for app-------------------------------------------------------------------------------
-		<text <h6 style="color:white;">目前共有 <b><span style="color:white;" id="stations_count_online"></span></b> 個測站上線</h6> </text>
-		<text <h6 style="color:white;">當前時間: <span style="color:white;" id= "nowDiv"; > </span> </h6> </text>
-		<span id="ver"></span>
-	</footer>-->
-
 </body>
-<script type="text/javascript">
-/*
-//using library
-const bytenode = require("bytenode");
-const crypto = require("crypto");
-const dgram = require("dgram");
-const axios = require('axios');
-const { serialize } = require('v8');
-const path = require('path');
-const { shell } = require('electron');
-const storage = require('electron-localstorage');
-const { resolve } = require('path');
-let ipcRenderer = require('electron').ipcRenderer;
-const { setFdLimit, disconnect } = require('process');
-const { Serializer } = require('v8');
-const fs = require('fs');
-storage.setStoragePath(path.join(__dirname, '../../../../RF-Monitor_config/config.json'));
-server_url = storage.getItem('server_url');
-ws_server_url = storage.getItem('ws_server_url');
-*/
-</script>
-<!--
-<script src="js/main/auth.js"></script>
-<script src="js/main/replay.js"></script>
-<script src="js/main/webhook.js"></script>
-<script src="js/main/pga.js"></script>
-<script src="js/main/EEW_TW.js"></script>
-<script src="js/main/RFPLUS.js"></script>
-<script src="js/main/tsunami.js"></script>
-<script src="js/indexprocess.js"></script>-->
 <script type="module" src="renderer.js"></script>
-<script type="text/javascript">
-
-	//require('./renderer.js');		
-	//navbar切頁
-	
-	/*
-	//Rick Roll
-	if(enable_eew_jp == "false" && enable_eew_tw == "false" && enable_RFPLUS == "false" && enable_shindo == "false" && enable_weather == "false" && enable_typhoon == "false"){
-		shell.openExternal("https://youtu.be/dQw4w9WgXcQ");
-	}
-	//應用設定
-	if (enable_tsunami == "false") {
-		document.querySelector('.tsunami').style.display = "none";
-	}
-	if (enable_eew_jp == "false") {
-		document.querySelector('.eew_jp').style.display = "none";
-	}
-	if (enable_eew_tw == "false") {
-		document.querySelector('.eew_tw').style.display = "none";
-	}
-	document.getElementById("loading_text").innerHTML = "正在建構地圖...";
-
-	var infoupchk = '';
-	var count = 0;
-	//所在地圖標
-	L.marker([userlat, userlon], { icon: L.icon({ iconUrl: "shindo_icon/house.png", iconSize: [10, 10] }), }).addTo(map);
-	//選取測站
-	document.getElementById("selected_name").innerHTML = selected_station;
-	
-	
-
-	
-
-	var stations = [];
-	var weather_warning_lines = [];
-
-
-	var eew_jp_lat = 0;
-	var eew_jp_lon = 0;
-	var eew_jp_depth = 0;
-	var eew_jp_timestamp = 0;
-	var eew_jp_id = '';
-	var eew_jp_version = '';
-	var eew_jp_epicenter = '';
-	var eew_jp_magnitude = '';
-	var eew_jp_shindo = '';
-
-	var eew_jp_lat_displayed = 0;
-	var eew_jp_lon_displayed = 0;
-	var eew_jp_depth_displayed = 0;
-	var eew_jp_timestamp_displayed = 0;
-	var eew_jp_id_displayed = '';
-	var eew_jp_version_displayed = '';
-
-	var eew_jp_Pcircle = null;
-	var eew_jp_Scircle = null;
-	var eew_jp_epicenter_icon = null;
-
-	var eew_tw_lat = 0;
-	var eew_tw_lon = 0;
-	var eew_tw_depth = 0;
-	var eew_tw_timestamp = 0;
-	var eew_tw_id = '';
-	var eew_tw_version = '';
-
-	var eew_tw_lat_displayed = 0;
-	var eew_tw_lon_displayed = 0;
-	var eew_tw_depth_displayed = 0;
-	var eew_tw_timestamp_displayed = 0;
-	var eew_tw_id_displayed = '';
-	var eew_tw_version_displayed = '';
-
-	var eew_tw_Pcircle = null;
-	var eew_tw_Scircle = null;
-	var eew_tw_epicenter_icon = null;
-	
-	//update();
-	
-	setInterval("update()", 100);
-	main();
-	document.getElementById("loading_intro").style.display = "none";
-	/*
-	setTimeout(() =>{RFPLUS({
-                        "id":"1749301625",
-                        "type":"RFPLUS3",
-                        "time": 1752584349000,
-                        "center":{
-                            "lat":24.818,//float
-                            "lon":121.02,///float
-                            "cname":"新竹縣竹北市",//float
-                            "depth":10
-                        },
-                        "scale":5.123456789,
-                        "rate":0,
-                        "report_num":1,
-                        "final":false
-                    })},5000)
-	*/
-	
-</script>
 </body>
 </html>
 
 <script>
 	function show() {
-		//var date = new Date(Date.now().Format("yyyy/MM/dd hh:mm:ss") + ntpoffset_);
-		//var date = (new Date(Date.now()) + ntpoffset_).Format("yyyy-MM-dd hh:mm:ss");
-        //var date = new Date(Date.now().Format("yyyy/MM/dd hh:mm:ss") + ntpoffset_); 
-
         var myDate = new Date((Date.now()) + ntpoffset_);
         myDate.getYear();        // 獲取當前年份(2位)
         myDate.getFullYear();    // 獲取完整的年份(4位,1970-????)
@@ -551,24 +407,6 @@ ws_server_url = storage.getItem('ws_server_url');
         document.getElementById("nowDiv").innerHTML = time2; 
 		//setTimeout("show()", 1000); 
 	}
-	
-	/*----------按鈕綁定邏輯----------*/
-	/*
-	document.getElementById("login_btn").addEventListener("click" ,async() => {
-		document.getElementById("login_btn").innerHTML = "登入中...";
-		document.getElementById("login_btn").disabled = true;
-		const username = document.getElementById('email').value;
-		const password = document.getElementById('password').value;
-		if(await login(username,password)){
-			console.log("login successful");
-			ipcRenderer.send('restart');
-		}else{
-			document.getElementById("login_btn").disabled = false;
-    		document.getElementById("login_failed").style.display = "block";
-    		document.getElementById("login_btn").innerHTML = "登入";
-			console.log("login failed");
-		}
-	})*/
 </script>
 
 <body>
