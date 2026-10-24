@@ -362,6 +362,74 @@
 				<span class="line blue"></span> 陸上強風特報
 			</div>
 		</div>
+		<div id="weather_sidebar" class="weather-sidebar">
+			<section id="typhoon_section" class="weather-panel typhoon-panel" aria-labelledby="typhoon-list-title">
+				<header class="weather-panel-header">
+					<div>
+						<p class="weather-eyebrow">TROPICAL CYCLONE TRACKER</p>
+						<h2 id="typhoon-list-title">颱風資訊</h2>
+					</div>
+				</header>
+				<div id="typhoon_info_list" class="typhoon-record-list">
+					<!--
+					<article class="typhoon-card">
+						<div class="typhoon-card-heading"><div><span class="typhoon-category">颱風編號 01</span><h3>青嵐 <small>QINGLAN</small></h3></div><span class="typhoon-sample-tag">示範</span></div>
+						<div class="typhoon-fix-time">定位時間：2026/10/24 18:00</div>
+						<div class="typhoon-stats"><div><span>中心位置</span><strong>北緯 20.8°・東經 126.4°</strong></div><div><span>預測移向／移速</span><strong>西北西・18 km/h</strong></div><div><span>近中心最大風速</span><strong>33 m/s</strong></div><div><span>近中心最大陣風</span><strong>43 m/s</strong></div><div><span>中心氣壓</span><strong>965 hPa</strong></div></div>
+						<div class="typhoon-forecast-list"><div class="typhoon-forecast-title">路徑預報</div><div class="forecast-point"><span>+12 小時・10/25 06:00</span><strong>北緯 21.4°・東經 124.8°</strong></div><div class="forecast-point"><span>+24 小時・10/25 18:00</span><strong>北緯 22.1°・東經 123.0°</strong></div></div>
+					</article>
+					<article class="typhoon-card">
+						<div class="typhoon-card-heading"><div><span class="typhoon-category">颱風編號 02</span><h3>白露 <small>BAILU</small></h3></div><span class="typhoon-sample-tag">示範</span></div>
+						<div class="typhoon-fix-time">定位時間：2026/10/24 18:00</div>
+						<div class="typhoon-stats"><div><span>中心位置</span><strong>北緯 15.3°・東經 139.7°</strong></div><div><span>預測移向／移速</span><strong>西北・12 km/h</strong></div><div><span>近中心最大風速</span><strong>28 m/s</strong></div><div><span>近中心最大陣風</span><strong>38 m/s</strong></div><div><span>中心氣壓</span><strong>980 hPa</strong></div></div>
+						<div class="typhoon-forecast-list"><div class="typhoon-forecast-title">路徑預報</div><div class="forecast-point"><span>+12 小時・10/25 06:00</span><strong>北緯 15.9°・東經 138.4°</strong></div><div class="forecast-point"><span>+24 小時・10/25 18:00</span><strong>北緯 16.7°・東經 136.8°</strong></div></div>
+					</article>
+					<article class="typhoon-card typhoon-card-td">
+						<div class="typhoon-card-heading"><div><span class="typhoon-category">熱帶性低氣壓編號 19</span><h3>熱帶性低氣壓</h3></div><span class="typhoon-sample-tag">示範</span></div>
+						<div class="typhoon-fix-time">定位時間：2026/10/24 18:00</div>
+						<div class="typhoon-stats"><div><span>中心位置</span><strong>北緯 14.2°・東經 137.1°</strong></div><div><span>預測移向／移速</span><strong>西北西・15 km/h</strong></div><div><span>近中心最大風速</span><strong>15 m/s</strong></div><div><span>近中心最大陣風</span><strong>23 m/s</strong></div><div><span>中心氣壓</span><strong>1000 hPa</strong></div></div>
+					</article>-->
+				</div>
+			</section>
+			<section class="weather-panel weather-warning-panel" aria-labelledby="weather-alert-title">
+				<header class="weather-panel-header">
+					<div><p class="weather-eyebrow">CWA WEATHER ALERTS</p><h2 id="weather-alert-title">天氣警特報</h2></div>
+				</header>
+				<div class="weather-panel-summary"><span class="weather-updated">依縣市與警特報項目列示</span></div>
+				<div id="weather_warning_list" class="weather-record-list">
+					<article id="weather_extreme_heavy_rain" class="weather-record alert-extreme-heavy-rain">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-extreme-heavy-rain">超大豪雨特報</span></div>
+						<h3 id="weather_extreme_heavy_rain_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+					<article id="weather_super_heavy_rain" class="weather-record alert-super-heavy-rain">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-super-heavy-rain">大豪雨特報</span></div>
+						<h3 id="weather_super_heavy_rain_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+					<article id="weather_heavy_rain" class="weather-record alert-heavy-rain">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-heavy-rain">豪雨特報</span></div>
+						<h3 id="weather_heavy_rain_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+					<article id="weather_rain" class="weather-record alert-rain">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-rain">大雨特報</span></div>
+						<h3 id="weather_rain_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+					<article id="weather_wind" class="weather-record alert-wind">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-wind">強風特報</span></div>
+						<h3 id="weather_wind_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+					<article id="weather_foggy" class="weather-record alert-fog">
+						<div class="weather-record-top"><span class="weather-alert-badge badge-fog">濃霧特報</span></div>
+						<h3 id="weather_foggy_counties"></h3>
+						<div class="weather-record-meta"><span>最後更新時間:</span></div>
+					</article>
+				</div>
+			</section>
+		</div>
 	</div>
 </body>
 <script type="module" src="renderer.js"></script>

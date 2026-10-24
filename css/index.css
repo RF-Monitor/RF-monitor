@@ -480,3 +480,107 @@
 .lang_CNS{
     display:none
 }
+
+/*天氣警特報頁面*/
+.weather-dashboard{position:absolute;top:42px;left:14px;right:14px;z-index:10;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;pointer-events:none;}
+.weather-panel{width:min(370px,calc(50vw - 26px));max-height:calc(100vh - 120px);display:flex;flex-direction:column;overflow:hidden;color:#f4f7fb;background:rgba(25,29,35,.94);border:1px solid rgba(255,255,255,.13);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.38);backdrop-filter:blur(9px);pointer-events:auto;}
+.weather-panel-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 11px;border-bottom:1px solid rgba(255,255,255,.09);}
+.weather-panel-header h2{font-size:20px;font-weight:700;margin:1px 0 0;color:#fff;}
+.weather-eyebrow{font-size:9px;letter-spacing:1.15px;color:#92a5b9;margin:0;}
+.weather-sample-tag{font-size:11px;color:#e5edf5;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);padding:4px 8px;border-radius:20px;white-space:nowrap;}
+.weather-panel-summary{display:flex;align-items:center;gap:7px;padding:9px 15px;color:#bac6d2;font-size:11px;background:rgba(255,255,255,.025);}
+.weather-live-dot{width:7px;height:7px;border-radius:50%;background:#58d69a;box-shadow:0 0 8px rgba(88,214,154,.6);}
+.weather-updated{margin-left:auto;color:#8795a4;white-space:nowrap;}
+.weather-record-list,.typhoon-record-list{overflow-y:auto;padding:9px;scrollbar-width:thin;scrollbar-color:#596573 transparent;}
+.weather-record{position:relative;padding:12px 12px 10px 14px;margin-bottom:8px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.075);border-radius:8px;}
+.weather-record:last-child{margin-bottom:0;}
+.weather-record:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:#f28b35;}
+.weather-record.alert-extreme-heavy-rain:before{background:#8746bb;}
+.weather-record.alert-super-heavy-rain:before{background:#e84a45;}
+.weather-record.alert-heavy-rain:before{background:#f28b35;}
+.weather-record.alert-rain:before{background:#e4c73c;}
+.weather-record.alert-wind:before{background:#59a9ff;}
+.weather-record.alert-fog:before{background:#c4d3df;}
+.weather-record-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.weather-alert-badge{font-size:11px;font-weight:700;padding:4px 8px;border-radius:4px;}
+.badge-extreme-heavy-rain{color:#e5c9ff;background:rgba(135,70,187,.22);}
+.badge-super-heavy-rain{color:#ffc1bd;background:rgba(232,74,69,.2);}
+.badge-heavy-rain{color:#ffd7ad;background:rgba(219,111,36,.2);}
+.badge-rain{color:#fff0a8;background:rgba(228,199,60,.18);}
+.badge-wind{color:#bfdeff;background:rgba(63,140,220,.2);}
+.badge-fog{color:#e0e8ef;background:rgba(173,190,203,.18);}
+.weather-record-time{font-size:10px;color:#8f9baa;white-space:nowrap;}
+.weather-record h3{font-size:14px;line-height:1.4;margin:9px 0 4px;color:#fff;font-weight:650;}
+.weather-record p{font-size:12px;line-height:1.55;margin:0;color:#c0cad5;}
+.weather-record-meta{display:flex;justify-content:space-between;gap:8px;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.075);font-size:10px;color:#8795a4;}
+.typhoon-panel{margin-left:auto;}
+.typhoon-feature{margin:10px 11px 6px;padding:13px;background:linear-gradient(145deg,rgba(28,77,105,.65),rgba(30,42,55,.72));border:1px solid rgba(112,184,223,.22);border-radius:9px;}
+.typhoon-feature-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.typhoon-category{font-size:10px;color:#ffd48a;letter-spacing:.3px;}
+.typhoon-feature-heading h3{display:inline-block;font-size:25px;margin:1px 7px 0 0;color:#fff;line-height:1.2;}
+.typhoon-name-en{font-size:10px;letter-spacing:1px;color:#a9bdca;}
+.typhoon-status{font-size:10px;color:#ffc3b8;background:rgba(217,86,66,.2);padding:5px 8px;border-radius:20px;white-space:nowrap;}
+.typhoon-stats{display:grid;grid-template-columns:1fr 1fr;gap:11px 8px;margin-top:13px;padding-top:11px;border-top:1px solid rgba(255,255,255,.1);}
+.typhoon-stats div{min-width:0;}
+.typhoon-stats span{display:block;font-size:10px;color:#9eb0bd;margin-bottom:3px;}
+.typhoon-stats strong{display:block;font-size:11px;font-weight:600;color:#edf5fa;line-height:1.45;}
+.typhoon-forecast{display:flex;gap:9px;margin-top:12px;padding:9px;background:rgba(0,0,0,.16);border-radius:6px;}
+.forecast-dot{flex:0 0 7px;height:7px;margin-top:4px;border-radius:50%;background:#74d9c1;}
+.typhoon-forecast b{display:block;font-size:11px;color:#d9f4ed;margin-bottom:3px;}
+.typhoon-forecast small{display:block;font-size:10px;line-height:1.45;color:#b4c4cc;}
+.typhoon-list-heading{display:flex;justify-content:space-between;align-items:center;padding:9px 14px 2px;font-size:12px;color:#eaf0f4;}
+.typhoon-list-heading span{font-size:10px;color:#8e9daa;}
+.typhoon-row{display:flex;align-items:center;gap:10px;padding:10px 5px;border-bottom:1px solid rgba(255,255,255,.075);}
+.typhoon-row:last-child{border-bottom:0;}
+.typhoon-row-icon{display:flex;align-items:center;justify-content:center;flex:0 0 31px;height:31px;border-radius:50%;font-size:10px;font-weight:700;color:#e5d5aa;background:rgba(196,157,75,.18);border:1px solid rgba(219,184,111,.28);}
+.typhoon-row-icon-muted{color:#b4c4cf;background:rgba(149,170,185,.13);border-color:rgba(149,170,185,.22);}
+.typhoon-row-main{flex:1;min-width:0;}
+.typhoon-row-main strong,.typhoon-row-main span,.typhoon-row-side b,.typhoon-row-side span{display:block;}
+.typhoon-row-main strong{font-size:11px;color:#e8eef3;margin-bottom:3px;}
+.typhoon-row-main span,.typhoon-row-side span{font-size:10px;color:#8f9eaa;}
+.typhoon-row-side{text-align:right;white-space:nowrap;}
+.typhoon-row-side b{font-size:10px;color:#c5d2dc;margin-bottom:3px;font-weight:500;}
+.typhoon-source-note{font-size:9px;color:#758390;margin:2px 13px 11px;}
+@media(max-width:760px){.weather-dashboard{left:8px;right:8px;top:40px;gap:8px;}.weather-panel{width:calc(50vw - 13px);max-height:calc(100vh - 115px);}.weather-panel-header{padding:11px 12px 9px;}.weather-panel-header h2{font-size:17px;}.weather-updated{display:none;}.weather-record{padding:10px 9px 9px 12px;}.weather-record h3{font-size:12px;}.weather-record p{font-size:11px;}.typhoon-feature{margin:8px;padding:10px;}.typhoon-stats{grid-template-columns:1fr;gap:8px;margin-top:10px;}.typhoon-stats div{display:flex;justify-content:space-between;gap:6px;}.typhoon-stats span{margin:0;}.typhoon-stats strong{text-align:right;}.typhoon-forecast{margin-top:9px;}}
+@media(max-width:520px){.weather-dashboard{top:38px;bottom:82px;display:flex;flex-direction:column;}.weather-panel{width:100%;max-height:50%;min-height:0;}.weather-panel-summary{padding:7px 11px;}.weather-record-list,.typhoon-record-list{padding:7px;}.weather-record{margin-bottom:6px;}.typhoon-stats{grid-template-columns:1fr 1fr;}.typhoon-stats div{display:block;}.typhoon-stats strong{text-align:left;}.typhoon-source-note{margin-bottom:7px;}}
+
+/*依 CWA W-C0033-001 / W-C0034-005 欄位呈現*/
+.typhoon-fix-time{margin-top:8px;font-size:10px;color:#a9bdca;}
+.typhoon-forecast-list{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);}
+.typhoon-forecast-title{font-size:11px;font-weight:700;color:#d9f4ed;margin-bottom:5px;}
+.forecast-point{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.forecast-point:last-child{border-bottom:0;padding-bottom:0;}
+.forecast-point span{font-size:10px;color:#9eb0bd;}
+.forecast-point strong{font-size:10px;color:#edf5fa;font-weight:600;text-align:right;}
+
+/*左側天氣與颱風整體捲動*/
+.weather-sidebar{position:absolute;top:42px;left:14px;right:auto;bottom:14px;z-index:10;width:min(390px,calc(100vw - 28px));display:flex;flex-direction:column;align-items:stretch;gap:12px;overflow-x:hidden;overflow-y:auto;padding:0 4px 10px 0;pointer-events:auto;scrollbar-width:thin;scrollbar-color:#596573 rgba(20,24,29,.35);}
+.weather-sidebar::-webkit-scrollbar{width:7px;}.weather-sidebar::-webkit-scrollbar-thumb{background:#596573;border-radius:8px;}.weather-sidebar::-webkit-scrollbar-track{background:rgba(20,24,29,.35);border-radius:8px;}
+.weather-sidebar .weather-panel{flex:0 0 auto;width:100%;max-height:none;overflow:visible;pointer-events:auto;}
+.weather-sidebar .weather-record-list,.weather-sidebar .typhoon-record-list{overflow:visible;padding:9px;}
+.weather-sidebar .typhoon-panel{margin-left:0;}
+.typhoon-card{margin:9px 0;padding:12px;background:linear-gradient(145deg,rgba(28,77,105,.55),rgba(30,42,55,.76));border:1px solid rgba(112,184,223,.22);border-radius:9px;}
+.typhoon-card:last-child{margin-bottom:0;}
+.typhoon-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.typhoon-card-heading h3{margin:3px 0 0;color:#fff;font-size:19px;line-height:1.3;}
+.typhoon-card-heading h3 small{font-size:10px;letter-spacing:.8px;color:#a9bdca;margin-left:5px;}
+.typhoon-sample-tag{flex:0 0 auto;font-size:10px;color:#e5edf5;background:rgba(255,255,255,.1);padding:4px 7px;border-radius:20px;}
+.typhoon-card .typhoon-fix-time{margin-top:7px;}
+.typhoon-card .typhoon-stats{margin-top:10px;padding-top:9px;gap:9px 8px;}
+.typhoon-card-td{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09);}
+.weather-warning-panel .weather-record-list{padding-top:7px;padding-bottom:7px;}
+@media(max-width:760px){.weather-sidebar{top:40px;left:8px;right:auto;bottom:8px;width:min(390px,calc(100vw - 16px));}.weather-sidebar .weather-panel-header{padding:11px 12px 9px;}.weather-sidebar .weather-panel-header h2{font-size:17px;}.weather-sidebar .weather-record{padding:10px 9px 9px 12px;}.weather-sidebar .weather-record h3{font-size:12px;}.weather-sidebar .typhoon-card{padding:10px;}.weather-sidebar .typhoon-stats{grid-template-columns:1fr 1fr;gap:8px;}.weather-sidebar .typhoon-stats div{display:block;}.weather-sidebar .typhoon-stats strong{text-align:left;}}
+@media(max-width:520px){.weather-sidebar{top:38px;left:6px;right:auto;bottom:6px;width:calc(100vw - 12px);gap:9px;padding-right:3px;}.weather-sidebar .typhoon-stats{grid-template-columns:1fr 1fr;}.weather-sidebar .typhoon-stats span{margin-bottom:3px;}.weather-sidebar .weather-updated{display:none;}}
+.weather-sidebar{z-index:20;box-sizing:border-box;}
+.weather-sidebar .weather-panel{box-sizing:border-box;}
+
+
+
+
+
+
+
+
+
+
+
