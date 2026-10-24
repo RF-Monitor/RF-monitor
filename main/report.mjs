@@ -1,9 +1,11 @@
+import config from "../config/index.js";
+
 export async function getInfoDistribution(id) {
     
     //console.log(id);
     id = id.replace("-", "");
     try {
-        const res = await fetch(`http://rfeqserver.myqnapcloud.com:8787/reportDistribution?id=${encodeURIComponent(id)}`, {
+        const res = await fetch(`https://${config.get("server_url")}/reportDistribution?id=${encodeURIComponent(id)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
