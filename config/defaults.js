@@ -7,6 +7,7 @@ function applyDefaults(){
     const serverUrl = storage.getItem('server_url');
     if(
         serverUrl !== 'rptes.com' &&
+        serverUrl !== 'server1.rptes.com' &&
         serverUrl !== 'server2.rptes.com'
     ){
         storage.setItem('server_url', 'rptes.com');

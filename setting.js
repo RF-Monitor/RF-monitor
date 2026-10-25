@@ -92,6 +92,8 @@ if(config.server.url == "rptes.com"){
     document.getElementById("server_url").value = "rptes.com";
 }else if(config.server.url == "server2.rptes.com"){
     document.getElementById("server_url").value = "server2.rptes.com";
+}else if(config.server.url == "server1.rptes.com"){
+    document.getElementById("server_url").value = "server1.rptes.com";
 }
 document.getElementById("userlat").value = config.user.lat;
 document.getElementById("userlon").value = config.user.lon;
