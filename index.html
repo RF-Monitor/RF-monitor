@@ -323,18 +323,28 @@
 		<!--檢視地震報告 右側-->
 		<div id="report_details" class="report_discription">
 			<div class="report_discription_inside">
-				<h3 class="lang_CNT" style="margin-bottom: 15px;" align="center"><strong>中央氣象署地震報告</strong></h3>
-				<h3 class="lang_ENG" style="margin-bottom: 15px;" align="center">CWA earthquake report</h3>
-				<h3 class="lang_CNS" style="margin-bottom: 15px;" align="center">中央气象署地震报告</h3>
-				<h3 class="lang_JP" style="margin-bottom: 15px;" align="center">中央気象庁地震情報</h3>
-				<hr style="border-color: white;">
-				<h5>時間:<span id="epitime"></span></h5>
-				<h5>震央:<span id="epicenter"></span></h5>
-				<h5>北緯:<span id="lat"></span></h5>
-				<h5>東經:<span id="lon"></span></h5>
-				<h5>規模:<span id="magnitude"></span></h5>
-				<h5>深度:<span id="depth"></span></h5>
-				<h5>最大震度:<strong><span id="shindo" style="padding: 2px;"></span></strong></h5>
+				<header class="report-detail-header">
+					<div>
+						<p class="weather-eyebrow">CWA EARTHQUAKE REPORT</p>
+						<h3 class="lang_CNT">中央氣象署地震報告</h3>
+						<h3 class="lang_ENG">CWA earthquake report</h3>
+						<h3 class="lang_CNS">中央气象署地震报告</h3>
+						<h3 class="lang_JP">中央気象庁地震情報</h3>
+					</div>
+					<span class="report-detail-mark" aria-hidden="true">M</span>
+				</header>
+				<div class="report-detail-epicenter">
+					<span>震央</span>
+					<strong id="epicenter"></strong>
+				</div>
+				<div class="report-detail-grid">
+					<div class="report-detail-item report-detail-time"><span>發震時間</span><strong id="epitime"></strong></div>
+					<div class="report-detail-item report-detail-magnitude"><span>規模</span><strong id="magnitude"></strong></div>
+					<div class="report-detail-item"><span>北緯</span><strong id="lat"></strong></div>
+					<div class="report-detail-item"><span>東經</span><strong id="lon"></strong></div>
+					<div class="report-detail-item"><span>深度</span><strong id="depth"></strong></div>
+					<div class="report-detail-item report-detail-shindo"><span>最大震度</span><strong><img id="shindo_icon" class="report-shindo-icon" src="" alt="" hidden><span id="shindo" class="report-shindo-value"></span></strong></div>
+				</div>
 			</div>
 		</div>
 	</div>
