@@ -283,6 +283,14 @@ class WeatherUI{
 			foggy: document.getElementById("weather_foggy"),
 			wind: document.getElementById("weather_wind")
 		}
+		this.weatherListUpdatedElements = {
+			rain: document.getElementById("weather_rain_updated"),
+			heavy_rain: document.getElementById("weather_heavy_rain_updated"),
+			super_heavy_rain: document.getElementById("weather_super_heavy_rain_updated"),
+			extreme_heavy_rain: document.getElementById("weather_extreme_heavy_rain_updated"),
+			foggy: document.getElementById("weather_foggy_updated"),
+			wind: document.getElementById("weather_wind_updated")
+		}
 	}
 	updateWeather(data){
 		for(const key in this.weatherList){
@@ -320,6 +328,7 @@ class WeatherUI{
 				// Do something with the weather list
 				this.weatherListCardElements[key].style.display = "block";
 				this.weatherListCountiesElements[key].innerText = this.weatherList[key].join("、");
+				this.weatherListUpdatedElements[key].innerText = new Date().toLocaleString();
 			}else{
 				this.weatherListCardElements[key].style.display = "none";
 			}
